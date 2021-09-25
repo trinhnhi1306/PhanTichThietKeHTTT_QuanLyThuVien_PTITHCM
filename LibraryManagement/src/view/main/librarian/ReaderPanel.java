@@ -5,10 +5,6 @@
  */
 package view.main.librarian;
 
-import java.awt.Font;
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import swing.UIController;
 
 /**
@@ -30,7 +26,7 @@ public class ReaderPanel extends javax.swing.JPanel {
      */
     public ReaderPanel() {
         initComponents();
-        setDefaultTableHeader(jTable_Reader);
+        UIController.setDefaultTableHeader(jTable_Reader);
         setEditableForAll(false);
     }
 
@@ -458,29 +454,6 @@ public class ReaderPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void setHorizontalAlignmentForColumn(JTable table, int columnNumber, int Alignment) {
-        DefaultTableCellRenderer align = new DefaultTableCellRenderer();
-        align.setHorizontalAlignment(Alignment);
-        table.getColumnModel().getColumn(columnNumber).setCellRenderer(align);
-    }
-
-    private void setColumnWidth(JTable table, int column, int width) {
-        table.getColumnModel().getColumn(column).setMinWidth(width);
-        table.getColumnModel().getColumn(column).setMaxWidth(width);
-    }
-
-    private void setDefaultTableHeader(JTable table) {
-        DefaultTableCellRenderer defaultTableCellRenderer;
-        table.setRowHeight(30);
-        defaultTableCellRenderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
-        defaultTableCellRenderer.setHorizontalAlignment(0); //Tiêu đề nằm giữa
-        table.getTableHeader().setFont(new Font("Segoe UI", 1, 15));
-        table.setFont(new java.awt.Font("Segoe UI", 0, 15));
-
-        setHorizontalAlignmentForColumn(table, 0, JLabel.CENTER);
-        setColumnWidth(table, 0, 50);
-    }
 
     public void clearAll() {
         jRadioButton_Male.setSelected(true);

@@ -5,8 +5,6 @@
  */
 package view.main.librarian;
 
-import java.awt.CardLayout;
-import javax.swing.JPanel;
 import swing.UIController;
 import view.login.LoginFrame;
 
