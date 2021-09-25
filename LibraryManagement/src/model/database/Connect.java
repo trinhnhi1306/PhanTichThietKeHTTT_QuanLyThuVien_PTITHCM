@@ -25,7 +25,6 @@ public class Connect {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             
             conn = DriverManager.getConnection(url, user, password);
-            System.out.println("sucess connection");
         } catch (Exception e) {
             System.out.println("connect error: "+e);
         }
