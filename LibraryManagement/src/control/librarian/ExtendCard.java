@@ -5,8 +5,6 @@
  */
 package control.librarian;
 
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.sql.Connection;
 import model.database.Connect;
 import java.sql.PreparedStatement;
@@ -14,9 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.CallableStatement;
 import javax.swing.JOptionPane;
-import view.main.librarian.ExtendCardDialog;
 import java.lang.String;
-import java.util.*;
 
 /**
  *

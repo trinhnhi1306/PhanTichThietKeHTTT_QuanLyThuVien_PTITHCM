@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package view.main.librarian;
+package view.main.admin;
 
 import swing.UIController;
 
@@ -11,22 +11,21 @@ import swing.UIController;
  *
  * @author Admin
  */
-public class ReaderPanel extends javax.swing.JPanel {
+public class StaffPanel extends javax.swing.JPanel {
 
     public enum Mode {
         ADD,
         MODIFY,
         FREE
     }
-    ExtendCardDialog extendCardDialog;
     Mode mode;
-
+    
     /**
-     * Creates new form ReaderPanel
+     * Creates new form StaffPanel
      */
-    public ReaderPanel() {
+    public StaffPanel() {
         initComponents();
-        UIController.setDefaultTableHeader(jTable_Reader);
+        UIController.setDefaultTableHeader(jTable_Staff);
         setEditableForAll(false);
     }
 
@@ -39,7 +38,6 @@ public class ReaderPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -64,26 +62,27 @@ public class ReaderPanel extends javax.swing.JPanel {
         jDateChooser_DayEnd = new com.toedter.calendar.JDateChooser();
         jDateChooser_DateOfBirth = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
-        jButton_Extend = new javax.swing.JButton();
+        jLabel15 = new javax.swing.JLabel();
+        jComboBox_Role = new javax.swing.JComboBox<>();
         jPanel_Card = new javax.swing.JPanel();
-        jPanel_Card2 = new javax.swing.JPanel();
-        jButton_OK = new javax.swing.JButton();
-        jButton_Cancel = new javax.swing.JButton();
-        jButton_Clear = new javax.swing.JButton();
         jPanel_Card1 = new javax.swing.JPanel();
         jButton_Add = new javax.swing.JButton();
         jButton_Modify = new javax.swing.JButton();
         jButton_Remove = new javax.swing.JButton();
+        jPanel_Card2 = new javax.swing.JPanel();
+        jButton_OK = new javax.swing.JButton();
+        jButton_Cancel = new javax.swing.JButton();
+        jButton_Clear = new javax.swing.JButton();
         jButton_ClearSearch = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jTextField_NameSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable_Reader = new javax.swing.JTable();
+        jTable_Staff = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Reader information", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Staff information", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel1.setText("ID");
@@ -128,18 +127,15 @@ public class ReaderPanel extends javax.swing.JPanel {
         jTextField_ID.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
         jRadioButton_Male.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton_Male);
         jRadioButton_Male.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Male.setSelected(true);
         jRadioButton_Male.setText("Male");
 
         jRadioButton_Female.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton_Female);
         jRadioButton_Female.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Female.setText("Female");
 
         jRadioButton_Other.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton_Other);
         jRadioButton_Other.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Other.setText("Other");
 
@@ -157,16 +153,11 @@ public class ReaderPanel extends javax.swing.JPanel {
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel4.setText("Date of birth");
 
-        jButton_Extend.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jButton_Extend.setForeground(new java.awt.Color(51, 51, 51));
-        jButton_Extend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icon-clock.png"))); // NOI18N
-        jButton_Extend.setText("Extend");
-        jButton_Extend.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_Extend.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_ExtendActionPerformed(evt);
-            }
-        });
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel15.setText("Role");
+
+        jComboBox_Role.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jComboBox_Role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -206,9 +197,9 @@ public class ReaderPanel extends javax.swing.JPanel {
                     .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addComponent(jTextField_Name, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -221,12 +212,12 @@ public class ReaderPanel extends javax.swing.JPanel {
                             .addComponent(jComboBox_Province, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jComboBox_Commune, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(187, 187, 187))
+                                .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton_Extend)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jLabel15)
+                        .addGap(29, 29, 29)
+                        .addComponent(jComboBox_Role, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(187, 187, 187))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,61 +256,22 @@ public class ReaderPanel extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel13)
                             .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
+                        .addGap(22, 22, 22))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton_Extend)))
-                .addGap(22, 22, 22))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel15)
+                            .addComponent(jComboBox_Role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         jPanel_Card.setBackground(new java.awt.Color(255, 255, 255));
         jPanel_Card.setLayout(new java.awt.CardLayout());
-
-        jPanel_Card2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel_Card2.setLayout(new java.awt.GridLayout(1, 0, 35, 0));
-
-        jButton_OK.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jButton_OK.setForeground(new java.awt.Color(51, 51, 51));
-        jButton_OK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/add30px.png"))); // NOI18N
-        jButton_OK.setText("OK");
-        jButton_OK.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_OK.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_OKActionPerformed(evt);
-            }
-        });
-        jPanel_Card2.add(jButton_OK);
-
-        jButton_Cancel.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jButton_Cancel.setForeground(new java.awt.Color(51, 51, 51));
-        jButton_Cancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancel20px.png"))); // NOI18N
-        jButton_Cancel.setText("Cancel");
-        jButton_Cancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_Cancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_CancelActionPerformed(evt);
-            }
-        });
-        jPanel_Card2.add(jButton_Cancel);
-
-        jButton_Clear.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jButton_Clear.setForeground(new java.awt.Color(51, 51, 51));
-        jButton_Clear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
-        jButton_Clear.setText("Clear");
-        jButton_Clear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_Clear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_ClearActionPerformed(evt);
-            }
-        });
-        jPanel_Card2.add(jButton_Clear);
-
-        jPanel_Card.add(jPanel_Card2, "cardSecond");
 
         jPanel_Card1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel_Card1.setLayout(new java.awt.GridLayout(1, 0, 35, 0));
@@ -364,6 +316,47 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         jPanel_Card.add(jPanel_Card1, "cardFirst");
 
+        jPanel_Card2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel_Card2.setLayout(new java.awt.GridLayout(1, 0, 35, 0));
+
+        jButton_OK.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_OK.setForeground(new java.awt.Color(51, 51, 51));
+        jButton_OK.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/add30px.png"))); // NOI18N
+        jButton_OK.setText("OK");
+        jButton_OK.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_OK.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_OKActionPerformed(evt);
+            }
+        });
+        jPanel_Card2.add(jButton_OK);
+
+        jButton_Cancel.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_Cancel.setForeground(new java.awt.Color(51, 51, 51));
+        jButton_Cancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/cancel20px.png"))); // NOI18N
+        jButton_Cancel.setText("Cancel");
+        jButton_Cancel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Cancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_CancelActionPerformed(evt);
+            }
+        });
+        jPanel_Card2.add(jButton_Cancel);
+
+        jButton_Clear.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_Clear.setForeground(new java.awt.Color(51, 51, 51));
+        jButton_Clear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
+        jButton_Clear.setText("Clear");
+        jButton_Clear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ClearActionPerformed(evt);
+            }
+        });
+        jPanel_Card2.add(jButton_Clear);
+
+        jPanel_Card.add(jPanel_Card2, "cardSecond");
+
         jButton_ClearSearch.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_ClearSearch.setForeground(new java.awt.Color(51, 51, 51));
         jButton_ClearSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
@@ -375,23 +368,23 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         jTextField_NameSearch.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
-        jTable_Reader.setModel(new javax.swing.table.DefaultTableModel(
+        jTable_Staff.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID", "Name", "Gender", "Date of birth", "Adress", "Phone number", "Email", "Ngày đăng ký", "Ngày hết hạn"
+                "ID", "Name", "Role", "Gender", "Date of birth", "Adress", "Phone number", "Email", "Registered", "Expiration"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable_Reader);
+        jScrollPane1.setViewportView(jTable_Staff);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -440,23 +433,48 @@ public class ReaderPanel extends javax.swing.JPanel {
         jComboBox_Province.setSelectedIndex(0);
         jComboBox_District.setSelectedIndex(0);
         jComboBox_Commune.setSelectedIndex(0);
+        jComboBox_Role.setSelectedIndex(0);
     }
-
+    
     public void setEditableForAll(boolean editable) {
         jDateChooser_DateOfBirth.setEnabled(editable);
         jTextField_Name.setEditable(editable);
         jTextField_PhoneNumber.setEditable(editable);
         jTextField_Email.setEditable(editable);
+        jDateChooser_DayEnd.setEnabled(editable);
         jComboBox_Province.setEnabled(editable);
         jComboBox_District.setEnabled(editable);
         jComboBox_Commune.setEnabled(editable);
+        jComboBox_Role.setEnabled(editable);
     }
     
-    private void jButton_ExtendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExtendActionPerformed
+    private void jButton_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_OKActionPerformed
         // TODO add your handling code here:
-        this.extendCardDialog = new ExtendCardDialog(null, true, this);
-        this.extendCardDialog.setVisible(true);
-    }//GEN-LAST:event_jButton_ExtendActionPerformed
+        if (mode == Mode.ADD) {
+
+        } else if (mode == Mode.MODIFY) {
+
+        }
+        UIController.showCardLayout("cardFirst", jPanel_Card);
+    }//GEN-LAST:event_jButton_OKActionPerformed
+
+    private void jButton_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelActionPerformed
+        // TODO add your handling code here:
+        mode = Mode.FREE;
+        clearAll();
+        setEditableForAll(false);
+        if (jTable_Staff.getSelectedRow() != -1) {
+        } else {
+            jButton_Modify.setEnabled(false);
+            jButton_Remove.setEnabled(false);
+        }
+        UIController.showCardLayout("cardFirst", jPanel_Card);
+    }//GEN-LAST:event_jButton_CancelActionPerformed
+
+    private void jButton_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearActionPerformed
+        // TODO add your handling code here:
+        clearAll();
+    }//GEN-LAST:event_jButton_ClearActionPerformed
 
     private void jButton_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddActionPerformed
         // TODO add your handling code here:
@@ -480,48 +498,19 @@ public class ReaderPanel extends javax.swing.JPanel {
         jButton_Remove.setEnabled(false);
     }//GEN-LAST:event_jButton_RemoveActionPerformed
 
-    private void jButton_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_OKActionPerformed
-        // TODO add your handling code here:
-        if (mode == Mode.ADD) {
-
-        } else if (mode == Mode.MODIFY) {
-
-        }
-        UIController.showCardLayout("cardFirst", jPanel_Card);
-    }//GEN-LAST:event_jButton_OKActionPerformed
-
-    private void jButton_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelActionPerformed
-        // TODO add your handling code here:
-        mode = Mode.FREE;
-        clearAll();
-        setEditableForAll(false);
-        if (jTable_Reader.getSelectedRow() != -1) {
-        } else {
-            jButton_Modify.setEnabled(false);
-            jButton_Remove.setEnabled(false);
-        }
-        UIController.showCardLayout("cardFirst", jPanel_Card);
-    }//GEN-LAST:event_jButton_CancelActionPerformed
-
-    private void jButton_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearActionPerformed
-        // TODO add your handling code here:
-        clearAll();
-    }//GEN-LAST:event_jButton_ClearActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton_Add;
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Clear;
     private javax.swing.JButton jButton_ClearSearch;
-    private javax.swing.JButton jButton_Extend;
     private javax.swing.JButton jButton_Modify;
     private javax.swing.JButton jButton_OK;
     private javax.swing.JButton jButton_Remove;
     private javax.swing.JComboBox<String> jComboBox_Commune;
     private javax.swing.JComboBox<String> jComboBox_District;
     private javax.swing.JComboBox<String> jComboBox_Province;
+    private javax.swing.JComboBox<String> jComboBox_Role;
     private com.toedter.calendar.JDateChooser jDateChooser_DateOfBirth;
     private com.toedter.calendar.JDateChooser jDateChooser_DayEnd;
     private javax.swing.JLabel jLabel1;
@@ -530,6 +519,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -544,7 +534,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JRadioButton jRadioButton_Male;
     private javax.swing.JRadioButton jRadioButton_Other;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable_Reader;
+    private javax.swing.JTable jTable_Staff;
     private javax.swing.JTextField jTextField_Email;
     private javax.swing.JTextField jTextField_ID;
     private javax.swing.JTextField jTextField_Name;
