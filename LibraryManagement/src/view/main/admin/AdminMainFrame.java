@@ -41,6 +41,9 @@ public class AdminMainFrame extends javax.swing.JFrame {
         jPanel_Staff = new javax.swing.JPanel();
         jLabel_Staff = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
+        jPanel_Rule = new javax.swing.JPanel();
+        jSeparator5 = new javax.swing.JSeparator();
+        jLabel_Rule = new javax.swing.JLabel();
         jPanel_Statistical = new javax.swing.JPanel();
         jLabel_Statistical = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
@@ -51,6 +54,7 @@ public class AdminMainFrame extends javax.swing.JFrame {
         staffPanel1 = new view.main.admin.StaffPanel();
         statisticalPanel1 = new view.main.admin.StatisticalPanel();
         profilePanel1 = new view.profile.ProfilePanel();
+        rulePanel1 = new view.main.admin.RulePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Library Management Program");
@@ -88,7 +92,7 @@ public class AdminMainFrame extends javax.swing.JFrame {
         });
         jPanel_Side.add(jLabel_LogOut, java.awt.BorderLayout.SOUTH);
 
-        jPanel5.setPreferredSize(new java.awt.Dimension(150, 330));
+        jPanel5.setPreferredSize(new java.awt.Dimension(150, 440));
         jPanel5.setLayout(new java.awt.GridLayout(0, 1));
 
         jPanel_Staff.setBackground(new java.awt.Color(0, 204, 204));
@@ -113,6 +117,26 @@ public class AdminMainFrame extends javax.swing.JFrame {
         jPanel_Staff.add(jSeparator1, java.awt.BorderLayout.SOUTH);
 
         jPanel5.add(jPanel_Staff);
+
+        jPanel_Rule.setBackground(new java.awt.Color(0, 204, 204));
+        jPanel_Rule.setLayout(new java.awt.BorderLayout());
+        jPanel_Rule.add(jSeparator5, java.awt.BorderLayout.SOUTH);
+
+        jLabel_Rule.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_Rule.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel_Rule.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel_Rule.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icon_rules.png"))); // NOI18N
+        jLabel_Rule.setText("Rule");
+        jLabel_Rule.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel_Rule.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jLabel_Rule.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel_RuleMouseClicked(evt);
+            }
+        });
+        jPanel_Rule.add(jLabel_Rule, java.awt.BorderLayout.CENTER);
+
+        jPanel5.add(jPanel_Rule);
 
         jPanel_Statistical.setBackground(new java.awt.Color(0, 204, 204));
         jPanel_Statistical.setLayout(new java.awt.BorderLayout());
@@ -177,6 +201,7 @@ public class AdminMainFrame extends javax.swing.JFrame {
 
         jPanel_CardLayout.add(statisticalPanel1, "statistical");
         jPanel_CardLayout.add(profilePanel1, "profile");
+        jPanel_CardLayout.add(rulePanel1, "rule");
 
         getContentPane().add(jPanel_CardLayout, java.awt.BorderLayout.CENTER);
 
@@ -192,6 +217,7 @@ public class AdminMainFrame extends javax.swing.JFrame {
     private void jLabel_StaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_StaffMouseClicked
         // TODO add your handling code here:
         jPanel_Staff.setBackground(jPanel_Title.getBackground());
+        jPanel_Rule.setBackground(jPanel_Side.getBackground());
         jPanel_Statistical.setBackground(jPanel_Side.getBackground());
         jPanel_Profile.setBackground(jPanel_Side.getBackground());
         UIController.showCardLayout("staff", jPanel_CardLayout);
@@ -201,6 +227,7 @@ public class AdminMainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         jPanel_Profile.setBackground(jPanel_Title.getBackground());
         jPanel_Staff.setBackground(jPanel_Side.getBackground());
+        jPanel_Rule.setBackground(jPanel_Side.getBackground());
         jPanel_Statistical.setBackground(jPanel_Side.getBackground());
         UIController.showCardLayout("profile", jPanel_CardLayout);
     }//GEN-LAST:event_jLabel_ProfileMouseClicked
@@ -209,9 +236,19 @@ public class AdminMainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         jPanel_Statistical.setBackground(jPanel_Title.getBackground());
         jPanel_Staff.setBackground(jPanel_Side.getBackground());
+        jPanel_Rule.setBackground(jPanel_Side.getBackground());
         jPanel_Profile.setBackground(jPanel_Side.getBackground());
         UIController.showCardLayout("statistical", jPanel_CardLayout);
     }//GEN-LAST:event_jLabel_StatisticalMouseClicked
+
+    private void jLabel_RuleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_RuleMouseClicked
+        // TODO add your handling code here:
+        jPanel_Rule.setBackground(jPanel_Title.getBackground());
+        jPanel_Staff.setBackground(jPanel_Side.getBackground());
+        jPanel_Statistical.setBackground(jPanel_Side.getBackground());
+        jPanel_Profile.setBackground(jPanel_Side.getBackground());
+        UIController.showCardLayout("rule", jPanel_CardLayout);
+    }//GEN-LAST:event_jLabel_RuleMouseClicked
 
     /**
      * @param args the command line arguments
@@ -253,11 +290,13 @@ public class AdminMainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_LogOut;
     private javax.swing.JLabel jLabel_Profile;
+    private javax.swing.JLabel jLabel_Rule;
     private javax.swing.JLabel jLabel_Staff;
     private javax.swing.JLabel jLabel_Statistical;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel_CardLayout;
     private javax.swing.JPanel jPanel_Profile;
+    private javax.swing.JPanel jPanel_Rule;
     private javax.swing.JPanel jPanel_Side;
     private javax.swing.JPanel jPanel_Staff;
     private javax.swing.JPanel jPanel_Statistical;
@@ -265,7 +304,9 @@ public class AdminMainFrame extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
     private view.profile.ProfilePanel profilePanel1;
+    private view.main.admin.RulePanel rulePanel1;
     private view.main.admin.StaffPanel staffPanel1;
     private view.main.admin.StatisticalPanel statisticalPanel1;
     // End of variables declaration//GEN-END:variables

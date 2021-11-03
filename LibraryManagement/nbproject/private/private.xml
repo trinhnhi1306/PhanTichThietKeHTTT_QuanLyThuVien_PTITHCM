@@ -3,10 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/Nam4/PhanTichVaThietKeHeThongThongTin/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/archivist/ArchivistMainFrame.java</file>
-            <file>file:/E:/Nam4/PhanTichVaThietKeHeThongThongTin/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/librarian/ReaderPanel.java</file>
-            <file>file:/E:/Nam4/PhanTichVaThietKeHeThongThongTin/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/archivist/BookPanel.java</file>
-            <file>file:/E:/Nam4/PhanTichVaThietKeHeThongThongTin/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/librarian/LibrarianMainFrame.java</file>
+            <file>file:/E:/Nam4/PhanTichVaThietKeHeThongThongTin/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/StaffPanel.java</file>
+            <file>file:/E:/Nam4/PhanTichVaThietKeHeThongThongTin/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/AdminMainFrame.java</file>
+            <file>file:/E:/Nam4/PhanTichVaThietKeHeThongThongTin/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/RulePanel.java</file>
         </group>
     </open-files>
 </project-private>
