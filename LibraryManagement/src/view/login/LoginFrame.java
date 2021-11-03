@@ -14,6 +14,7 @@ import javax.swing.ImageIcon;
 public class LoginFrame extends javax.swing.JFrame {
 
     private RecoveryPasswordDialog recoveryPasswordDialog;
+    private RuleLibraryDialog ruleLibraryDialog;
     private boolean showPass = false;
 
     /**
@@ -151,6 +152,11 @@ public class LoginFrame extends javax.swing.JFrame {
         jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jLabel_i.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/i-icon.png"))); // NOI18N
+        jLabel_i.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel_iMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -223,6 +229,12 @@ public class LoginFrame extends javax.swing.JFrame {
             jPasswordField_Pass.setEchoChar('\u0000');
         }
     }//GEN-LAST:event_jLabel_HideShowMouseClicked
+
+    private void jLabel_iMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_iMouseClicked
+        // TODO add your handling code here:
+        this.ruleLibraryDialog = new RuleLibraryDialog(this, true);
+        this.ruleLibraryDialog.setVisible(true);
+    }//GEN-LAST:event_jLabel_iMouseClicked
 
     /**
      * @param args the command line arguments

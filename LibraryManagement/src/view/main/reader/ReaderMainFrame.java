@@ -19,6 +19,8 @@ public class ReaderMainFrame extends javax.swing.JFrame {
      */
     public ReaderMainFrame() {
         initComponents();
+        setLocationRelativeTo(null);
+        jPanel_Book.setBackground(jPanel_Title.getBackground());
     }
 
     /**
@@ -36,8 +38,8 @@ public class ReaderMainFrame extends javax.swing.JFrame {
         jPanel_Book = new javax.swing.JPanel();
         jLabel_Book = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        jPanel_Book1 = new javax.swing.JPanel();
-        jLabel_Book1 = new javax.swing.JLabel();
+        jPanel_Borrow = new javax.swing.JPanel();
+        jLabel_Borrow = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jPanel_Profile = new javax.swing.JPanel();
         jSeparator4 = new javax.swing.JSeparator();
@@ -46,7 +48,8 @@ public class ReaderMainFrame extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel_CardLayout = new javax.swing.JPanel();
-        bookPanel1 = new view.main.archivist.BookPanel();
+        bookPanel2 = new view.main.reader.BookPanel();
+        bookBorrowPanel1 = new view.main.reader.BookBorrowPanel();
         profilePanel1 = new view.profile.ProfilePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -94,28 +97,28 @@ public class ReaderMainFrame extends javax.swing.JFrame {
 
         jPanel5.add(jPanel_Book);
 
-        jPanel_Book1.setBackground(new java.awt.Color(0, 204, 204));
-        jPanel_Book1.setLayout(new java.awt.BorderLayout());
+        jPanel_Borrow.setBackground(new java.awt.Color(0, 204, 204));
+        jPanel_Borrow.setLayout(new java.awt.BorderLayout());
 
-        jLabel_Book1.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_Book1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel_Book1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel_Book1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/borrow.png"))); // NOI18N
-        jLabel_Book1.setText("Borrow");
-        jLabel_Book1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel_Book1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jLabel_Book1.addMouseListener(new java.awt.event.MouseAdapter() {
+        jLabel_Borrow.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_Borrow.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel_Borrow.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel_Borrow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/borrow.png"))); // NOI18N
+        jLabel_Borrow.setText("Borrow");
+        jLabel_Borrow.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jLabel_Borrow.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jLabel_Borrow.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel_Book1MouseClicked(evt);
+                jLabel_BorrowMouseClicked(evt);
             }
         });
-        jPanel_Book1.add(jLabel_Book1, java.awt.BorderLayout.CENTER);
+        jPanel_Borrow.add(jLabel_Borrow, java.awt.BorderLayout.CENTER);
 
         jSeparator2.setBackground(new java.awt.Color(235, 235, 235));
         jSeparator2.setPreferredSize(new java.awt.Dimension(10, 2));
-        jPanel_Book1.add(jSeparator2, java.awt.BorderLayout.SOUTH);
+        jPanel_Borrow.add(jSeparator2, java.awt.BorderLayout.SOUTH);
 
-        jPanel5.add(jPanel_Book1);
+        jPanel5.add(jPanel_Borrow);
 
         jPanel_Profile.setBackground(new java.awt.Color(0, 204, 204));
         jPanel_Profile.setLayout(new java.awt.BorderLayout());
@@ -158,7 +161,8 @@ public class ReaderMainFrame extends javax.swing.JFrame {
         getContentPane().add(jPanel_Title, java.awt.BorderLayout.NORTH);
 
         jPanel_CardLayout.setLayout(new java.awt.CardLayout());
-        jPanel_CardLayout.add(bookPanel1, "book");
+        jPanel_CardLayout.add(bookPanel2, "book");
+        jPanel_CardLayout.add(bookBorrowPanel1, "borrow");
         jPanel_CardLayout.add(profilePanel1, "profile");
 
         getContentPane().add(jPanel_CardLayout, java.awt.BorderLayout.CENTER);
@@ -175,6 +179,7 @@ public class ReaderMainFrame extends javax.swing.JFrame {
     private void jLabel_BookMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_BookMouseClicked
         // TODO add your handling code here:
         jPanel_Book.setBackground(jPanel_Title.getBackground());
+        jPanel_Borrow.setBackground(jPanel_Side.getBackground());
         jPanel_Profile.setBackground(jPanel_Side.getBackground());
         UIController.showCardLayout("book", jPanel_CardLayout);
     }//GEN-LAST:event_jLabel_BookMouseClicked
@@ -183,12 +188,17 @@ public class ReaderMainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         jPanel_Profile.setBackground(jPanel_Title.getBackground());
         jPanel_Book.setBackground(jPanel_Side.getBackground());
+        jPanel_Borrow.setBackground(jPanel_Side.getBackground());
         UIController.showCardLayout("profile", jPanel_CardLayout);
     }//GEN-LAST:event_jLabel_ProfileMouseClicked
 
-    private void jLabel_Book1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_Book1MouseClicked
+    private void jLabel_BorrowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_BorrowMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel_Book1MouseClicked
+        jPanel_Borrow.setBackground(jPanel_Title.getBackground());
+        jPanel_Book.setBackground(jPanel_Side.getBackground());
+        jPanel_Profile.setBackground(jPanel_Side.getBackground());
+        UIController.showCardLayout("borrow", jPanel_CardLayout);
+    }//GEN-LAST:event_jLabel_BorrowMouseClicked
 
     /**
      * @param args the command line arguments
@@ -226,16 +236,17 @@ public class ReaderMainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private view.main.archivist.BookPanel bookPanel1;
+    private view.main.reader.BookBorrowPanel bookBorrowPanel1;
+    private view.main.reader.BookPanel bookPanel2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_Book;
-    private javax.swing.JLabel jLabel_Book1;
+    private javax.swing.JLabel jLabel_Borrow;
     private javax.swing.JLabel jLabel_LogOut;
     private javax.swing.JLabel jLabel_Profile;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel_Book;
-    private javax.swing.JPanel jPanel_Book1;
+    private javax.swing.JPanel jPanel_Borrow;
     private javax.swing.JPanel jPanel_CardLayout;
     private javax.swing.JPanel jPanel_Profile;
     private javax.swing.JPanel jPanel_Side;

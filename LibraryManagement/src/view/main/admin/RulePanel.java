@@ -55,17 +55,17 @@ public class RulePanel extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         jTextField_OldID = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        jSpinner_OldMaxDay = new javax.swing.JSpinner();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jSpinner_OldMaxBook = new javax.swing.JSpinner();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
-        jSpinner_OldFine = new javax.swing.JSpinner();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        jSpinner_OldDamaged = new javax.swing.JSpinner();
         jLabel22 = new javax.swing.JLabel();
+        jTextField_OldMaxDay = new javax.swing.JTextField();
+        jTextField_OldFine = new javax.swing.JTextField();
+        jTextField_OldPenalties = new javax.swing.JTextField();
+        jTextField_OldMaxBook = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -79,7 +79,7 @@ public class RulePanel extends javax.swing.JPanel {
         jLabel12.setToolTipText("");
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search for reader", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search for rules", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel1.setText("From");
@@ -202,18 +202,12 @@ public class RulePanel extends javax.swing.JPanel {
         jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel15.setText("Max rental day");
 
-        jSpinner_OldMaxDay.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jSpinner_OldMaxDay.setModel(new javax.swing.SpinnerNumberModel(5, 0, null, 1));
-
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(102, 102, 102));
         jLabel16.setText("days");
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel17.setText("Max rental book");
-
-        jSpinner_OldMaxBook.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jSpinner_OldMaxBook.setModel(new javax.swing.SpinnerNumberModel(5, 0, null, 1));
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(102, 102, 102));
@@ -222,9 +216,6 @@ public class RulePanel extends javax.swing.JPanel {
         jLabel19.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel19.setText("Fine");
 
-        jSpinner_OldFine.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jSpinner_OldFine.setModel(new javax.swing.SpinnerNumberModel(10000, 0, null, 1000));
-
         jLabel20.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(102, 102, 102));
         jLabel20.setText("đồng");
@@ -232,12 +223,21 @@ public class RulePanel extends javax.swing.JPanel {
         jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel21.setText("Penalties damaged");
 
-        jSpinner_OldDamaged.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jSpinner_OldDamaged.setModel(new javax.swing.SpinnerNumberModel(200, 0, null, 5));
-
         jLabel22.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(102, 102, 102));
         jLabel22.setText("%");
+
+        jTextField_OldMaxDay.setEditable(false);
+        jTextField_OldMaxDay.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+
+        jTextField_OldFine.setEditable(false);
+        jTextField_OldFine.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+
+        jTextField_OldPenalties.setEditable(false);
+        jTextField_OldPenalties.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+
+        jTextField_OldMaxBook.setEditable(false);
+        jTextField_OldMaxBook.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -253,28 +253,29 @@ public class RulePanel extends javax.swing.JPanel {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel15)
-                                            .addComponent(jLabel19)
-                                            .addComponent(jLabel14)
-                                            .addComponent(jLabel17))
-                                        .addGap(37, 37, 37)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(jSpinner_OldFine, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jTextField_OldID, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jSpinner_OldMaxDay, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jSpinner_OldMaxBook, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel21)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jTextField_OldPenalties, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jLabel15)
+                                                    .addComponent(jLabel19)
+                                                    .addComponent(jLabel14)
+                                                    .addComponent(jLabel17))
+                                                .addGap(37, 37, 37)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                    .addComponent(jTextField_OldFine, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                                                    .addComponent(jTextField_OldMaxDay, javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jTextField_OldID, javax.swing.GroupLayout.Alignment.LEADING)
+                                                    .addComponent(jTextField_OldMaxBook))))
                                         .addGap(18, 18, 18)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel16)
                                             .addComponent(jLabel18)
-                                            .addComponent(jLabel20)))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel21)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jSpinner_OldDamaged, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel22)))
+                                            .addComponent(jLabel20)
+                                            .addComponent(jLabel22))))
                                 .addGap(18, 18, 18)
                                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(20, 20, 20)
@@ -356,33 +357,33 @@ public class RulePanel extends javax.swing.JPanel {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel14)
                                             .addComponent(jTextField_OldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(57, 57, 57)
+                                        .addGap(54, 54, 54)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel15)
-                                            .addComponent(jSpinner_OldMaxDay, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel16))
+                                            .addComponent(jLabel16)
+                                            .addComponent(jTextField_OldMaxDay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(54, 54, 54)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel17)
-                                            .addComponent(jSpinner_OldMaxBook, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel18))
+                                            .addComponent(jLabel18)
+                                            .addComponent(jTextField_OldMaxBook, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(51, 51, 51)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel19)
-                                            .addComponent(jSpinner_OldFine, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel20))
+                                            .addComponent(jLabel20)
+                                            .addComponent(jTextField_OldFine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                         .addGap(51, 51, 51)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel21)
-                                            .addComponent(jSpinner_OldDamaged, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel22)))))
+                                            .addComponent(jLabel22)
+                                            .addComponent(jTextField_OldPenalties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                             .addComponent(jLabel12))
-                        .addGap(0, 99, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Clear)
                     .addComponent(jButton_Save))
-                .addGap(18, 18, 18))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -421,11 +422,11 @@ public class RulePanel extends javax.swing.JPanel {
     private javax.swing.JSpinner jSpinner_NewFine;
     private javax.swing.JSpinner jSpinner_NewMaxBook;
     private javax.swing.JSpinner jSpinner_NewMaxDay;
-    private javax.swing.JSpinner jSpinner_OldDamaged;
-    private javax.swing.JSpinner jSpinner_OldFine;
-    private javax.swing.JSpinner jSpinner_OldMaxBook;
-    private javax.swing.JSpinner jSpinner_OldMaxDay;
     private javax.swing.JTextField jTextField_NewID;
+    private javax.swing.JTextField jTextField_OldFine;
     private javax.swing.JTextField jTextField_OldID;
+    private javax.swing.JTextField jTextField_OldMaxBook;
+    private javax.swing.JTextField jTextField_OldMaxDay;
+    private javax.swing.JTextField jTextField_OldPenalties;
     // End of variables declaration//GEN-END:variables
 }

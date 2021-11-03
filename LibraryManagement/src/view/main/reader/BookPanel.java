@@ -5,6 +5,8 @@
  */
 package view.main.reader;
 
+import swing.UIController;
+
 /**
  *
  * @author Admin
@@ -16,6 +18,7 @@ public class BookPanel extends javax.swing.JPanel {
      */
     public BookPanel() {
         initComponents();
+        UIController.setDefaultTableHeader(jTable_Book);
     }
 
     /**
@@ -27,19 +30,141 @@ public class BookPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel21 = new javax.swing.JLabel();
+        jTextField_Search = new javax.swing.JTextField();
+        jButton_ClearSearch = new javax.swing.JButton();
+        jPanel_Card = new javax.swing.JPanel();
+        jRadioButton_Title = new javax.swing.JRadioButton();
+        jRadioButton_Author = new javax.swing.JRadioButton();
+        jRadioButton_Publisher = new javax.swing.JRadioButton();
+        jRadioButton_Category = new javax.swing.JRadioButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable_Book = new javax.swing.JTable();
+
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel21.setText("Search with");
+
+        jTextField_Search.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+
+        jButton_ClearSearch.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_ClearSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
+        jButton_ClearSearch.setText("Clear");
+
+        jPanel_Card.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel_Card.setLayout(new java.awt.GridLayout(1, 0, 40, 0));
+
+        jRadioButton_Title.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(jRadioButton_Title);
+        jRadioButton_Title.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jRadioButton_Title.setSelected(true);
+        jRadioButton_Title.setText("Title");
+        jPanel_Card.add(jRadioButton_Title);
+
+        jRadioButton_Author.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(jRadioButton_Author);
+        jRadioButton_Author.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jRadioButton_Author.setText("Author");
+        jPanel_Card.add(jRadioButton_Author);
+
+        jRadioButton_Publisher.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(jRadioButton_Publisher);
+        jRadioButton_Publisher.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jRadioButton_Publisher.setText("Publisher");
+        jPanel_Card.add(jRadioButton_Publisher);
+
+        jRadioButton_Category.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(jRadioButton_Category);
+        jRadioButton_Category.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jRadioButton_Category.setText("Category");
+        jPanel_Card.add(jRadioButton_Category);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel21)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel_Card, javax.swing.GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
+                .addGap(71, 71, 71)
+                .addComponent(jTextField_Search, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton_ClearSearch)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField_Search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_ClearSearch))
+                    .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel21))
+                .addGap(0, 11, Short.MAX_VALUE))
+        );
+
+        jTable_Book.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Title", "Publish date", "Price", "Location", "Author", "Publisher", "Category", "Rate"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable_Book);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton jButton_ClearSearch;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel_Card;
+    private javax.swing.JRadioButton jRadioButton_Author;
+    private javax.swing.JRadioButton jRadioButton_Category;
+    private javax.swing.JRadioButton jRadioButton_Publisher;
+    private javax.swing.JRadioButton jRadioButton_Title;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable_Book;
+    private javax.swing.JTextField jTextField_Search;
     // End of variables declaration//GEN-END:variables
 }

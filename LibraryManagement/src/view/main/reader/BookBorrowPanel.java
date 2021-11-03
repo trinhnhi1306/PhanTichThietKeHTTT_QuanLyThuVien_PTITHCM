@@ -5,6 +5,8 @@
  */
 package view.main.reader;
 
+import swing.UIController;
+
 /**
  *
  * @author Admin
@@ -16,6 +18,7 @@ public class BookBorrowPanel extends javax.swing.JPanel {
      */
     public BookBorrowPanel() {
         initComponents();
+        UIController.setDefaultTableHeader(jTable_Book);
     }
 
     /**
@@ -27,19 +30,205 @@ public class BookBorrowPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel_NgayMuon = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel_HanTra = new javax.swing.JLabel();
+        jLabel_Phat = new javax.swing.JLabel();
+        jSlider_Rate = new javax.swing.JSlider();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jButton_Send = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable_Book = new javax.swing.JTable();
+
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel2.setText("Ngày mượn");
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel6.setText("Rate");
+
+        jLabel_NgayMuon.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_NgayMuon.setText("ngày");
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel8.setText("Hạn trả");
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel10.setText("Phạt");
+
+        jLabel_HanTra.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_HanTra.setText("ngày");
+
+        jLabel_Phat.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_Phat.setText("Đã trễ ... phải nộp phạt ...");
+
+        jSlider_Rate.setBackground(new java.awt.Color(255, 255, 255));
+        jSlider_Rate.setMajorTickSpacing(1);
+        jSlider_Rate.setMaximum(5);
+        jSlider_Rate.setPaintTicks(true);
+
+        jLabel1.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel1.setText("1");
+
+        jLabel3.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel3.setText("2");
+
+        jLabel4.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel4.setText("3");
+
+        jLabel5.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel5.setText("4");
+
+        jLabel9.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel9.setText("5");
+
+        jLabel13.setForeground(new java.awt.Color(153, 153, 153));
+        jLabel13.setText("0");
+
+        jButton_Send.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_Send.setText("Send");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel_NgayMuon, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(81, 81, 81)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel_HanTra, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(81, 81, 81)
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel_Phat, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(jLabel13)
+                                .addGap(33, 33, 33)
+                                .addComponent(jLabel1)
+                                .addGap(31, 31, 31)
+                                .addComponent(jLabel3)
+                                .addGap(33, 33, 33)
+                                .addComponent(jLabel4)
+                                .addGap(30, 30, 30)
+                                .addComponent(jLabel5)
+                                .addGap(30, 30, 30)
+                                .addComponent(jLabel9))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jSlider_Rate, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton_Send)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel_NgayMuon, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel_Phat)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel_HanTra)
+                    .addComponent(jLabel10))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jSlider_Rate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_Send))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel13))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTable_Book.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Title", "Publish date", "Price", "Author", "Publisher", "Category"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable_Book);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton_Send;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabel_HanTra;
+    private javax.swing.JLabel jLabel_NgayMuon;
+    private javax.swing.JLabel jLabel_Phat;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSlider jSlider_Rate;
+    private javax.swing.JTable jTable_Book;
     // End of variables declaration//GEN-END:variables
 }
