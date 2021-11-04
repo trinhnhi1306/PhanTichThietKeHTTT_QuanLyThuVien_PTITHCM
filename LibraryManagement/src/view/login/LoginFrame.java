@@ -6,15 +6,17 @@
 package view.login;
 
 import javax.swing.ImageIcon;
+import view.main.reader.BookPanel;
 
 /**
  *
  * @author Admin
  */
 public class LoginFrame extends javax.swing.JFrame {
-
+    
     private RecoveryPasswordDialog recoveryPasswordDialog;
     private RuleLibraryDialog ruleLibraryDialog;
+    private BookDialog bookDialog;
     private boolean showPass = false;
 
     /**
@@ -47,7 +49,7 @@ public class LoginFrame extends javax.swing.JFrame {
         jPasswordField_Pass = new javax.swing.JPasswordField();
         jButton_Login = new javax.swing.JButton();
         jButton_Forgot = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        jButton_WithoutLogin = new javax.swing.JButton();
         jLabel_i = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -144,12 +146,17 @@ public class LoginFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setBackground(new java.awt.Color(255, 255, 255));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(0, 51, 51));
-        jButton1.setText("Access without login");
-        jButton1.setContentAreaFilled(false);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_WithoutLogin.setBackground(new java.awt.Color(255, 255, 255));
+        jButton_WithoutLogin.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jButton_WithoutLogin.setForeground(new java.awt.Color(0, 51, 51));
+        jButton_WithoutLogin.setText("Access without login");
+        jButton_WithoutLogin.setContentAreaFilled(false);
+        jButton_WithoutLogin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_WithoutLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_WithoutLoginActionPerformed(evt);
+            }
+        });
 
         jLabel_i.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/i-icon.png"))); // NOI18N
         jLabel_i.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -174,7 +181,7 @@ public class LoginFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(147, 147, 147)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton1)
+                            .addComponent(jButton_WithoutLogin)
                             .addComponent(jButton_Forgot))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel_i)
@@ -193,7 +200,7 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton_Forgot)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(jButton_WithoutLogin)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -236,6 +243,12 @@ public class LoginFrame extends javax.swing.JFrame {
         this.ruleLibraryDialog.setVisible(true);
     }//GEN-LAST:event_jLabel_iMouseClicked
 
+    private void jButton_WithoutLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_WithoutLoginActionPerformed
+        // TODO add your handling code here:
+        this.bookDialog = new BookDialog(this, true);
+        this.bookDialog.setVisible(true);
+    }//GEN-LAST:event_jButton_WithoutLoginActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -272,9 +285,9 @@ public class LoginFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton_Forgot;
     private javax.swing.JButton jButton_Login;
+    private javax.swing.JButton jButton_WithoutLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
