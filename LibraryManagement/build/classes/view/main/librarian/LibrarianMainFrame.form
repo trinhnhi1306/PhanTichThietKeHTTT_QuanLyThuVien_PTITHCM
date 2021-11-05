@@ -38,17 +38,10 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
       <SubComponents>
-        <Component class="view.main.librarian.BookLoanPanel" name="bookLoanPanel">
+        <Component class="view.main.librarian.ChooseReaderPanel" name="chooseReaderPanel1">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="loan"/>
-            </Constraint>
-          </Constraints>
-        </Component>
-        <Component class="view.main.librarian.BookReturnPanel" name="bookReturnPanel">
-          <Constraints>
-            <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
-              <CardConstraints cardName="return"/>
+              <CardConstraints cardName="choose"/>
             </Constraint>
           </Constraints>
         </Component>

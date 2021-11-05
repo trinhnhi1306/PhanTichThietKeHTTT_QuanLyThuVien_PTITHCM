@@ -33,8 +33,7 @@ public class LibrarianMainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel_CardLayout = new javax.swing.JPanel();
-        bookLoanPanel = new view.main.librarian.BookLoanPanel();
-        bookReturnPanel = new view.main.librarian.BookReturnPanel();
+        chooseReaderPanel1 = new view.main.librarian.ChooseReaderPanel();
         readerPanel = new view.main.librarian.ReaderPanel();
         profilePanel = new view.profile.ProfilePanel();
         jPanel_Title = new javax.swing.JPanel();
@@ -61,8 +60,7 @@ public class LibrarianMainFrame extends javax.swing.JFrame {
 
         jPanel_CardLayout.setBackground(new java.awt.Color(255, 255, 255));
         jPanel_CardLayout.setLayout(new java.awt.CardLayout());
-        jPanel_CardLayout.add(bookLoanPanel, "loan");
-        jPanel_CardLayout.add(bookReturnPanel, "return");
+        jPanel_CardLayout.add(chooseReaderPanel1, "choose");
         jPanel_CardLayout.add(readerPanel, "reader");
         jPanel_CardLayout.add(profilePanel, "profile");
 
@@ -200,7 +198,8 @@ public class LibrarianMainFrame extends javax.swing.JFrame {
         jPanel_Return.setBackground(jPanel_Side.getBackground());
         jPanel_Reader.setBackground(jPanel_Side.getBackground());
         jPanel_Profile.setBackground(jPanel_Side.getBackground());
-        UIController.showCardLayout("loan", jPanel_CardLayout);
+        UIController.showCardLayout("choose", jPanel_CardLayout);
+        chooseReaderPanel1.setFlag(1);
     }//GEN-LAST:event_jLabel_BorrowMouseClicked
 
     private void jLabel_ReturnMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_ReturnMouseClicked
@@ -209,7 +208,8 @@ public class LibrarianMainFrame extends javax.swing.JFrame {
         jPanel_Borrow.setBackground(jPanel_Side.getBackground());
         jPanel_Reader.setBackground(jPanel_Side.getBackground());
         jPanel_Profile.setBackground(jPanel_Side.getBackground());
-        UIController.showCardLayout("return", jPanel_CardLayout);
+        UIController.showCardLayout("choose", jPanel_CardLayout);
+        chooseReaderPanel1.setFlag(2);
     }//GEN-LAST:event_jLabel_ReturnMouseClicked
 
     private void jLabel_ReaderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_ReaderMouseClicked
@@ -272,8 +272,7 @@ public class LibrarianMainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private view.main.librarian.BookLoanPanel bookLoanPanel;
-    private view.main.librarian.BookReturnPanel bookReturnPanel;
+    private view.main.librarian.ChooseReaderPanel chooseReaderPanel1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel_Borrow;
