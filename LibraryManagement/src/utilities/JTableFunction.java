@@ -34,7 +34,6 @@ public class JTableFunction {
     public void LoadData(JTable tb, String sql) {
         DefaultTableModel dtm = (DefaultTableModel)tb.getModel();
         dtm.setNumRows(0);
-        
         Connection conn = Connect.GetConnect();
         
         try {
@@ -68,7 +67,8 @@ public class JTableFunction {
             ps.close();
             conn.close();
         } catch (SQLException e) {
-            System.out.println("lỗi kết nối database đến bảng");
+            System.out.println("lỗi kết nối database đến bảng ");
+            e.printStackTrace();
         }
     }
     public void LoadData(JTable tb, String sql, boolean haveDayInWeek) {
@@ -152,5 +152,22 @@ public class JTableFunction {
         catch(PatternSyntaxException pse) {
             System.out.println("Bad regex pattern");
         }
+    }
+    
+    public long SumColumn (JTable tb, int column)
+    {
+        long sum = 0;
+        
+        try {
+            for (int row = 0; row < tb.getRowCount(); row ++) 
+            {
+                if (tb.getValueAt(row, column).toString().isBlank()) return 0;
+                sum += Integer.parseInt(tb.getValueAt(row, column).toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return sum;
     }
 }
