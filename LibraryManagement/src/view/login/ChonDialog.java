@@ -5,6 +5,26 @@
  */
 package view.login;
 
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Properties;
+import java.util.Random;
+import model.database.Connect;
+import java.util.Properties;
+import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 /**
  *
  * @author Admin
@@ -22,8 +42,24 @@ public class ChonDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        getPhoneAndEmail();
+        
     }
-
+    void getPhoneAndEmail(){
+        String dauSao = "";
+        for(int i =0; i < (LoginFrame.PhoneNumber.length()-4) ; i++)
+        {
+             dauSao += "*";
+        }
+        String sdt = LoginFrame.PhoneNumber.substring(0, 2) + dauSao + LoginFrame.PhoneNumber.substring(LoginFrame.PhoneNumber.length()-2, LoginFrame.PhoneNumber.length());
+        jLabel_Phone.setText(sdt);
+        for(int i =0; i < (LoginFrame.Email.length()-4) ; i++)
+        {
+             dauSao += "*";
+        }
+        String email = LoginFrame.Email.substring(0, 2) + dauSao + LoginFrame.Email.substring(LoginFrame.Email.length()-2, LoginFrame.Email.length());
+        jLabel_Email.setText(email);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -41,8 +77,8 @@ public class ChonDialog extends javax.swing.JDialog {
         jButton_Cancel = new javax.swing.JButton();
         jRadioButton_SMS = new javax.swing.JRadioButton();
         jRadioButton_Email = new javax.swing.JRadioButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
+        jLabel_Email = new javax.swing.JLabel();
+        jLabel_Phone = new javax.swing.JLabel();
         jLabel_Ten = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -87,13 +123,13 @@ public class ChonDialog extends javax.swing.JDialog {
         jRadioButton_Email.setSelected(true);
         jRadioButton_Email.setText("Gửi mã qua email");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel3.setText("Email");
+        jLabel_Email.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_Email.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel_Email.setText("Email");
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel4.setText("Số điện thoại");
+        jLabel_Phone.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_Phone.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel_Phone.setText("Số điện thoại");
 
         jLabel_Ten.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel_Ten.setForeground(new java.awt.Color(51, 51, 51));
@@ -108,7 +144,7 @@ public class ChonDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jLabel4)
+                        .addComponent(jLabel_Phone)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,7 +153,7 @@ public class ChonDialog extends javax.swing.JDialog {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(21, 21, 21)
-                                        .addComponent(jLabel3))
+                                        .addComponent(jLabel_Email))
                                     .addComponent(jRadioButton_Email)
                                     .addComponent(jRadioButton_SMS))
                                 .addGap(0, 0, Short.MAX_VALUE))
@@ -144,11 +180,11 @@ public class ChonDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jRadioButton_Email)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3)
+                .addComponent(jLabel_Email)
                 .addGap(18, 18, 18)
                 .addComponent(jRadioButton_SMS)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
+                .addComponent(jLabel_Phone)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Continue)
@@ -175,6 +211,13 @@ public class ChonDialog extends javax.swing.JDialog {
     private void jButton_ContinueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ContinueActionPerformed
         // TODO add your handling code here:
         this.dispose();
+        LoginFrame.OTPSystem = stringOTP();
+        if(jRadioButton_Email.isSelected()){
+            sendOTPByEmail(LoginFrame.Email, LoginFrame.OTPSystem);
+            
+        }else{
+            sendOTPBySMS(LoginFrame.PhoneNumber, LoginFrame.OTPSystem);
+        }
         this.maDialog = new MaDialog(null, true);
         this.maDialog.setVisible(true);
     }//GEN-LAST:event_jButton_ContinueActionPerformed
@@ -183,15 +226,94 @@ public class ChonDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton_CancelActionPerformed
+    
+    
+    static void sendOTPByEmail(String email,String OTP){
+         final String username = "quansonvu2408@gmail.com";
+        final String password = "bxlmyowotnvbpeer";
 
+        Properties prop = new Properties();
+		prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "465");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.socketFactory.port", "465");
+        prop.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("quansonvu2408@gmail.com"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(email)
+            );
+            message.setSubject("Password recovery service");
+            message.setText("Dear customer,"
+                    + "\n Here your OTP: " + OTP);
+
+            Transport.send(message);
+
+            System.out.println("Done");
+
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    static void  sendOTPBySMS(String sdt,String OTP){
+        try {
+             SpeedSMSAPI api  = new SpeedSMSAPI("z7FjSOma-io4dTyJZsOKh1jTMhrV9gT-");
+            String phone = sdt; 
+            String content = OTP + "là mã OTP lấy lại mật khẩu của bạn" ;
+            int type = 5;
+            String sender = "3dacfd2c27a076a9";
+            
+            String response = api.sendSMS(phone, content, type, sender);
+            System.out.println(response);
+        } catch (IOException ex) {
+            Logger.getLogger(ChonDialog.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     static char[] OTP(int len)
+    {
+        // Using numeric values
+        String numbers = "0123456789";
+  
+        // Using random method
+        Random rndm_method = new Random();
+  
+        char[] otp = new char[len];
+  
+        for (int i = 0; i < len; i++)
+        {
+            // Use of charAt() method : to get character value
+            // Use of nextInt() as it is scanning the value as int
+            otp[i] =
+             numbers.charAt(rndm_method.nextInt(numbers.length()));
+        }
+        
+        return otp;
+    }
+    
+    static String stringOTP(){
+        int length = 6;
+        return String.valueOf(OTP(length));
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Continue;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel_Email;
+    private javax.swing.JLabel jLabel_Phone;
     private javax.swing.JLabel jLabel_Ten;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRadioButton_Email;

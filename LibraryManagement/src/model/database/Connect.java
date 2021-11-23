@@ -10,12 +10,17 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
  * @author Admin
  */
 public class Connect {
+    
+    private Connection con;
+    private Statement stmt;
+    
     public static Connection GetConnect(){
         Connection conn = null;
         String url ="jdbc:sqlserver://;databaseName=QLTHUVIEN";
@@ -40,5 +45,34 @@ public class Connect {
         ps.close();
         conn.close();
         return rs;
+    }
+    
+    public Connect() {
+        try 
+        {
+            con = GetConnect();
+            stmt = con.createStatement();
+        } catch (Exception e) {
+        }
+    }
+    
+     public int Update(String str) {
+        try 
+        {
+            int i = stmt.executeUpdate(str);
+            return i;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    public ResultSet Query(String str) {
+        try 
+        {
+            ResultSet rs = stmt.executeQuery(str);
+            return rs;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

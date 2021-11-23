@@ -5,7 +5,16 @@
  */
 package view.login;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import model.database.Connect;
+import org.mindrot.bcrypt.BCrypt;
+import view.main.librarian.ReaderPanel;
 
 /**
  *
@@ -42,11 +51,8 @@ public class ConfirmDialog extends javax.swing.JDialog {
         jButton_Confirm = new javax.swing.JButton();
         jButton_Cancel = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jPasswordField_New = new javax.swing.JPasswordField();
+        jPasswordField_NewPasword = new javax.swing.JPasswordField();
         jLabel_New = new javax.swing.JLabel();
-        jLabel_Verify = new javax.swing.JLabel();
-        jPasswordField_Verify = new javax.swing.JPasswordField();
-        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -82,7 +88,7 @@ public class ConfirmDialog extends javax.swing.JDialog {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel3.setText("New password");
 
-        jPasswordField_New.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jPasswordField_NewPasword.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
         jLabel_New.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/hide.png"))); // NOI18N
         jLabel_New.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -90,19 +96,6 @@ public class ConfirmDialog extends javax.swing.JDialog {
                 jLabel_NewMouseClicked(evt);
             }
         });
-
-        jLabel_Verify.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/hide.png"))); // NOI18N
-        jLabel_Verify.setToolTipText("");
-        jLabel_Verify.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel_VerifyMouseClicked(evt);
-            }
-        });
-
-        jPasswordField_Verify.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel4.setText("Verify new password");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -115,22 +108,18 @@ public class ConfirmDialog extends javax.swing.JDialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jButton_Cancel)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jButton_Confirm))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel4)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jPasswordField_New)
-                                        .addComponent(jPasswordField_Verify, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel_New)
-                                        .addComponent(jLabel_Verify)))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jPasswordField_NewPasword, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel_New)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton_Cancel)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton_Confirm)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -145,18 +134,12 @@ public class ConfirmDialog extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel_New)
-                    .addComponent(jPasswordField_New, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel_Verify)
-                    .addComponent(jPasswordField_Verify, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jPasswordField_NewPasword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(42, 42, 42)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Confirm)
                     .addComponent(jButton_Cancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -175,6 +158,25 @@ public class ConfirmDialog extends javax.swing.JDialog {
 
     private void jButton_ConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ConfirmActionPerformed
         // TODO add your handling code here:
+        String pwd = new String(jPasswordField_NewPasword.getPassword());
+        if(pwd.trim().equalsIgnoreCase("")){
+            JOptionPane.showMessageDialog(null, "Mật khẩu không được để trống!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+        Connection ketNoi =Connect.GetConnect();
+        String sql = "update account\n" +
+                        "SET password = ?\n" +
+                        "where phone_number = ?";
+
+                PreparedStatement ps;
+              try {
+                  ps = ketNoi.prepareStatement(sql);
+                  ps.setString(1, hash(pwd));
+                  ps.setString(2, LoginFrame.PhoneNumber);
+                  ps.executeUpdate();
+              } catch (SQLException ex) {
+                  Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+              }  
         this.dispose();
     }//GEN-LAST:event_jButton_ConfirmActionPerformed
 
@@ -188,38 +190,28 @@ public class ConfirmDialog extends javax.swing.JDialog {
         if (showPassNew) {
             showPassNew = false;
             jLabel_New.setIcon(new ImageIcon(getClass().getResource("/img/hide.png")));
-            jPasswordField_New.setEchoChar('*');
+            jPasswordField_NewPasword.setEchoChar('*');
         } else {
             showPassNew = true;
             jLabel_New.setIcon(new ImageIcon(getClass().getResource("/img/show.png")));
-            jPasswordField_New.setEchoChar('\u0000');
+            jPasswordField_NewPasword.setEchoChar('\u0000');
         }
     }//GEN-LAST:event_jLabel_NewMouseClicked
+    public static String hash(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt(12));
+    }
 
-    private void jLabel_VerifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel_VerifyMouseClicked
-        // TODO add your handling code here:
-        if (showPassVerify) {
-            showPassVerify = false;
-            jLabel_Verify.setIcon(new ImageIcon(getClass().getResource("/img/hide.png")));
-            jPasswordField_Verify.setEchoChar('*');
-        } else {
-            showPassVerify = true;
-            jLabel_Verify.setIcon(new ImageIcon(getClass().getResource("/img/show.png")));
-            jPasswordField_Verify.setEchoChar('\u0000');
-        }
-    }//GEN-LAST:event_jLabel_VerifyMouseClicked
-
+    public static boolean verifyHash(String password, String hash) {
+        return BCrypt.checkpw(password, hash);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Confirm;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel_New;
-    private javax.swing.JLabel jLabel_Verify;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField_New;
-    private javax.swing.JPasswordField jPasswordField_Verify;
+    private javax.swing.JPasswordField jPasswordField_NewPasword;
     // End of variables declaration//GEN-END:variables
 }

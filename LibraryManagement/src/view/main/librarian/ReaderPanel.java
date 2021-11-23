@@ -5,6 +5,31 @@
  */
 package view.main.librarian;
 
+import com.toedter.calendar.JTextFieldDateEditor;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import model.database.Connect;
+import org.mindrot.bcrypt.BCrypt;
 import swing.UIController;
 
 /**
@@ -12,7 +37,7 @@ import swing.UIController;
  * @author Admin
  */
 public class ReaderPanel extends javax.swing.JPanel {
-
+  DefaultTableModel dtm;
     public enum Mode {
         ADD,
         MODIFY,
@@ -26,8 +51,15 @@ public class ReaderPanel extends javax.swing.JPanel {
      */
     public ReaderPanel() {
         initComponents();
+        UIController.showCardLayout("cardFirst", jPanel_Card);
+        layUser();
+        loadAddress();
         UIController.setDefaultTableHeader(jTable_Reader);
         setEditableForAll(false);
+        jTextField_Username.setEnabled(false);
+        JTextFieldDateEditor editor = (JTextFieldDateEditor) jDateChooser_DateOfBirth.getDateEditor();
+        editor.setEditable(false);
+      
     }
 
     /**
@@ -39,9 +71,8 @@ public class ReaderPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
+        buttonGroupGender = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -54,7 +85,6 @@ public class ReaderPanel extends javax.swing.JPanel {
         jComboBox_Province = new javax.swing.JComboBox<>();
         jComboBox_District = new javax.swing.JComboBox<>();
         jComboBox_Commune = new javax.swing.JComboBox<>();
-        jTextField_ID = new javax.swing.JTextField();
         jRadioButton_Male = new javax.swing.JRadioButton();
         jRadioButton_Female = new javax.swing.JRadioButton();
         jRadioButton_Other = new javax.swing.JRadioButton();
@@ -65,6 +95,9 @@ public class ReaderPanel extends javax.swing.JPanel {
         jDateChooser_DateOfBirth = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
         jButton_Extend = new javax.swing.JButton();
+        jTextField_Address = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField_Username = new javax.swing.JTextField();
         jPanel_Card = new javax.swing.JPanel();
         jPanel_Card2 = new javax.swing.JPanel();
         jButton_OK = new javax.swing.JButton();
@@ -74,7 +107,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         jButton_Add = new javax.swing.JButton();
         jButton_Modify = new javax.swing.JButton();
         jButton_Remove = new javax.swing.JButton();
-        jButton_ClearSearch = new javax.swing.JButton();
+        jButton_Search = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         jTextField_NameSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -84,9 +117,6 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Reader information", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel1.setText("ID");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel2.setText("Name");
@@ -116,30 +146,39 @@ public class ReaderPanel extends javax.swing.JPanel {
         jLabel13.setText("Commune");
 
         jComboBox_Province.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jComboBox_Province.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_Province.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_ProvinceActionPerformed(evt);
+            }
+        });
 
         jComboBox_District.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jComboBox_District.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_District.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_DistrictActionPerformed(evt);
+            }
+        });
 
         jComboBox_Commune.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jComboBox_Commune.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jTextField_ID.setEditable(false);
-        jTextField_ID.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jComboBox_Commune.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_CommuneActionPerformed(evt);
+            }
+        });
 
         jRadioButton_Male.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton_Male);
+        buttonGroupGender.add(jRadioButton_Male);
         jRadioButton_Male.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Male.setSelected(true);
         jRadioButton_Male.setText("Male");
 
         jRadioButton_Female.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton_Female);
+        buttonGroupGender.add(jRadioButton_Female);
         jRadioButton_Female.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Female.setText("Female");
 
         jRadioButton_Other.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup1.add(jRadioButton_Other);
+        buttonGroupGender.add(jRadioButton_Other);
         jRadioButton_Other.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Other.setText("Other");
 
@@ -149,9 +188,11 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         jTextField_Email.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
+        jDateChooser_DayEnd.setDateFormatString("yyyy-MM-dd");
         jDateChooser_DayEnd.setEnabled(false);
         jDateChooser_DayEnd.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
+        jDateChooser_DateOfBirth.setDateFormatString("yyyy-MM-dd");
         jDateChooser_DateOfBirth.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
@@ -168,113 +209,128 @@ public class ReaderPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
+        jLabel1.setText("Username");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(48, 48, 48)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel3)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(jLabel4)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jDateChooser_DateOfBirth, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
                                 .addComponent(jRadioButton_Male)
                                 .addGap(18, 18, 18)
                                 .addComponent(jRadioButton_Female)
                                 .addGap(18, 18, 18)
                                 .addComponent(jRadioButton_Other))
-                            .addComponent(jTextField_ID))
-                        .addGap(57, 57, 57)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel2)))
-                    .addComponent(jLabel6))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField_Email, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                    .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                    .addComponent(jTextField_Name, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                    .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel10)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel11))
-                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addComponent(jTextField_Name, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(76, 76, 76)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox_Province, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jComboBox_Commune, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(187, 187, 187))
+                            .addComponent(jDateChooser_DateOfBirth, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(jTextField_Username)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel10)
+                            .addGap(18, 18, 18)
+                            .addComponent(jTextField_Address))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel11)
+                            .addGap(18, 18, 18)
+                            .addComponent(jComboBox_Province, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(47, 47, 47)
+                            .addComponent(jLabel12)
+                            .addGap(18, 18, 18)
+                            .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(45, 45, 45)
+                            .addComponent(jLabel13)
+                            .addGap(18, 18, 18)
+                            .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton_Extend)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jButton_Extend))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(98, 98, 98)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel8)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7)))
+                        .addGap(35, 35, 35)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                            .addComponent(jTextField_Email))))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel11)
-                    .addComponent(jComboBox_Province, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField_ID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField_Name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(jRadioButton_Male)
                             .addComponent(jRadioButton_Female)
-                            .addComponent(jRadioButton_Other)
-                            .addComponent(jLabel7)
-                            .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jRadioButton_Other))
+                        .addGap(22, 22, 22))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jDateChooser_DateOfBirth, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel8)
-                                .addComponent(jTextField_Email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel4))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton_Extend)))
-                .addGap(22, 22, 22))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jTextField_Email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(21, 21, 21)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jTextField_Username, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextField_Name, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jDateChooser_DateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(1, 1, 1)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton_Extend, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel11)
+                        .addComponent(jComboBox_Province, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel12)
+                        .addComponent(jLabel13)
+                        .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel6))
+                    .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jTextField_Address, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jPanel_Card.setBackground(new java.awt.Color(255, 255, 255));
@@ -364,11 +420,16 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         jPanel_Card.add(jPanel_Card1, "cardFirst");
 
-        jButton_ClearSearch.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jButton_ClearSearch.setForeground(new java.awt.Color(51, 51, 51));
-        jButton_ClearSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
-        jButton_ClearSearch.setText("Clear");
-        jButton_ClearSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Search.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_Search.setForeground(new java.awt.Color(51, 51, 51));
+        jButton_Search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
+        jButton_Search.setText("Find");
+        jButton_Search.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Search.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_SearchActionPerformed(evt);
+            }
+        });
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel14.setText("Name");
@@ -380,15 +441,27 @@ public class ReaderPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Name", "Gender", "Date of birth", "Adress", "Phone number", "Email", "Ngày đăng ký", "Ngày hết hạn"
+                "Username", "Name", "Gender", "Date of birth", "Adress", "Phone number", "Email", "Ngày đăng ký"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        jTable_Reader.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_ReaderMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jTable_Reader);
@@ -407,7 +480,7 @@ public class ReaderPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(jTextField_NameSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton_ClearSearch)
+                        .addComponent(jButton_Search)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
@@ -422,10 +495,10 @@ public class ReaderPanel extends javax.swing.JPanel {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel14)
                         .addComponent(jTextField_NameSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton_ClearSearch))
+                        .addComponent(jButton_Search))
                     .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 398, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -437,19 +510,27 @@ public class ReaderPanel extends javax.swing.JPanel {
         jTextField_PhoneNumber.setText("");
         jTextField_Email.setText("");
         jDateChooser_DayEnd.setDate(null);
-        jComboBox_Province.setSelectedIndex(0);
-        jComboBox_District.setSelectedIndex(0);
-        jComboBox_Commune.setSelectedIndex(0);
+        jTextField_Address.setText("");
+        jTextField_Username.setText("");
+//        jComboBox_Province.setSelectedIndex(0);
+//        jComboBox_District.setSelectedIndex(0);
+//        jComboBox_Commune.setSelectedIndex(0);
     }
 
     public void setEditableForAll(boolean editable) {
         jDateChooser_DateOfBirth.setEnabled(editable);
-        jTextField_Name.setEditable(editable);
-        jTextField_PhoneNumber.setEditable(editable);
-        jTextField_Email.setEditable(editable);
+        jTextField_Name.setEnabled(editable);
+        jTextField_PhoneNumber.setEnabled(editable);
+        jTextField_Email.setEnabled(editable);
         jComboBox_Province.setEnabled(editable);
         jComboBox_District.setEnabled(editable);
         jComboBox_Commune.setEnabled(editable);
+        jTextField_Address.setEnabled(editable);
+        jRadioButton_Male.setEnabled(editable);
+        jRadioButton_Female.setEnabled(editable);
+        jRadioButton_Other.setEnabled(editable);
+        
+        
     }
     
     private void jButton_ExtendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExtendActionPerformed
@@ -461,10 +542,17 @@ public class ReaderPanel extends javax.swing.JPanel {
     private void jButton_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddActionPerformed
         // TODO add your handling code here:
         clearAll();
-        jTextField_ID.setText("...");
+        
         mode = Mode.ADD;
         UIController.showCardLayout("cardSecond", jPanel_Card);
         setEditableForAll(true);
+        jTextField_Username.setEnabled(true);   
+        Date date = new Date();
+        jDateChooser_DateOfBirth.setDate(date);
+        jComboBox_Province.setSelectedIndex(0);
+        jComboBox_District.setSelectedIndex(0);
+        jComboBox_Commune.setSelectedIndex(0);
+        
     }//GEN-LAST:event_jButton_AddActionPerformed
 
     private void jButton_ModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ModifyActionPerformed
@@ -472,6 +560,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         mode = Mode.MODIFY;
         UIController.showCardLayout("cardSecond", jPanel_Card);
         setEditableForAll(true);
+        
     }//GEN-LAST:event_jButton_ModifyActionPerformed
 
     private void jButton_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RemoveActionPerformed
@@ -482,12 +571,159 @@ public class ReaderPanel extends javax.swing.JPanel {
 
     private void jButton_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_OKActionPerformed
         // TODO add your handling code here:
+        
         if (mode == Mode.ADD) {
-
+            // kiểm tra date và lấy date
+            Date dateCheck = jDateChooser_DateOfBirth.getDate();
+            String pattern = "yyyy-MM-dd";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            try {
+                Date dateAgeAllow = simpleDateFormat.parse("2015-01-12");
+                Date today = new Date();
+                if(!dateAgeAllow.after(dateCheck) && !today.before(dateCheck)) {
+                        JOptionPane.showMessageDialog(null, "Không quá ngày hiện tại\n Phải hơn 6 tuổi", "Ngày sinh sai định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+            } catch (ParseException ex) {
+                Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            String date_of_birth = sdf.format(jDateChooser_DateOfBirth.getDate());
+            
+            
+            String username = jTextField_Username.getText();
+            String Full_Name = jTextField_Name.getText();
+            String genderEndlish = getSelectedButtonText(buttonGroupGender);
+            String gender = "";
+            if(genderEndlish.equalsIgnoreCase("Male")){
+                gender = "Nam";
+            }else if(genderEndlish.equalsIgnoreCase("Female")){
+                gender = "Nữ";
+            }else{
+                gender = "Khác";
+            }
+            String email = jTextField_Email.getText();
+            String address = jTextField_Address.getText();
+            String phone_number = jTextField_PhoneNumber.getText();
+            int IdWard = getIdWard(jComboBox_Commune.getSelectedItem().toString());          
+            
+            
+            
+            insertAddress(getIdWard(jComboBox_Commune.getSelectedItem().toString()),jTextField_Address.getText());
+            int address_id = getLastIdAddress();
+            
+            
+            
+            
+            if(!verifyFullname(Full_Name)) {
+                JOptionPane.showMessageDialog(null, "Không được để trống\n Sử dụng bảng chữ cái Đông Lào", "Vui lòng nhập tên đúng định dạng sau", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
+            if(!validate(email)){
+                JOptionPane.showMessageDialog(null, "Không được để trống\n Sử dụng đúng định dạng Email chuẩn", "Vui lòng nhập email đúng định dạng", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
+            if(!validatePhone(phone_number)){
+                JOptionPane.showMessageDialog(null, "Không được để trống\n Chỉ nhận kí tự số", "Vui lòng nhập số điện thoại đúng định dạng", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }         
+//            if(!verifyUsername(useName)){    
+//                JOptionPane.showMessageDialog(null, "Không được để trống\nChứa các bảng chữ cái, chữ số và dấu gạch ngang \nKhông chứa kí tự đặc biệt", "Vui lòng nhập username đúng định dạng", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//            }
+            int i = checkExistUsernameOrPhoneOrEmail(phone_number,email,username); 
+            if(i > 0){
+                if(i == 1){
+                    JOptionPane.showMessageDialog(null, "số điện thoại đã có người sử dụng. Vui lòng nhập số điện thoại khác!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(i == 2){
+                    JOptionPane.showMessageDialog(null, "email đã có người sử dụng. Vui lòng nhập email khác!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(i == 3){
+                    JOptionPane.showMessageDialog(null, "username đã có người sử dụng. Vui lòng nhập username khác!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            
+            insertAccount(username, hash(username), Full_Name, gender, date_of_birth, address_id, phone_number, email, 1, 1);
+                    
         } else if (mode == Mode.MODIFY) {
+            // kiểm tra date và lấy date
+            Date dateCheck = jDateChooser_DateOfBirth.getDate();
+            String pattern = "yyyy-MM-dd";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+            try {
+                Date dateAgeAllow = simpleDateFormat.parse("2015-01-12");
+                Date today = new Date();
+                if(!dateAgeAllow.after(dateCheck) && !today.before(dateCheck)) {
+                        JOptionPane.showMessageDialog(null, "Không quá ngày hiện tại\n Phải hơn 6 tuổi", "Ngày sinh sai định dạng", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+            } catch (ParseException ex) {
+                Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+            String date_of_birth = sdf.format(jDateChooser_DateOfBirth.getDate());
+            
+            
+           
+            String Full_Name = jTextField_Name.getText();
+            String genderEndlish = getSelectedButtonText(buttonGroupGender);
+            String gender = "";
+            if(genderEndlish.equalsIgnoreCase("Male")){
+                gender = "Nam";
+            }else if(genderEndlish.equalsIgnoreCase("Female")){
+                gender = "Nữ";
+            }else{
+                gender = "Khác";
+            }
+            String email = jTextField_Email.getText();
+            String address = jTextField_Address.getText();
+            String phone_number = jTextField_PhoneNumber.getText();
+            int IdWard = getIdWard(jComboBox_Commune.getSelectedItem().toString());          
+            String username = jTextField_Username.getText();
+           
+            int address_id = getIdAddressByUserName(username);
 
+            if(!verifyFullname(Full_Name)) {
+                JOptionPane.showMessageDialog(null, "Không được để trống\n Sử dụng bảng chữ cái Đông Lào", "Vui lòng nhập tên đúng định dạng sau", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
+            if(!validate(email)){
+                JOptionPane.showMessageDialog(null, "Không được để trống\n Sử dụng đúng định dạng Email chuẩn", "Vui lòng nhập email đúng định dạng", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }
+            if(!validatePhone(phone_number)){
+                JOptionPane.showMessageDialog(null, "Không được để trống\n Chỉ nhận kí tự số", "Vui lòng nhập số điện thoại đúng định dạng", JOptionPane.ERROR_MESSAGE);
+                    return;
+            }         
+//            if(!verifyUsername(useName)){    
+//                JOptionPane.showMessageDialog(null, "Không được để trống\nChứa các bảng chữ cái, chữ số và dấu gạch ngang \nKhông chứa kí tự đặc biệt", "Vui lòng nhập username đúng định dạng", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//            }
+            int i = checkExistPhoneOrEmailWhenUpdate(phone_number,email,username); 
+                if(i > 0){
+                if(i == 1){
+                    JOptionPane.showMessageDialog(null, "Số điện thoại đã có người sử dụng. Vui lòng nhập số điện thoại khác!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if(i == 2){
+                    JOptionPane.showMessageDialog(null, "email đã có người sử dụng. Vui lòng nhập username khác!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+            }
+            updateAccount(Full_Name, gender, date_of_birth, phone_number, email, username);
+            updateAddress(address_id, IdWard, address);
+            
         }
+        setEditableForAll(false);
+        jTextField_Username.setEnabled(false);
+        jButton_Modify.setEnabled(true);
         UIController.showCardLayout("cardFirst", jPanel_Card);
+        layUser();
     }//GEN-LAST:event_jButton_OKActionPerformed
 
     private void jButton_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelActionPerformed
@@ -495,6 +731,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         mode = Mode.FREE;
         clearAll();
         setEditableForAll(false);
+        jTextField_Username.setEnabled(false);
         if (jTable_Reader.getSelectedRow() != -1) {
         } else {
             jButton_Modify.setEnabled(false);
@@ -508,17 +745,564 @@ public class ReaderPanel extends javax.swing.JPanel {
         clearAll();
     }//GEN-LAST:event_jButton_ClearActionPerformed
 
+    private void jComboBox_ProvinceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_ProvinceActionPerformed
+        // TODO add your handling code here:
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select district.district_name from district where district.province_id = ?");
+            ps.setInt(1, getIdProvince(jComboBox_Province.getSelectedItem().toString()));
+            ResultSet rs=ps.executeQuery();
+            jComboBox_District.removeAllItems();
+            while(rs.next()){  
+                jComboBox_District.addItem(rs.getString(1));   
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay khach hang");
+        }
+        
+    }//GEN-LAST:event_jComboBox_ProvinceActionPerformed
 
+    private void jComboBox_CommuneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_CommuneActionPerformed
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_jComboBox_CommuneActionPerformed
+
+    private void jComboBox_DistrictActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_DistrictActionPerformed
+        // TODO add your handling code here:
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select ward.ward_name from ward where ward.district_id = ?");
+            System.out.println(jComboBox_District.getSelectedItem().toString());
+            ps.setInt(1, getIdDistrict(jComboBox_District.getSelectedItem().toString()));
+            ResultSet rs=ps.executeQuery();
+            jComboBox_Commune.removeAllItems();
+            while(rs.next()){  
+                jComboBox_Commune.addItem(rs.getString(1));   
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (Exception ex) {
+                
+        }
+    }//GEN-LAST:event_jComboBox_DistrictActionPerformed
+
+    private void jTable_ReaderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_ReaderMouseClicked
+        // TODO add your handling code here:
+        DefaultTableModel model= (DefaultTableModel)jTable_Reader.getModel();
+        int selectedRow = jTable_Reader.getSelectedRow();
+        
+//        jButtonNVSua.enable(true);
+        List<Integer> list = getIdDistrictAndIdProvince(model.getValueAt(selectedRow, 0).toString());
+        jTextField_Username.setText(model.getValueAt(selectedRow, 0).toString());
+        jTextField_Name.setText(model.getValueAt(selectedRow, 1).toString());
+        jTextField_Email.setText(model.getValueAt(selectedRow, 6).toString());
+        jTextField_PhoneNumber.setText(model.getValueAt(selectedRow, 5).toString());
+        jTextField_Address.setText(model.getValueAt(selectedRow, 4).toString().split("-")[0]);
+        jComboBox_Province.setSelectedIndex(list.get(2)-1);
+        System.out.println(model.getValueAt(selectedRow, 2).toString());
+        if(model.getValueAt(selectedRow, 2).toString().equalsIgnoreCase("nam")){
+            jRadioButton_Male.setSelected(true);
+        }else if(model.getValueAt(selectedRow, 2).toString().equalsIgnoreCase("nữ")){
+            jRadioButton_Female.setSelected(true);
+        }else{
+            jRadioButton_Other.setSelected(true);
+        }
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            jDateChooser_DayEnd.setDate(sdf.parse(model.getValueAt(selectedRow, 7).toString()));
+            jDateChooser_DateOfBirth.setDate(sdf.parse(model.getValueAt(selectedRow, 3).toString()));
+        } catch (ParseException ex) {
+            System.out.println("loi lay ngay tu bang nhan vien"+ex.getMessage());
+        }
+        jButton_Modify.setEnabled(true);
+        jButton_Remove.setEnabled(true);
+        
+    }//GEN-LAST:event_jTable_ReaderMouseClicked
+
+    private void jButton_SearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SearchActionPerformed
+        // TODO add your handling code here:
+        layUserBySearch(jTextField_NameSearch.getText());
+    }//GEN-LAST:event_jButton_SearchActionPerformed
+    
+    int getIdProvince(String nameProvince){
+        int i = 0;
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select province.province_id from province where province.province_name = ?");
+            ps.setString(1, nameProvince);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                i = rs.getInt(1);   
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay khach hang");
+        }
+        return i;
+    }
+    
+    int getIdDistrict(String nameDistrict){
+        int i = 0;
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select district.district_id from district where district.district_name = ?");
+            ps.setString(1, nameDistrict);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                i = rs.getInt(1);   
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay getIdDistrict");
+        }
+        return i;
+    }
+    
+    int getIdAddressByUserName(String username){
+        int i = 0;
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select account.address_id from account where account.username = ?");
+            ps.setString(1, username);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                i = rs.getInt(1);   
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay getIdAddressByUserName");
+        }
+        return i;
+    }
+    
+    List<Integer> getIdDistrictAndIdProvince(String username){
+        int i = 0;
+        int j = 0;
+        int x = 0;
+        List<Integer> list = new ArrayList<Integer>();
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select ward.ward_id,district.district_id,province.province_id from ward,district,province,address\n" +
+                                                            "where ward.district_id = district.district_id\n" +
+                                                            "and district.province_id = province.province_id\n" +
+                                                            "and ward.ward_id = address.ward_id\n" +
+                                                            "and address.address_id = ?");
+            ps.setInt(1, getIdAddressByUserName(username));
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                i = rs.getInt(1);   
+                j = rs.getInt(2); 
+                x = rs.getInt(3); 
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay getIdDistrictAndIdProvince");
+        }
+        list.add(i);
+        list.add(j);
+        list.add(x);
+        return list;
+    }
+    
+    int getIdWard(String nameWard){
+        int i = 0;
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select ward.ward_id from ward where ward.ward_name = ?");
+            ps.setString(1, nameWard);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                i = rs.getInt(1);   
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay getIdWard");
+        }
+        return i;
+    }
+    
+    void layUser(){
+        
+         dtm= (DefaultTableModel) jTable_Reader.getModel();
+         dtm.setNumRows(0);
+        Connection ketNoi= Connect.GetConnect();
+        Vector vt;
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select a.username,a.Full_Name,a.gender,a.date_of_birth,address.specific_address + ' - ' + ward.ward_name  + ' - ' + district.district_name + ' - ' + province.province_name as diachi,a.phone_number,a.email,a.registered_date from account a\n" +
+                                                                "inner join address\n" +
+                                                                "on address.address_id = a.address_id\n" +
+                                                                "left join ward\n" +
+                                                                "on address.ward_id = ward.ward_id\n" +
+                                                                "left join district\n" +
+                                                                "on ward.district_id = district.district_id\n" +
+                                                                "left join province\n" +
+                                                                "on district.province_id = province.province_id");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                vt= new Vector();
+                vt.add(rs.getString(1));
+                vt.add(rs.getString(2));
+                vt.add(rs.getString(3));
+                vt.add(rs.getDate(4));
+                vt.add(rs.getString(5));
+                vt.add(rs.getString(6));
+                vt.add(rs.getString(7));
+                vt.add(rs.getDate(8));
+                dtm.addRow(vt);
+            }
+            jTable_Reader.setModel(dtm);
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay khach hang");
+        }
+   
+    }
+    
+    void layUserBySearch(String name){
+        
+         dtm= (DefaultTableModel) jTable_Reader.getModel();
+         dtm.setNumRows(0);
+        Connection ketNoi= Connect.GetConnect();
+        Vector vt;
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select a.username,a.Full_Name,a.gender,a.date_of_birth,address.specific_address + ' - ' + ward.ward_name  + ' - ' + district.district_name + ' - ' + province.province_name as diachi,a.phone_number,a.email,a.registered_date from account a\n" +
+                                                                "inner join address\n" +
+                                                                "on address.address_id = a.address_id\n" +
+                                                                "left join ward\n" +
+                                                                "on address.ward_id = ward.ward_id\n" +
+                                                                "left join district\n" +
+                                                                "on ward.district_id = district.district_id\n" +
+                                                                "left join province\n" +
+                                                                "on district.province_id = province.province_id where Full_Name LIKE  ?");
+            ps.setString(1, "%" + name + "%");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                vt= new Vector();
+                vt.add(rs.getString(1));
+                vt.add(rs.getString(2));
+                vt.add(rs.getString(3));
+                vt.add(rs.getDate(4));
+                vt.add(rs.getString(5));
+                vt.add(rs.getString(6));
+                vt.add(rs.getString(7));
+                vt.add(rs.getDate(8));
+                dtm.addRow(vt);
+            }
+            jTable_Reader.setModel(dtm);
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay khach hang");
+        }
+   
+    }
+    
+    int checkExistUsernameOrPhoneOrEmail(String PhoneNumber, String Email,String username)
+    {
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select 1 from account a where a.phone_number = ?");
+            ps.setString(1, PhoneNumber);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                return 1;
+            }
+            ps.close();
+            rs.close();
+            
+            PreparedStatement ps1 = ketNoi.prepareStatement("select 1 from account a where a.email = ?");
+            ps1.setString(1, Email);
+            ResultSet rs1=ps1.executeQuery();
+            while(rs1.next()){  
+                return 2;
+            }
+            ps1.close();
+            rs1.close();
+            
+            PreparedStatement ps2 = ketNoi.prepareStatement("select 1 from account a where a.username = ?");
+            ps2.setString(1, username);
+            ResultSet rs2=ps2.executeQuery();
+            while(rs2.next()){  
+                return 3;
+            }
+            ps2.close();
+            rs2.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi checkExistUsernameOrPhoneOrEmail");
+        }
+        return 0;
+    }
+    
+    int checkExistPhoneOrEmailWhenUpdate(String PhoneNumber, String Email,String username)
+    {
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select 1 from account a where a.phone_number = ? and username not in (?)");
+            ps.setString(1, PhoneNumber);
+            ps.setString(2, username);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                return 1;
+            }
+            ps.close();
+            rs.close();
+            
+            PreparedStatement ps1 = ketNoi.prepareStatement("select 1 from account a where a.email = ? and username not in (?)");
+            ps1.setString(1, Email);
+            ps1.setString(2, username);
+            ResultSet rs1=ps1.executeQuery();
+            while(rs1.next()){  
+                return 2;
+            }
+            ps1.close();
+            rs1.close();
+
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi checkExistPhoneOrEmailWhenUpdate");
+        }
+        return 0;
+    }
+    
+   void loadAddress(){
+       Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select province_name from province");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                jComboBox_Province.addItem(rs.getString(1));   
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay khach hang");
+        }
+   }
+   
+   public boolean insertAccount(String username,String password ,String Full_Name,String gender,String date_of_birth,int address_id,String phone_number,String email,int role_id,int status){
+        Connection ketNoi =Connect.GetConnect();
+        String sql = "INSERT INTO account (username, password , Full_Name, gender,date_of_birth,address_id,phone_number,email,role_id,status)\n" +
+                        "VALUES (?,?, ?, ?,?,?,?,?,?,?)";
+
+        PreparedStatement ps;
+      try {
+          ps = ketNoi.prepareStatement(sql);
+          ps.setString(1, username);
+          ps.setString(2, password);
+          ps.setString(3, Full_Name);
+          ps.setString(4, gender);
+          ps.setString(5, date_of_birth);
+          ps.setInt(6, address_id);
+          ps.setString(7, phone_number);
+          ps.setString(8, email);
+          ps.setInt(9, role_id);
+          ps.setInt(10, status);
+          return ps.executeUpdate()>0; 
+      } catch (SQLException ex) {
+          Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+       return false;
+        
+    }
+   
+   public boolean updateAccount(String Full_Name,String gender,String date_of_birth, String phone_number, String email,String username){
+       Connection ketNoi =Connect.GetConnect();
+        String sql = "UPDATE account\n" +
+                        "SET Full_Name= ?, gender= ?, date_of_birth = ?, phone_number= ?, email= ?" +
+                        "WHERE username = ?";
+
+        PreparedStatement ps;
+      try {
+          ps = ketNoi.prepareStatement(sql);
+          ps.setString(1, Full_Name);
+          ps.setString(2, gender);
+          ps.setString(3, date_of_birth);
+          ps.setString(4, phone_number);
+          ps.setString(5, email);
+          ps.setString(6, username);
+          return ps.executeUpdate() > 0;
+      } catch (SQLException ex) {
+          Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+      }  
+        return false;
+
+        
+   }
+   
+   void insertAddress(int ward_id,String specific_address){
+       Connection ketNoi =Connect.GetConnect();
+        String sql = "INSERT INTO address(ward_id,specific_address)\n" +
+                        "VALUES (?, ?)";
+        PreparedStatement ps;
+      try {
+          ps = ketNoi.prepareStatement(sql);
+          ps = ketNoi.prepareStatement(sql);
+          ps.setInt(1, ward_id);
+          ps.setString(2, specific_address);
+          ps.executeUpdate(); 
+          ps.close();
+  
+      } catch (SQLException ex) {
+          Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+      }
+        
+   }
+   
+   void updateAddress(int addressId,int ward_id,String specific_address){
+       Connection ketNoi =Connect.GetConnect();
+        String sql = "UPDATE address\n" +
+                        "SET ward_id= ?, specific_address= ?\n" +
+                        "WHERE address_id = ?;";
+        PreparedStatement ps;
+      try {
+          ps = ketNoi.prepareStatement(sql);
+          ps = ketNoi.prepareStatement(sql);
+          ps.setInt(1, ward_id);
+          ps.setString(2, specific_address);
+          ps.setInt(3, addressId);
+          ps.executeUpdate(); 
+          ps.close();
+  
+      } catch (SQLException ex) {
+          Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+      }
+        
+   }
+   
+   int getLastIdAddress(){
+       Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("SELECT MAX(address_id) FROM address");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                return rs.getInt(1);   
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay khach hang");
+        }
+        return -1;
+   }
+   
+   int getIdAddressByUsername(String username){
+       Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select account.address_id from account where account.username = ?");
+            ps.setString(1, username);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                return rs.getInt(1);   
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay khach hang");
+        }
+        return -1;
+   }
+   
+   
+   
+   public String getSelectedButtonText(ButtonGroup buttonGroup) {
+        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
+
+        return null;
+    }
+   
+   public static String hash(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt(12));
+    }
+   
+   // email hop le
+   public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
+    Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    public static boolean validate(String emailStr) {
+            Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
+            return matcher.find();
+    }
+    
+    // fullname hop le
+     public static boolean verifyFullname(String fullname) {
+        if (fullname == null) return false;
+        return fullname.matches(FULLNAME_PATTERN);
+    }
+    
+    
+    private static final String FULLNAME_PATTERN =
+            "^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶ" +
+            "ẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợ" +
+            "ụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\\s]+$";
+    
+    public static boolean validatePhone(String str) {
+        String expression = "\\d{10}|(?:\\d{3}-){2}\\d{4}|\\(\\d{3}\\)\\d{3}-?\\d{4}"; 
+        return str.matches(expression);        
+    }
+    
+    // password hop le
+    private static final String PASSWORD_PATTERN =
+		"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+
+    public static boolean verifyPassword(String password) {
+        if (password == null) return false;
+        return password.matches(PASSWORD_PATTERN);
+    }
+    
+    // username hop le
+    private static final String USERNAME_PATTERN = "^[a-z0-9_-]{3,16}$";
+
+    public static boolean verifyUsername(String username) {
+        if (username == null) return false;
+        return username.matches(USERNAME_PATTERN);
+    }
+    
+    private static final String PHONE_PATTERN = "^(0|\\\\+84)(\\\\s|\\\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\\\d)(\\\\s|\\\\.)?(\\\\d{3})(\\\\s|\\\\.)?(\\\\d{3})$";
+
+    public static boolean verifyPhoneNumber(String phone) {
+        if (phone == null) return false;
+        return phone.matches(PHONE_PATTERN);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroupGender;
     private javax.swing.JButton jButton_Add;
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Clear;
-    private javax.swing.JButton jButton_ClearSearch;
     private javax.swing.JButton jButton_Extend;
     private javax.swing.JButton jButton_Modify;
     private javax.swing.JButton jButton_OK;
     private javax.swing.JButton jButton_Remove;
+    private javax.swing.JButton jButton_Search;
     private javax.swing.JComboBox<String> jComboBox_Commune;
     private javax.swing.JComboBox<String> jComboBox_District;
     private javax.swing.JComboBox<String> jComboBox_Province;
@@ -545,10 +1329,11 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JRadioButton jRadioButton_Other;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable_Reader;
+    private javax.swing.JTextField jTextField_Address;
     private javax.swing.JTextField jTextField_Email;
-    private javax.swing.JTextField jTextField_ID;
     private javax.swing.JTextField jTextField_Name;
     private javax.swing.JTextField jTextField_NameSearch;
     private javax.swing.JTextField jTextField_PhoneNumber;
+    private javax.swing.JTextField jTextField_Username;
     // End of variables declaration//GEN-END:variables
 }

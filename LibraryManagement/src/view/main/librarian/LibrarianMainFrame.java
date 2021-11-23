@@ -5,6 +5,7 @@
  */
 package view.main.librarian;
 
+import javax.swing.table.DefaultTableModel;
 import swing.UIController;
 import view.login.LoginFrame;
 
@@ -13,7 +14,7 @@ import view.login.LoginFrame;
  * @author Admin
  */
 public class LibrarianMainFrame extends javax.swing.JFrame {
-
+  
     /**
      * Creates new form LibrarianMainFrame
      */
@@ -270,6 +271,8 @@ public class LibrarianMainFrame extends javax.swing.JFrame {
             }
         });
     }
+    
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private view.main.librarian.ChooseReaderPanel chooseReaderPanel1;

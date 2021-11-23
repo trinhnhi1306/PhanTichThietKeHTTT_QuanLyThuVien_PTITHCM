@@ -5,6 +5,13 @@
  */
 package view.login;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import model.database.Connect;
+
 /**
  *
  * @author Admin
@@ -12,6 +19,7 @@ package view.login;
 public class RecoveryPasswordDialog extends javax.swing.JDialog {
 
     private ChonDialog chonDialog;
+    
     
     /**
      * Creates new form RecoveryPasswordDialog
@@ -22,6 +30,7 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        
     }
 
     /**
@@ -36,7 +45,7 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField_EmailSDT = new javax.swing.JTextField();
+        jTextField_Username = new javax.swing.JTextField();
         jButton_Tim = new javax.swing.JButton();
         jButton_Cancel = new javax.swing.JButton();
 
@@ -51,10 +60,10 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel2.setText("Vui lòng nhập email hoặc số di động để tìm kiếm tài khoản của bạn.");
+        jLabel2.setText("Vui lòng nhập username để tìm kiếm tài khoản của bạn.");
 
-        jTextField_EmailSDT.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTextField_EmailSDT.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 204)));
+        jTextField_Username.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jTextField_Username.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 204)));
 
         jButton_Tim.setBackground(new java.awt.Color(0, 153, 255));
         jButton_Tim.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
@@ -85,8 +94,8 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(0, 20, Short.MAX_VALUE))
-                    .addComponent(jTextField_EmailSDT)
+                        .addGap(0, 94, Short.MAX_VALUE))
+                    .addComponent(jTextField_Username)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton_Cancel)
@@ -102,7 +111,7 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
                 .addGap(31, 31, 31)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField_EmailSDT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextField_Username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton_Tim)
@@ -127,21 +136,50 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
     private void jButton_TimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_TimActionPerformed
         // TODO add your handling code here:
         this.dispose();
-        this.chonDialog = new ChonDialog(null, true);
-        this.chonDialog.setVisible(true);
+        if(getPhoneAndEmail(jTextField_Username.getText()))
+        {
+            this.chonDialog = new ChonDialog(null, true);
+            this.chonDialog.setVisible(true);
+        }else{
+             JOptionPane.showMessageDialog(null, "Username không tồn tại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+       
+        
+        
+        
     }//GEN-LAST:event_jButton_TimActionPerformed
 
     private void jButton_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelActionPerformed
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton_CancelActionPerformed
-
+    boolean getPhoneAndEmail(String username){
+      
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select phone_number,email from account where username = ?");
+            ps.setString(1, username);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){  
+                LoginFrame.PhoneNumber = rs.getString(1);
+                LoginFrame.Email = rs.getString(2);
+                return true;
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay phone and email");
+        }
+        return false;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Tim;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField_EmailSDT;
+    private javax.swing.JTextField jTextField_Username;
     // End of variables declaration//GEN-END:variables
 }
