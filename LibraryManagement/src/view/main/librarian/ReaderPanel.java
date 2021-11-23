@@ -29,6 +29,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import model.database.Connect;
+import org.mindrot.bcrypt.BCrypt;
 import swing.UIController;
 
 /**
@@ -646,7 +647,7 @@ public class ReaderPanel extends javax.swing.JPanel {
                 }
             }
             
-            insertAccount(username, username, Full_Name, gender, date_of_birth, address_id, phone_number, email, 1, 1);
+            insertAccount(username, hash(username), Full_Name, gender, date_of_birth, address_id, phone_number, email, 1, 1);
                     
         } else if (mode == Mode.MODIFY) {
             // kiểm tra date và lấy date
@@ -1238,6 +1239,10 @@ public class ReaderPanel extends javax.swing.JPanel {
         return null;
     }
    
+   public static String hash(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt(12));
+    }
+   
    // email hop le
    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = 
     Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -1279,6 +1284,13 @@ public class ReaderPanel extends javax.swing.JPanel {
     public static boolean verifyUsername(String username) {
         if (username == null) return false;
         return username.matches(USERNAME_PATTERN);
+    }
+    
+    private static final String PHONE_PATTERN = "^(0|\\\\+84)(\\\\s|\\\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\\\d)(\\\\s|\\\\.)?(\\\\d{3})(\\\\s|\\\\.)?(\\\\d{3})$";
+
+    public static boolean verifyPhoneNumber(String phone) {
+        if (phone == null) return false;
+        return phone.matches(PHONE_PATTERN);
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -5,32 +5,25 @@
  */
 package view.login;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import model.database.Connect;
 
 /**
  *
  * @author Admin
  */
-public class RecoveryPasswordDialog extends javax.swing.JDialog {
+public class MaDialog extends javax.swing.JDialog {
 
-    private ChonDialog chonDialog;
-    
+    private ConfirmDialog confirmDialog;
     
     /**
-     * Creates new form RecoveryPasswordDialog
+     * Creates new form MaDialog
      * @param parent
      * @param modal
      */
-    public RecoveryPasswordDialog(java.awt.Frame parent, boolean modal) {
+    public MaDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
-        
     }
 
     /**
@@ -44,34 +37,31 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField_Username = new javax.swing.JTextField();
-        jButton_Tim = new javax.swing.JButton();
+        jLabel_ThongBao = new javax.swing.JLabel();
+        jButton_Continue = new javax.swing.JButton();
         jButton_Cancel = new javax.swing.JButton();
+        jLabel_SDTEmail = new javax.swing.JLabel();
+        jTextField_Ma = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Forgot password");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel1.setText("TÌM TÀI KHOẢN CỦA BẠN");
+        jLabel1.setText("Nhập mã bảo mật");
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel2.setText("Vui lòng nhập username để tìm kiếm tài khoản của bạn.");
+        jLabel_ThongBao.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_ThongBao.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel_ThongBao.setText("Vui lòng kiểm tra điện thoại để xem tin nhắn văn bản có mã");
 
-        jTextField_Username.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTextField_Username.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 204, 204)));
-
-        jButton_Tim.setBackground(new java.awt.Color(0, 153, 255));
-        jButton_Tim.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jButton_Tim.setText("Tìm kiếm");
-        jButton_Tim.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_Tim.addActionListener(new java.awt.event.ActionListener() {
+        jButton_Continue.setBackground(new java.awt.Color(0, 153, 255));
+        jButton_Continue.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jButton_Continue.setText("Tiếp tục");
+        jButton_Continue.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Continue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_TimActionPerformed(evt);
+                jButton_ContinueActionPerformed(evt);
             }
         });
 
@@ -84,6 +74,12 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
             }
         });
 
+        jLabel_SDTEmail.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_SDTEmail.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel_SDTEmail.setText("Chúng tôi đã gửi cho bạn mã đến: (SĐT/Email)");
+
+        jTextField_Ma.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -93,28 +89,32 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 94, Short.MAX_VALUE))
-                    .addComponent(jTextField_Username)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton_Cancel)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton_Tim)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton_Cancel)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton_Continue))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel_ThongBao)
+                                .addComponent(jLabel_SDTEmail)
+                                .addComponent(jTextField_Ma, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(31, 31, 31)
-                .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField_Username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel_ThongBao)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel_SDTEmail)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField_Ma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton_Tim)
+                    .addComponent(jButton_Continue)
                     .addComponent(jButton_Cancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -123,63 +123,45 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton_TimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_TimActionPerformed
+    //Vui lòng kiểm tra mã trong email của bạn.
+    
+    private void jButton_ContinueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ContinueActionPerformed
         // TODO add your handling code here:
-        this.dispose();
-        if(getPhoneAndEmail(jTextField_Username.getText()))
+        
+        if(jTextField_Ma.getText().equalsIgnoreCase(LoginFrame.OTPSystem))
         {
-            this.chonDialog = new ChonDialog(null, true);
-            this.chonDialog.setVisible(true);
+            this.confirmDialog = new ConfirmDialog(null, true);
+            this.confirmDialog.setVisible(true);
         }else{
-             JOptionPane.showMessageDialog(null, "Username không tồn tại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             JOptionPane.showMessageDialog(null, "Mã xác nhận OTP sai. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
              return;
         }
-       
+        this.dispose();
         
-        
-        
-    }//GEN-LAST:event_jButton_TimActionPerformed
+    }//GEN-LAST:event_jButton_ContinueActionPerformed
 
     private void jButton_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelActionPerformed
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton_CancelActionPerformed
-    boolean getPhoneAndEmail(String username){
-      
-        Connection ketNoi= Connect.GetConnect();
-        try {
-            PreparedStatement ps=ketNoi.prepareStatement("select phone_number,email from account where username = ?");
-            ps.setString(1, username);
-            ResultSet rs=ps.executeQuery();
-            while(rs.next()){  
-                LoginFrame.PhoneNumber = rs.getString(1);
-                LoginFrame.Email = rs.getString(2);
-                return true;
-            }
-            ps.close();
-            rs.close();
-            ketNoi.close();
-        } catch (SQLException ex) {
-            System.out.println("loi lay phone and email");
-        }
-        return false;
-    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Cancel;
-    private javax.swing.JButton jButton_Tim;
+    private javax.swing.JButton jButton_Continue;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel_SDTEmail;
+    private javax.swing.JLabel jLabel_ThongBao;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField_Username;
+    private javax.swing.JTextField jTextField_Ma;
     // End of variables declaration//GEN-END:variables
 }

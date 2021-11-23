@@ -5,8 +5,18 @@
  */
 package view.login;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
-import view.main.reader.BookPanel;
+import javax.swing.JOptionPane;
+import model.database.Connect;
+import org.mindrot.bcrypt.BCrypt;
+import view.main.admin.AdminMainFrame;
+import view.main.archivist.ArchivistMainFrame;
+import view.main.librarian.LibrarianMainFrame;
+import view.main.reader.ReaderMainFrame;
 
 /**
  *
@@ -17,8 +27,18 @@ public class LoginFrame extends javax.swing.JFrame {
     private RecoveryPasswordDialog recoveryPasswordDialog;
     private RuleLibraryDialog ruleLibraryDialog;
     private BookDialog bookDialog;
+    private AdminMainFrame adminMainFrame;
+    private ArchivistMainFrame archivistMainFrame;
+    private LibrarianMainFrame librarianMainFrame;
+    private ReaderMainFrame readerMainFrame;
+    
+    
     private boolean showPass = false;
-
+    public static String OTPSystem;
+    public static String PhoneNumber;
+    public static String Email;
+    private String password;
+    private int Idrole; 
     /**
      * Creates new form LoginFrame
      */
@@ -26,6 +46,9 @@ public class LoginFrame extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         jLabel_i.setToolTipText("Thông tin thư viện");
+        OTPSystem = "";
+        PhoneNumber = "";
+        Email = "";
     }
 
     /**
@@ -43,7 +66,7 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField_Email = new javax.swing.JTextField();
+        jTextField_Username = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel_HideShow = new javax.swing.JLabel();
         jPasswordField_Pass = new javax.swing.JPasswordField();
@@ -83,9 +106,9 @@ public class LoginFrame extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel3.setText("Email:");
+        jLabel3.setText("Username:");
 
-        jTextField_Email.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jTextField_Username.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Password:");
@@ -108,7 +131,7 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel3)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField_Email, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+                    .addComponent(jTextField_Username, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
                     .addComponent(jPasswordField_Pass))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_HideShow, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -120,7 +143,7 @@ public class LoginFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField_Email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextField_Username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -133,6 +156,11 @@ public class LoginFrame extends javax.swing.JFrame {
         jButton_Login.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/signin.png"))); // NOI18N
         jButton_Login.setContentAreaFilled(false);
         jButton_Login.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_LoginActionPerformed(evt);
+            }
+        });
 
         jButton_Forgot.setBackground(new java.awt.Color(255, 255, 255));
         jButton_Forgot.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -249,6 +277,34 @@ public class LoginFrame extends javax.swing.JFrame {
         this.bookDialog.setVisible(true);
     }//GEN-LAST:event_jButton_WithoutLoginActionPerformed
 
+    private void jButton_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_LoginActionPerformed
+        // TODO add your handling code here:
+        String pwd = new String(jPasswordField_Pass.getPassword());
+        String passwordConfirm = getPassword(jTextField_Username.getText());
+        if(passwordConfirm.equalsIgnoreCase("")){
+            JOptionPane.showMessageDialog(null, "Username không tồn tại. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+        if(!verifyHash(pwd, passwordConfirm)){
+            JOptionPane.showMessageDialog(null, "Sai mật khẩu. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+        this.dispose();
+        if(Idrole == 4){
+            this.adminMainFrame = new AdminMainFrame();  
+            this.adminMainFrame.setVisible(true);
+        }else if(Idrole == 3){
+            this.archivistMainFrame = new ArchivistMainFrame();  
+            this.archivistMainFrame.setVisible(true);
+        }else if(Idrole == 2){
+            this.librarianMainFrame = new LibrarianMainFrame();  
+            this.librarianMainFrame.setVisible(true);
+        }else{
+            this.readerMainFrame = new ReaderMainFrame();  
+            this.readerMainFrame.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton_LoginActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -283,7 +339,32 @@ public class LoginFrame extends javax.swing.JFrame {
             }
         });
     }
+    String getPassword(String username){
+      
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select password,role_id from account where username = ?");
+            ps.setString(1, username);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                Idrole = rs.getInt(2);
+                return rs.getString(1);
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay phone and email");
+        }
+        return "";
+    }
+    public static String hash(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt(12));
+    }
 
+    public static boolean verifyHash(String password, String hash) {
+        return BCrypt.checkpw(password, hash);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Forgot;
     private javax.swing.JButton jButton_Login;
@@ -298,6 +379,6 @@ public class LoginFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPasswordField jPasswordField_Pass;
-    private javax.swing.JTextField jTextField_Email;
+    private javax.swing.JTextField jTextField_Username;
     // End of variables declaration//GEN-END:variables
 }
