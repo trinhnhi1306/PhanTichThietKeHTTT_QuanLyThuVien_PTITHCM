@@ -6,7 +6,6 @@
 package view.login;
 
 import javax.swing.ImageIcon;
-import view.main.reader.BookPanel;
 
 /**
  *
