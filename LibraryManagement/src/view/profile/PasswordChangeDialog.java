@@ -5,8 +5,21 @@
  */
 package view.profile;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.database.Connect;
+import org.mindrot.bcrypt.BCrypt;
+import static view.login.ConfirmDialog.hash;
+import view.login.LoginFrame;
+import static view.login.LoginFrame.verifyHash;
+import view.main.librarian.ReaderPanel;
 
 /**
  *
@@ -74,6 +87,11 @@ public class PasswordChangeDialog extends javax.swing.JDialog {
         jButton_Update.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Update.setText("Update password");
         jButton_Update.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Update.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_UpdateActionPerformed(evt);
+            }
+        });
 
         jButton_Cancel.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Cancel.setText("Cancel");
@@ -252,6 +270,68 @@ public class PasswordChangeDialog extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_jLabel_VerifyMouseClicked
 
+    private void jButton_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_UpdateActionPerformed
+        // TODO add your handling code here:
+        String pwdOld = new String(jPasswordField_Old.getPassword());
+        String pwdNew = new String(jPasswordField_New.getPassword());
+        String pwdVerify = new String(jPasswordField_Verify.getPassword());
+        if(pwdOld.equalsIgnoreCase("") || pwdNew.equalsIgnoreCase("") || pwdVerify.equalsIgnoreCase("")){
+            JOptionPane.showMessageDialog(null, "Không được để trống password. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+        String passwordConfirm = getPassword(view.login.LoginFrame.username);
+        if(!verifyHash(pwdOld, passwordConfirm)){
+            JOptionPane.showMessageDialog(null, "Sai mật khẩu. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+        if(!pwdNew.equals(pwdVerify)){
+            JOptionPane.showMessageDialog(null, "Mật khẩu mới và mật khẩu xác nhận không trùng nhau. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+        
+       
+        Connection ketNoi =Connect.GetConnect();
+        String sql = "update account\n" +
+                        "SET password = ?\n" +
+                        "where username = ?";
+
+                PreparedStatement ps;
+              try {
+                  ps = ketNoi.prepareStatement(sql);
+                  ps.setString(1, hash(pwdNew));
+                  ps.setString(2, view.login.LoginFrame.username);
+                  ps.executeUpdate();
+              } catch (SQLException ex) {
+                  Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+              }
+        JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công!");
+        this.dispose();
+    }//GEN-LAST:event_jButton_UpdateActionPerformed
+     public static String hash(String password) {
+        return BCrypt.hashpw(password, BCrypt.gensalt(12));
+    }
+
+    public static boolean verifyHash(String password, String hash) {
+        return BCrypt.checkpw(password, hash);
+    }
+    String getPassword(String username){
+      
+        Connection ketNoi= Connect.GetConnect();
+        try {
+            PreparedStatement ps=ketNoi.prepareStatement("select password from account where username = ?");
+            ps.setString(1, username);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                return rs.getString(1);
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("loi lay phone and email");
+        }
+        return "";
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Update;

@@ -75,7 +75,6 @@ public class ReaderPanel extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -91,10 +90,8 @@ public class ReaderPanel extends javax.swing.JPanel {
         jTextField_PhoneNumber = new javax.swing.JTextField();
         jTextField_Name = new javax.swing.JTextField();
         jTextField_Email = new javax.swing.JTextField();
-        jDateChooser_DayEnd = new com.toedter.calendar.JDateChooser();
         jDateChooser_DateOfBirth = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
-        jButton_Extend = new javax.swing.JButton();
         jTextField_Address = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jTextField_Username = new javax.swing.JTextField();
@@ -123,9 +120,6 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel3.setText("Gender");
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel6.setText("Expiration date");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel7.setText("Phone number");
@@ -188,26 +182,11 @@ public class ReaderPanel extends javax.swing.JPanel {
 
         jTextField_Email.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
-        jDateChooser_DayEnd.setDateFormatString("yyyy-MM-dd");
-        jDateChooser_DayEnd.setEnabled(false);
-        jDateChooser_DayEnd.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-
         jDateChooser_DateOfBirth.setDateFormatString("yyyy-MM-dd");
         jDateChooser_DateOfBirth.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel4.setText("Date of birth");
-
-        jButton_Extend.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jButton_Extend.setForeground(new java.awt.Color(51, 51, 51));
-        jButton_Extend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icon-clock.png"))); // NOI18N
-        jButton_Extend.setText("Extend");
-        jButton_Extend.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_Extend.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_ExtendActionPerformed(evt);
-            }
-        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel1.setText("Username");
@@ -258,25 +237,16 @@ public class ReaderPanel extends javax.swing.JPanel {
                             .addComponent(jLabel13)
                             .addGap(18, 18, 18)
                             .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(98, 98, 98)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel8)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton_Extend))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(98, 98, 98)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel8)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel7)))
-                        .addGap(35, 35, 35)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
-                            .addComponent(jTextField_Email))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7)))
+                .addGap(35, 35, 35)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                    .addComponent(jTextField_Email))
                 .addContainerGap(49, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -315,17 +285,13 @@ public class ReaderPanel extends javax.swing.JPanel {
                                         .addComponent(jDateChooser_DateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(1, 1, 1)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton_Extend, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel11)
-                        .addComponent(jComboBox_Province, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel12)
-                        .addComponent(jLabel13)
-                        .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel6))
-                    .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jComboBox_Province, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel13)
+                    .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
@@ -441,14 +407,14 @@ public class ReaderPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Username", "Name", "Gender", "Date of birth", "Adress", "Phone number", "Email", "Ngày đăng ký"
+                "Username", "Name", "Gender", "Date of birth", "Adress", "Phone number", "Email"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -509,7 +475,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         jTextField_Name.setText("");
         jTextField_PhoneNumber.setText("");
         jTextField_Email.setText("");
-        jDateChooser_DayEnd.setDate(null);
+
         jTextField_Address.setText("");
         jTextField_Username.setText("");
 //        jComboBox_Province.setSelectedIndex(0);
@@ -533,12 +499,6 @@ public class ReaderPanel extends javax.swing.JPanel {
         
     }
     
-    private void jButton_ExtendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExtendActionPerformed
-        // TODO add your handling code here:
-        this.extendCardDialog = new ExtendCardDialog(null, true, this);
-        this.extendCardDialog.setVisible(true);
-    }//GEN-LAST:event_jButton_ExtendActionPerformed
-
     private void jButton_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddActionPerformed
         // TODO add your handling code here:
         clearAll();
@@ -605,11 +565,11 @@ public class ReaderPanel extends javax.swing.JPanel {
             String email = jTextField_Email.getText();
             String address = jTextField_Address.getText();
             String phone_number = jTextField_PhoneNumber.getText();
-            int IdWard = getIdWard(jComboBox_Commune.getSelectedItem().toString());          
+            int IdWard = getIdWard(jComboBox_Commune.getSelectedItem().toString(),jComboBox_District.getSelectedItem().toString(),jComboBox_Province.getSelectedItem().toString());          
             
             
             
-            insertAddress(getIdWard(jComboBox_Commune.getSelectedItem().toString()),jTextField_Address.getText());
+            insertAddress(getIdWard(jComboBox_Commune.getSelectedItem().toString(),jComboBox_District.getSelectedItem().toString(),jComboBox_Province.getSelectedItem().toString()),jTextField_Address.getText());
             int address_id = getLastIdAddress();
             
             
@@ -682,7 +642,7 @@ public class ReaderPanel extends javax.swing.JPanel {
             String email = jTextField_Email.getText();
             String address = jTextField_Address.getText();
             String phone_number = jTextField_PhoneNumber.getText();
-            int IdWard = getIdWard(jComboBox_Commune.getSelectedItem().toString());          
+            int IdWard = getIdWard(jComboBox_Commune.getSelectedItem().toString(),jComboBox_District.getSelectedItem().toString(),jComboBox_Province.getSelectedItem().toString());          
             String username = jTextField_Username.getText();
            
             int address_id = getIdAddressByUserName(username);
@@ -738,6 +698,7 @@ public class ReaderPanel extends javax.swing.JPanel {
             jButton_Remove.setEnabled(false);
         }
         UIController.showCardLayout("cardFirst", jPanel_Card);
+       
     }//GEN-LAST:event_jButton_CancelActionPerformed
 
     private void jButton_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearActionPerformed
@@ -776,7 +737,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         try {
             PreparedStatement ps=ketNoi.prepareStatement("select ward.ward_name from ward where ward.district_id = ?");
             System.out.println(jComboBox_District.getSelectedItem().toString());
-            ps.setInt(1, getIdDistrict(jComboBox_District.getSelectedItem().toString()));
+            ps.setInt(1, getIdDistrict(jComboBox_District.getSelectedItem().toString(),jComboBox_Province.getSelectedItem().toString()) );
             ResultSet rs=ps.executeQuery();
             jComboBox_Commune.removeAllItems();
             while(rs.next()){  
@@ -801,8 +762,10 @@ public class ReaderPanel extends javax.swing.JPanel {
         jTextField_Name.setText(model.getValueAt(selectedRow, 1).toString());
         jTextField_Email.setText(model.getValueAt(selectedRow, 6).toString());
         jTextField_PhoneNumber.setText(model.getValueAt(selectedRow, 5).toString());
-        jTextField_Address.setText(model.getValueAt(selectedRow, 4).toString().split("-")[0]);
+        jTextField_Address.setText(model.getValueAt(selectedRow, 4).toString().split(" - ")[0]);
         jComboBox_Province.setSelectedIndex(list.get(2)-1);
+        jComboBox_District.setSelectedItem(model.getValueAt(selectedRow, 4).toString().split(" - ")[2]);
+        jComboBox_Commune.setSelectedItem(model.getValueAt(selectedRow, 4).toString().split(" - ")[1]);
         System.out.println(model.getValueAt(selectedRow, 2).toString());
         if(model.getValueAt(selectedRow, 2).toString().equalsIgnoreCase("nam")){
             jRadioButton_Male.setSelected(true);
@@ -814,7 +777,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            jDateChooser_DayEnd.setDate(sdf.parse(model.getValueAt(selectedRow, 7).toString()));
+            
             jDateChooser_DateOfBirth.setDate(sdf.parse(model.getValueAt(selectedRow, 3).toString()));
         } catch (ParseException ex) {
             System.out.println("loi lay ngay tu bang nhan vien"+ex.getMessage());
@@ -848,12 +811,13 @@ public class ReaderPanel extends javax.swing.JPanel {
         return i;
     }
     
-    int getIdDistrict(String nameDistrict){
+    int getIdDistrict(String nameDistrict,String nameProvince){
         int i = 0;
         Connection ketNoi= Connect.GetConnect();
         try {
-            PreparedStatement ps=ketNoi.prepareStatement("select district.district_id from district where district.district_name = ?");
+            PreparedStatement ps=ketNoi.prepareStatement("select district.district_id from district where district.district_name = ? and district.province_id = ?");
             ps.setString(1, nameDistrict);
+            ps.setInt(2, getIdProvince(nameProvince));
             ResultSet rs=ps.executeQuery();
             while(rs.next()){  
                 i = rs.getInt(1);   
@@ -917,12 +881,13 @@ public class ReaderPanel extends javax.swing.JPanel {
         return list;
     }
     
-    int getIdWard(String nameWard){
+    int getIdWard(String nameWard,String nameDistrict,String nameProvince){
         int i = 0;
         Connection ketNoi= Connect.GetConnect();
         try {
-            PreparedStatement ps=ketNoi.prepareStatement("select ward.ward_id from ward where ward.ward_name = ?");
+            PreparedStatement ps=ketNoi.prepareStatement("select ward.ward_id from ward where ward.ward_name = ? and ward.district_id = ?");
             ps.setString(1, nameWard);
+            ps.setInt(2, getIdDistrict(nameDistrict, nameProvince));
             ResultSet rs=ps.executeQuery();
             while(rs.next()){  
                 i = rs.getInt(1);   
@@ -962,7 +927,7 @@ public class ReaderPanel extends javax.swing.JPanel {
                 vt.add(rs.getString(5));
                 vt.add(rs.getString(6));
                 vt.add(rs.getString(7));
-                vt.add(rs.getDate(8));
+
                 dtm.addRow(vt);
             }
             jTable_Reader.setModel(dtm);
@@ -970,7 +935,7 @@ public class ReaderPanel extends javax.swing.JPanel {
             rs.close();
             ketNoi.close();
         } catch (SQLException ex) {
-            System.out.println("loi lay khach hang");
+            System.out.println("loi lay user");
         }
    
     }
@@ -1002,7 +967,7 @@ public class ReaderPanel extends javax.swing.JPanel {
                 vt.add(rs.getString(5));
                 vt.add(rs.getString(6));
                 vt.add(rs.getString(7));
-                vt.add(rs.getDate(8));
+                
                 dtm.addRow(vt);
             }
             jTable_Reader.setModel(dtm);
@@ -1129,7 +1094,7 @@ public class ReaderPanel extends javax.swing.JPanel {
    public boolean updateAccount(String Full_Name,String gender,String date_of_birth, String phone_number, String email,String username){
        Connection ketNoi =Connect.GetConnect();
         String sql = "UPDATE account\n" +
-                        "SET Full_Name= ?, gender= ?, date_of_birth = ?, phone_number= ?, email= ?" +
+                        "SET Full_Name= ?, gender= ?, date_of_birth = ?, phone_number= ?, email= ?\n" +
                         "WHERE username = ?";
 
         PreparedStatement ps;
@@ -1298,7 +1263,6 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton_Add;
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Clear;
-    private javax.swing.JButton jButton_Extend;
     private javax.swing.JButton jButton_Modify;
     private javax.swing.JButton jButton_OK;
     private javax.swing.JButton jButton_Remove;
@@ -1307,7 +1271,6 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jComboBox_District;
     private javax.swing.JComboBox<String> jComboBox_Province;
     private com.toedter.calendar.JDateChooser jDateChooser_DateOfBirth;
-    private com.toedter.calendar.JDateChooser jDateChooser_DayEnd;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1317,7 +1280,6 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;

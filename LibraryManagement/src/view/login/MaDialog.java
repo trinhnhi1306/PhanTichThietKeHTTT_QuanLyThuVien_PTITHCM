@@ -137,7 +137,7 @@ public class MaDialog extends javax.swing.JDialog {
     
     private void jButton_ContinueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ContinueActionPerformed
         // TODO add your handling code here:
-        
+        this.dispose();
         if(jTextField_Ma.getText().equalsIgnoreCase(LoginFrame.OTPSystem))
         {
             this.confirmDialog = new ConfirmDialog(null, true);
@@ -146,7 +146,7 @@ public class MaDialog extends javax.swing.JDialog {
              JOptionPane.showMessageDialog(null, "Mã xác nhận OTP sai. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
              return;
         }
-        this.dispose();
+        
         
     }//GEN-LAST:event_jButton_ContinueActionPerformed
 
