@@ -37,6 +37,7 @@ public class LoginFrame extends javax.swing.JFrame {
     public static String OTPSystem;
     public static String PhoneNumber;
     public static String Email;
+    public static String username;
     private String password;
     private int Idrole; 
     /**
@@ -49,6 +50,7 @@ public class LoginFrame extends javax.swing.JFrame {
         OTPSystem = "";
         PhoneNumber = "";
         Email = "";
+        username = "";
     }
 
     /**
@@ -280,16 +282,26 @@ public class LoginFrame extends javax.swing.JFrame {
     private void jButton_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_LoginActionPerformed
         // TODO add your handling code here:
         String pwd = new String(jPasswordField_Pass.getPassword());
-        String passwordConfirm = getPassword(jTextField_Username.getText());
+        String passwordConfirm = getPassword(jTextField_Username.getText().trim());
+        if(jTextField_Username.getText().trim().equalsIgnoreCase("")){
+            JOptionPane.showMessageDialog(null, "Username không được để khoảng trắng. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
+        if(pwd.equalsIgnoreCase("")){
+            JOptionPane.showMessageDialog(null, "Không được để trống password. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
+             return;
+        }
         if(passwordConfirm.equalsIgnoreCase("")){
             JOptionPane.showMessageDialog(null, "Username không tồn tại. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
              return;
         }
+        
         if(!verifyHash(pwd, passwordConfirm)){
             JOptionPane.showMessageDialog(null, "Sai mật khẩu. Vui lòng nhập lại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
              return;
         }
         this.dispose();
+        username = jTextField_Username.getText().trim();
         if(Idrole == 4){
             this.adminMainFrame = new AdminMainFrame();  
             this.adminMainFrame.setVisible(true);
