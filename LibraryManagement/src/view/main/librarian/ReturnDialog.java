@@ -5,7 +5,10 @@
  */
 package view.main.librarian;
 
+import control.librarian.BookLoan;
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import model.database.Reader;
 import swing.UIController;
 
 /**
@@ -14,6 +17,10 @@ import swing.UIController;
  */
 public class ReturnDialog extends javax.swing.JDialog {
 
+    private BookLoan bookLoan;
+    private Reader reader;
+    private DefaultTableModel modelBookBorrowed;
+    private DefaultTableModel modelChosenBook;
     /**
      * Creates new form ReturnDialog
      * @param parent
@@ -23,6 +30,12 @@ public class ReturnDialog extends javax.swing.JDialog {
     public ReturnDialog(java.awt.Frame parent, boolean modal, JPanel parentPanel) {
         super(parent, modal);
         initComponents();
+        bookLoan = new BookLoan();
+        reader = bookLoan.getReaderInformation(ChooseReaderPanel.username);
+        modelBookBorrowed = (DefaultTableModel) jTable_BooksBorrowed.getModel();
+        modelChosenBook = (DefaultTableModel) jTable_ChosenBook.getModel();
+        bookLoan.loadBookBorrowed(modelBookBorrowed, ChooseReaderPanel.username);
+        setReaderInformation();
         setLocationRelativeTo(null);
         setTableView();
     }
@@ -42,12 +55,10 @@ public class ReturnDialog extends javax.swing.JDialog {
         jLabel_Name = new javax.swing.JLabel();
         jLabel_Gender = new javax.swing.JLabel();
         jLabel_DateOfBirth = new javax.swing.JLabel();
-        jLabel_Address = new javax.swing.JLabel();
         jLabel_PhoneNumber = new javax.swing.JLabel();
         jLabel_Email = new javax.swing.JLabel();
         jLabel_DayStart = new javax.swing.JLabel();
-        jLabel_DayEnd = new javax.swing.JLabel();
-        jLabel_Status = new javax.swing.JLabel();
+        jLabel_Address = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_BooksBorrowed = new javax.swing.JTable();
@@ -87,10 +98,6 @@ public class ReturnDialog extends javax.swing.JDialog {
         jLabel_DateOfBirth.setText("Date of birth");
         jPanel3.add(jLabel_DateOfBirth);
 
-        jLabel_Address.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_Address.setText("Address");
-        jPanel3.add(jLabel_Address);
-
         jLabel_PhoneNumber.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel_PhoneNumber.setText("Phone number");
         jPanel3.add(jLabel_PhoneNumber);
@@ -103,13 +110,8 @@ public class ReturnDialog extends javax.swing.JDialog {
         jLabel_DayStart.setText("Day start");
         jPanel3.add(jLabel_DayStart);
 
-        jLabel_DayEnd.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_DayEnd.setText("Day end");
-        jPanel3.add(jLabel_DayEnd);
-
-        jLabel_Status.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_Status.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel_Status.setText("Status");
+        jLabel_Address.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_Address.setText("Address");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -118,8 +120,8 @@ public class ReturnDialog extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 828, Short.MAX_VALUE)
-                    .addComponent(jLabel_Status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel_Address, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -127,7 +129,7 @@ public class ReturnDialog extends javax.swing.JDialog {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel_Status)
+                .addComponent(jLabel_Address)
                 .addGap(0, 8, Short.MAX_VALUE))
         );
 
@@ -140,19 +142,12 @@ public class ReturnDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Title", "Location", "Author", "Publisher", "Category", "Number"
+                "ID", "Title", "Location", "Author", "Publisher", "Category", "Date Start"
             }
         ) {
-            Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
-            };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false, false, false, false
             };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -161,7 +156,7 @@ public class ReturnDialog extends javax.swing.JDialog {
         jScrollPane1.setViewportView(jTable_BooksBorrowed);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Details of fines ", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Total fines ", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
 
         jTextArea_Fines.setEditable(false);
         jTextArea_Fines.setColumns(20);
@@ -175,7 +170,7 @@ public class ReturnDialog extends javax.swing.JDialog {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
+                .addComponent(jScrollPane3)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -194,11 +189,11 @@ public class ReturnDialog extends javax.swing.JDialog {
 
             },
             new String [] {
-                "ID", "Title", "Author"
+                "ID", "Title", "Author", "Overdue", "Broken/Lost"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -214,20 +209,17 @@ public class ReturnDialog extends javax.swing.JDialog {
         jButton_BrokenLost.setForeground(new java.awt.Color(51, 51, 51));
         jButton_BrokenLost.setText("Broken / Lost ");
         jButton_BrokenLost.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_BrokenLost.setEnabled(false);
 
         jButton_Choose.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Choose.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Choose.setText("Choose");
         jButton_Choose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_Choose.setEnabled(false);
 
         jButton_Remove.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Remove.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Remove.setText("Remove");
         jButton_Remove.setToolTipText("");
         jButton_Remove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_Remove.setEnabled(false);
 
         jButton_Clear.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Clear.setForeground(new java.awt.Color(51, 51, 51));
@@ -254,7 +246,7 @@ public class ReturnDialog extends javax.swing.JDialog {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(173, 1138, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(217, 217, 217))
             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -266,25 +258,22 @@ public class ReturnDialog extends javax.swing.JDialog {
                         .addComponent(jButton_Choose, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(75, 75, 75)
                         .addComponent(jButton_BrokenLost))
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 850, Short.MAX_VALUE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 40, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jButton_Return, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton_Clear, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(42, 42, 42)
-                                .addComponent(jButton_Remove, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 120, Short.MAX_VALUE)
+                        .addComponent(jButton_Return, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(58, 58, 58)
+                        .addComponent(jButton_Clear, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42)
+                        .addComponent(jButton_Remove, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(68, 68, 68)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -297,12 +286,12 @@ public class ReturnDialog extends javax.swing.JDialog {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel10)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(12, 12, 12)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,26 +310,26 @@ public class ReturnDialog extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1320, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setReaderInformation() {
+        jLabel_Name.setText("Name: " + reader.getName());
+        jLabel_Gender.setText("Gender: " + reader.getGender());
+        jLabel_DateOfBirth.setText("Date of birth: " + reader.getDateOfBirth());
+        jLabel_PhoneNumber.setText("Phone: " + reader.getPhone());
+        jLabel_Email.setText("Email: " + reader.getEmail());
+        jLabel_DayStart.setText("Registration date: " + reader.getRegisteredDate());
+        jLabel_Address.setText("Address: " + reader.getAddress());
+    }
+    
     private void setTableView() {
         UIController.setDefaultTableHeader(jTable_BooksBorrowed);
         UIController.setDefaultTableHeader(jTable_ChosenBook);
@@ -362,13 +351,11 @@ public class ReturnDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel_Address;
     private javax.swing.JLabel jLabel_DateOfBirth;
-    private javax.swing.JLabel jLabel_DayEnd;
     private javax.swing.JLabel jLabel_DayStart;
     private javax.swing.JLabel jLabel_Email;
     private javax.swing.JLabel jLabel_Gender;
     private javax.swing.JLabel jLabel_Name;
     private javax.swing.JLabel jLabel_PhoneNumber;
-    private javax.swing.JLabel jLabel_Status;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

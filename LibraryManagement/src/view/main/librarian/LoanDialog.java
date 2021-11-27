@@ -162,6 +162,11 @@ public class LoanDialog extends javax.swing.JDialog {
         jButton_ClearSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
         jButton_ClearSearch.setText("Clear");
         jButton_ClearSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_ClearSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ClearSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -446,10 +451,19 @@ public class LoanDialog extends javax.swing.JDialog {
 
     private void jButton_BorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BorrowActionPerformed
         // TODO add your handling code here:
+        if(modelChosenBook.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Chưa có sách được chọn!");
+            return;
+        }
         bookLoan.borrowBook(ChooseReaderPanel.username, modelChosenBook);
         JOptionPane.showMessageDialog(this, "Mượn sách thành công!");
         this.dispose();
     }//GEN-LAST:event_jButton_BorrowActionPerformed
+
+    private void jButton_ClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearSearchActionPerformed
+        // TODO add your handling code here:
+        jTextField_SearchBook.setText("");
+    }//GEN-LAST:event_jButton_ClearSearchActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Borrow;

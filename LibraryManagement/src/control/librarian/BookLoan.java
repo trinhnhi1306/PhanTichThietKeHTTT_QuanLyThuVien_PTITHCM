@@ -93,6 +93,41 @@ public class BookLoan {
         }   
     }    
     
+    public void loadBookBorrowed(DefaultTableModel model, String username){
+        
+        model.setNumRows(0);
+        Connection ketNoi= Connect.GetConnect();
+        Vector vt;
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement("select b.book_id, b.title, l.location, a.name, p.name, c.category, loan.date_start\n" +
+                                                            "from loan\n" +
+                                                            "inner join loan_detail dt on loan.loan_id = dt.loan_id\n" +
+                                                            "inner join book b on b.book_id = dt.book_id\n" +
+                                                            "inner join location l on b.location_id = l.location_id\n" +
+                                                            "inner join author a on b.author_id = a.author_id\n" +
+                                                            "inner join publisher p on b.publisher_id = p.publisher_id\n" +
+                                                            "inner join category c on b.category_id = c.category_id\n" +
+                                                            "where dt.status = 0 and loan.user_id = '" + username + "'");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                vt = new Vector();
+                vt.add(rs.getString(1));
+                vt.add(rs.getString(2));
+                vt.add(rs.getString(3));
+                vt.add(rs.getString(4));
+                vt.add(rs.getString(5));
+                vt.add(rs.getString(6));
+                vt.add(rs.getString(7));
+                model.addRow(vt);
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi load reader");
+        }   
+    }    
+    
     public boolean findChosenBook(DefaultTableModel model, String id) {
         int size = model.getRowCount();
         for(int i = 0; i < size; i++) {
@@ -164,6 +199,24 @@ public class BookLoan {
         return loanID;
     }
     
+    public void updateBookQuantity(DefaultTableModel modelChosenBook) {
+        
+        int size = modelChosenBook.getRowCount();
+        for (int i = 0; i < size; i++) {
+            try {
+                Connection con = Connect.GetConnect();
+                PreparedStatement rs = con.prepareStatement("UPDATE BOOK SET no_of_copies_current = no_of_copies_current - 1 WHERE book_id = ?");
+                rs.setInt(1, Integer.parseInt(modelChosenBook.getValueAt(i,0).toString()));
+                rs.executeUpdate();
+                rs.close();
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(BookLoan.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }  
+        
+    }
+    
     public void borrowBook(String username, DefaultTableModel modelChosenBook) {
         insertLoan(username);
         int loanID = getCurrentBorrow();
@@ -183,6 +236,7 @@ public class BookLoan {
                 Logger.getLogger(BookLoan.class.getName()).log(Level.SEVERE, null, ex);
             }
         }  
+        updateBookQuantity(modelChosenBook);
     }
     
     public boolean expiredUser(String username){
@@ -230,7 +284,7 @@ public class BookLoan {
             PreparedStatement ps = con.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                rule = new Rule(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getString(7));
+                rule = new Rule(rs.getInt(1), rs.getInt(2), rs.getInt(3), rs.getInt(4), rs.getInt(5), rs.getString(6));
             }
             rs.close();
             ps.close();

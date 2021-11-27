@@ -200,26 +200,27 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
         }
         username = (String) model.getValueAt(selectedRow, 0);
         System.out.println("Username: " + username);
-        // check if reader card has expired
-        if(bookLoan.expiredUser(username)) {
-            JOptionPane.showMessageDialog(this, "Thẻ độc giả đã hết hạn! Vui lòng yêu cầu độc giả gia hạn thẻ để mượn sách");
-            return;
-        }
-        System.out.println("Số sách tối đa được phép mượn: " + rule.getSoSachMuonToiDa());
-        System.out.println("Số sách " + username + " đang mượn: " + bookLoan.numberOfBooksBorrowing(username));
         
-        remainingBook = rule.getSoSachMuonToiDa() - bookLoan.numberOfBooksBorrowing(username);
-        if(remainingBook <= 0) {
-            JOptionPane.showMessageDialog(this, "Độc giả đã mượn số sách tối đa được phép là " + rule.getSoSachMuonToiDa() + ". Không thể mượn thêm!");
-            return;
-        }
-        
-        if(bookLoan.expiredBook(username, rule.getSoNgayMuonToiDa())) {
-            JOptionPane.showMessageDialog(this, "Vui lòng trả sách mượn quá hạn trước để có thể mượn sách mới!");
-            return;
-        }
             
         if (flag == 1) {
+            // check if reader card has expired
+            if(bookLoan.expiredUser(username)) {
+                JOptionPane.showMessageDialog(this, "Thẻ độc giả đã hết hạn! Vui lòng yêu cầu độc giả gia hạn thẻ để mượn sách");
+                return;
+            }
+            System.out.println("Số sách tối đa được phép mượn: " + rule.getSoSachMuonToiDa());
+            System.out.println("Số sách " + username + " đang mượn: " + bookLoan.numberOfBooksBorrowing(username));
+
+            remainingBook = rule.getSoSachMuonToiDa() - bookLoan.numberOfBooksBorrowing(username);
+            if(remainingBook <= 0) {
+                JOptionPane.showMessageDialog(this, "Độc giả đã mượn số sách tối đa được phép là " + rule.getSoSachMuonToiDa() + ". Không thể mượn thêm!");
+                return;
+            }
+
+            if(bookLoan.expiredBook(username, rule.getSoNgayMuonToiDa())) {
+                JOptionPane.showMessageDialog(this, "Vui lòng trả sách mượn quá hạn trước để có thể mượn sách mới!");
+                return;
+            }
             this.loanDialog = new LoanDialog(null, true, this);
             this.loanDialog.setVisible(true);
         } else if (flag == 2) {
