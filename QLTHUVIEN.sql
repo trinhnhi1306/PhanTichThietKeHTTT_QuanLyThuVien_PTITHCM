@@ -1,12 +1,12 @@
 USE [master]
 GO
-/****** Object:  Database [QLTHUVIEN]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Database [QLTHUVIEN]    Script Date: 11/27/2021 7:03:47 PM ******/
 CREATE DATABASE [QLTHUVIEN]
  CONTAINMENT = NONE
  ON  PRIMARY 
 ( NAME = N'QLTHUVIEN', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\QLTHUVIEN.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'QLTHUVIEN_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\QLTHUVIEN_log.ldf' , SIZE = 73728KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+( NAME = N'QLTHUVIEN_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\QLTHUVIEN_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
  WITH CATALOG_COLLATION = DATABASE_DEFAULT
 GO
 ALTER DATABASE [QLTHUVIEN] SET COMPATIBILITY_LEVEL = 150
@@ -82,7 +82,7 @@ ALTER DATABASE [QLTHUVIEN] SET QUERY_STORE = OFF
 GO
 USE [QLTHUVIEN]
 GO
-/****** Object:  Table [dbo].[Extension_Price]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[Extension_Price]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -97,7 +97,7 @@ CREATE TABLE [dbo].[Extension_Price](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[Get_CurrentExtensionPrice]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  View [dbo].[Get_CurrentExtensionPrice]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -106,7 +106,7 @@ CREATE VIEW [dbo].[Get_CurrentExtensionPrice]
 AS
 	select TOP(1) * from Extension_Price order by Start_Date desc
 GO
-/****** Object:  Table [dbo].[Extension]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[Extension]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -123,7 +123,7 @@ CREATE TABLE [dbo].[Extension](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[Get_TotalRevenueFromExtend]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  View [dbo].[Get_TotalRevenueFromExtend]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -133,7 +133,7 @@ AS
 SELECT        SUM(Amount_Money) AS Expr1
 FROM            dbo.Extension
 GO
-/****** Object:  Table [dbo].[account]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[account]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -157,7 +157,7 @@ CREATE TABLE [dbo].[account](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  View [dbo].[Get_MoneyExtendOfEachReader]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  View [dbo].[Get_MoneyExtendOfEachReader]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -169,7 +169,7 @@ FROM            dbo.account AS a INNER JOIN
                          dbo.Extension AS e ON a.username = e.User_Id
 GROUP BY e.User_Id
 GO
-/****** Object:  Table [dbo].[address]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[address]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -184,7 +184,7 @@ CREATE TABLE [dbo].[address](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[author]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[author]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -199,7 +199,7 @@ CREATE TABLE [dbo].[author](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[book]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[book]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -222,7 +222,7 @@ CREATE TABLE [dbo].[book](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[category]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[category]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -237,7 +237,7 @@ CREATE TABLE [dbo].[category](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[district]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[district]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -253,7 +253,7 @@ CREATE TABLE [dbo].[district](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[feedback]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[feedback]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -264,7 +264,7 @@ CREATE TABLE [dbo].[feedback](
 	[rate] [int] NULL
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[loan]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[loan]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -272,32 +272,32 @@ GO
 CREATE TABLE [dbo].[loan](
 	[loan_id] [bigint] IDENTITY(1,1) NOT NULL,
 	[user_id] [nvarchar](50) NULL,
-	[date_start] [nchar](10) NULL,
+	[date_start] [date] NULL,
 	[rule_id] [int] NULL,
- CONSTRAINT [PK_LOAN] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_borrow] PRIMARY KEY CLUSTERED 
 (
 	[loan_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[loan_detail]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[loan_detail]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE TABLE [dbo].[loan_detail](
-	[book_id] [bigint] NOT NULL,
 	[loan_id] [bigint] NOT NULL,
-	[date_end] [datetime] NULL,
+	[book_id] [bigint] NOT NULL,
+	[date_end] [date] NULL,
 	[status] [int] NULL,
- CONSTRAINT [PK_loan_detail] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_borrow_detail] PRIMARY KEY CLUSTERED 
 (
-	[book_id] ASC,
-	[loan_id] ASC
+	[loan_id] ASC,
+	[book_id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[location]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[location]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -311,7 +311,7 @@ CREATE TABLE [dbo].[location](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[province]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[province]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -326,7 +326,7 @@ CREATE TABLE [dbo].[province](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[publisher]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[publisher]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -341,7 +341,7 @@ CREATE TABLE [dbo].[publisher](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[role]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[role]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -355,7 +355,7 @@ CREATE TABLE [dbo].[role](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[rule]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[rule]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -374,7 +374,7 @@ CREATE TABLE [dbo].[rule](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[ward]    Script Date: 26/11/2021 09:09:24 PM ******/
+/****** Object:  Table [dbo].[ward]    Script Date: 11/27/2021 7:03:47 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -390,15 +390,17 @@ CREATE TABLE [dbo].[ward](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'0', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Đậu Trường Quân', N'Nam', CAST(N'2000-08-24' AS Date), CAST(N'2018-11-08' AS Date), CAST(N'2023-11-08' AS Date), 1, N'0364296143', N'quansonvu2408@gmail.com', 2, 1)
+INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'0', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Nguyễn Hải Nam', N'Nam', CAST(N'1999-05-29' AS Date), CAST(N'2018-11-08' AS Date), CAST(N'2023-11-08' AS Date), 2, N'0123456782', N'nguyenhainam@gmail.com', 2, 1)
 GO
-INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'1', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Nguyễn Hải Nam', N'Nam', CAST(N'1992-02-17' AS Date), CAST(N'2018-07-04' AS Date), CAST(N'2023-07-04' AS Date), 2, N'0123456782', N'kieuhuynhthanhtung@gmail.com', 4, 1)
+INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'1', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Đậu Trường Quân', N'Nam', CAST(N'2000-08-24' AS Date), CAST(N'2018-07-04' AS Date), CAST(N'2023-07-04' AS Date), 1, N'0364296143', N'quansonvu2408@gmail.com', 4, 1)
 GO
 INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'10', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Hà Thị Mơ', N'Nữ', CAST(N'1992-02-17' AS Date), CAST(N'2018-05-04' AS Date), CAST(N'2023-05-04' AS Date), 3, N'0123456789', N'hathimo@gmail.com', 2, 1)
 GO
+INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'11', N'$2a$12$qwcnpSvCtO932ErYhgP7ZO2Ov0Hll8TlvOSX0s0PxUHbXOtiNhk9W', N'abc', N'Nam', CAST(N'2000-11-16' AS Date), CAST(N'2018-12-03' AS Date), NULL, 1007, N'0123456780', N'abcd@gmail.com', 1, 1)
+GO
 INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'2', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Nguyễn Đình Duy', N'Nam', CAST(N'1992-02-17' AS Date), CAST(N'2021-05-08' AS Date), CAST(N'2025-05-08' AS Date), 4, N'0123456788', N'abc@gmail.com', 1, 1)
 GO
-INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'3', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Tôn Thị Huế', N'Nữ', CAST(N'2000-06-10' AS Date), CAST(N'2018-06-01' AS Date), CAST(N'2022-06-01' AS Date), 5, N'0396311734', N'a@gmail.com', 1, 1)
+INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'3', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Tôn Thị Huế', N'Nữ', CAST(N'2000-06-10' AS Date), CAST(N'2018-06-01' AS Date), CAST(N'2022-06-01' AS Date), 5, N'0123456789', N'a@gmail.com', 1, 1)
 GO
 INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'4', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Nguyễn Tiến Phước', N'Nam', CAST(N'1999-05-29' AS Date), CAST(N'2021-05-08' AS Date), CAST(N'2025-05-08' AS Date), 6, N'0123456783', N'ba@gmail.com', 1, 1)
 GO
@@ -406,9 +408,9 @@ INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_
 GO
 INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'6', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Nguyễn Thị Trúc Ly', N'Nữ', CAST(N'2000-07-05' AS Date), CAST(N'2021-05-08' AS Date), CAST(N'2025-05-08' AS Date), 10, N'0123456785', N'da@gmail.com', 1, 1)
 GO
-INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'7', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Hoàng Quốc Huy', N'Nam', CAST(N'1998-09-30' AS Date), CAST(N'2020-07-20' AS Date), CAST(N'2024-07-20' AS Date), 12, N'0396311733', N'ea@gmail.com', 1, 1)
+INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'7', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Hoàng Quốc Huy', N'Nam', CAST(N'1998-09-30' AS Date), CAST(N'2020-07-20' AS Date), CAST(N'2024-07-20' AS Date), 12, N'0123456789', N'ea@gmail.com', 1, 1)
 GO
-INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'8', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Nguyễn Ngọc Phương Trinh', N'Nữ', CAST(N'2000-06-13' AS Date), CAST(N'2021-05-30' AS Date), CAST(N'2025-05-30' AS Date), 11, N'0123456786', N'reintrinh1306@gmail.com', 3, 1)
+INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'8', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Nguyễn Ngọc Phương Trinh', N'Nữ', CAST(N'2000-06-13' AS Date), CAST(N'2021-05-30' AS Date), CAST(N'2025-05-30' AS Date), 11, N'0396311734', N'reintrinh1306@gmail.com', 3, 1)
 GO
 INSERT [dbo].[account] ([username], [password], [Full_Name], [gender], [date_of_birth], [registered_date], [expiration_date], [address_id], [phone_number], [email], [role_id], [status]) VALUES (N'9', N'$2a$12$aHpTTCFyV.zq6Oi5ZxzCJ.5uIUHupBM08siBkSIvvdrNcHmnRRGUS', N'Nguyễn Ngọc Lâm Như', N'Nữ', CAST(N'1992-02-17' AS Date), CAST(N'2018-12-03' AS Date), CAST(N'2023-12-03' AS Date), 13, N'0123456787', N'nguyenngoclamnhu@gmail.com', 3, 1)
 GO
@@ -476,6 +478,10 @@ INSERT [dbo].[address] ([address_id], [ward_id], [specific_address]) VALUES (100
 GO
 INSERT [dbo].[address] ([address_id], [ward_id], [specific_address]) VALUES (1005, 1, N'hi')
 GO
+INSERT [dbo].[address] ([address_id], [ward_id], [specific_address]) VALUES (1006, 1, N'')
+GO
+INSERT [dbo].[address] ([address_id], [ward_id], [specific_address]) VALUES (1007, 1, N'')
+GO
 SET IDENTITY_INSERT [dbo].[address] OFF
 GO
 SET IDENTITY_INSERT [dbo].[author] ON 
@@ -520,7 +526,7 @@ SET IDENTITY_INSERT [dbo].[author] OFF
 GO
 SET IDENTITY_INSERT [dbo].[book] ON 
 GO
-INSERT [dbo].[book] ([book_id], [title], [status], [publish_date], [price], [location_id], [author_id], [publisher_id], [category_id], [no_of_copies_actual], [no_of_copies_current]) VALUES (1, N'Mononoke Princess', NULL, CAST(N'2021-03-05' AS Date), 50000, 1, 1, 1, 1, 25, 24)
+INSERT [dbo].[book] ([book_id], [title], [status], [publish_date], [price], [location_id], [author_id], [publisher_id], [category_id], [no_of_copies_actual], [no_of_copies_current]) VALUES (1, N'Mononoke Princess', NULL, CAST(N'2021-03-05' AS Date), 50000, 1, 1, 1, 1, 25, 0)
 GO
 INSERT [dbo].[book] ([book_id], [title], [status], [publish_date], [price], [location_id], [author_id], [publisher_id], [category_id], [no_of_copies_actual], [no_of_copies_current]) VALUES (2, N'Thánh kinh trong người mới khởi nghiệp', NULL, CAST(N'2021-03-05' AS Date), 96000, 2, 7, 13, 5, 10, 10)
 GO
@@ -548,7 +554,7 @@ INSERT [dbo].[book] ([book_id], [title], [status], [publish_date], [price], [loc
 GO
 INSERT [dbo].[book] ([book_id], [title], [status], [publish_date], [price], [location_id], [author_id], [publisher_id], [category_id], [no_of_copies_actual], [no_of_copies_current]) VALUES (14, N'Mình về nhà thôi', NULL, CAST(N'2021-03-05' AS Date), 110000, 2, 17, 2, 7, 10, 10)
 GO
-INSERT [dbo].[book] ([book_id], [title], [status], [publish_date], [price], [location_id], [author_id], [publisher_id], [category_id], [no_of_copies_actual], [no_of_copies_current]) VALUES (15, N'Sài Gòn trăm bước', NULL, CAST(N'2021-03-05' AS Date), 268000, 1, 16, 3, 8, 10, 10)
+INSERT [dbo].[book] ([book_id], [title], [status], [publish_date], [price], [location_id], [author_id], [publisher_id], [category_id], [no_of_copies_actual], [no_of_copies_current]) VALUES (15, N'Sài Gòn trăm bước', NULL, CAST(N'2021-03-05' AS Date), 268000, 1, 16, 3, 8, 10, 0)
 GO
 INSERT [dbo].[book] ([book_id], [title], [status], [publish_date], [price], [location_id], [author_id], [publisher_id], [category_id], [no_of_copies_actual], [no_of_copies_current]) VALUES (16, N'Spirited away', NULL, CAST(N'2021-03-05' AS Date), 50000, 2, 2, 7, 3, 20, 19)
 GO
@@ -2028,6 +2034,20 @@ INSERT [dbo].[Extension] ([Id], [Amount_Money], [Start_Date], [User_Id], [Extens
 GO
 INSERT [dbo].[Extension] ([Id], [Amount_Money], [Start_Date], [User_Id], [Extension_Price_Id]) VALUES (27, 150000, CAST(N'2021-09-25' AS Date), N'4', 3)
 GO
+INSERT [dbo].[Extension] ([Id], [Amount_Money], [Start_Date], [User_Id], [Extension_Price_Id]) VALUES (28, 0, CAST(N'2021-11-26' AS Date), N'0', 3)
+GO
+INSERT [dbo].[Extension] ([Id], [Amount_Money], [Start_Date], [User_Id], [Extension_Price_Id]) VALUES (29, 0, CAST(N'2021-11-26' AS Date), N'9', 3)
+GO
+INSERT [dbo].[Extension] ([Id], [Amount_Money], [Start_Date], [User_Id], [Extension_Price_Id]) VALUES (30, 0, CAST(N'2021-11-26' AS Date), N'11', 3)
+GO
+INSERT [dbo].[Extension] ([Id], [Amount_Money], [Start_Date], [User_Id], [Extension_Price_Id]) VALUES (31, 0, CAST(N'2021-11-26' AS Date), N'son', 3)
+GO
+INSERT [dbo].[Extension] ([Id], [Amount_Money], [Start_Date], [User_Id], [Extension_Price_Id]) VALUES (32, 0, CAST(N'2021-11-27' AS Date), N'10', 3)
+GO
+INSERT [dbo].[Extension] ([Id], [Amount_Money], [Start_Date], [User_Id], [Extension_Price_Id]) VALUES (33, 0, CAST(N'2021-11-27' AS Date), N'3', 3)
+GO
+INSERT [dbo].[Extension] ([Id], [Amount_Money], [Start_Date], [User_Id], [Extension_Price_Id]) VALUES (34, 0, CAST(N'2021-11-27' AS Date), N'8', 3)
+GO
 SET IDENTITY_INSERT [dbo].[Extension] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Extension_Price] ON 
@@ -2037,6 +2057,32 @@ GO
 INSERT [dbo].[Extension_Price] ([Id], [Per_Month], [Start_Date]) VALUES (3, 150000, CAST(N'2021-12-20' AS Date))
 GO
 SET IDENTITY_INSERT [dbo].[Extension_Price] OFF
+GO
+SET IDENTITY_INSERT [dbo].[loan] ON 
+GO
+INSERT [dbo].[loan] ([loan_id], [user_id], [date_start], [rule_id]) VALUES (1, N'1', CAST(N'2021-11-17' AS Date), 13)
+GO
+INSERT [dbo].[loan] ([loan_id], [user_id], [date_start], [rule_id]) VALUES (2, N'1', CAST(N'2021-11-20' AS Date), 13)
+GO
+INSERT [dbo].[loan] ([loan_id], [user_id], [date_start], [rule_id]) VALUES (3, N'1', CAST(N'2021-11-27' AS Date), 13)
+GO
+INSERT [dbo].[loan] ([loan_id], [user_id], [date_start], [rule_id]) VALUES (4, N'1', CAST(N'2021-11-27' AS Date), 13)
+GO
+SET IDENTITY_INSERT [dbo].[loan] OFF
+GO
+INSERT [dbo].[loan_detail] ([loan_id], [book_id], [date_end], [status]) VALUES (1, 1, NULL, 0)
+GO
+INSERT [dbo].[loan_detail] ([loan_id], [book_id], [date_end], [status]) VALUES (2, 2, NULL, 0)
+GO
+INSERT [dbo].[loan_detail] ([loan_id], [book_id], [date_end], [status]) VALUES (2, 3, NULL, 0)
+GO
+INSERT [dbo].[loan_detail] ([loan_id], [book_id], [date_end], [status]) VALUES (2, 4, NULL, 0)
+GO
+INSERT [dbo].[loan_detail] ([loan_id], [book_id], [date_end], [status]) VALUES (3, 10, NULL, 0)
+GO
+INSERT [dbo].[loan_detail] ([loan_id], [book_id], [date_end], [status]) VALUES (3, 14, NULL, 0)
+GO
+INSERT [dbo].[loan_detail] ([loan_id], [book_id], [date_end], [status]) VALUES (4, 13, NULL, 0)
 GO
 SET IDENTITY_INSERT [dbo].[location] ON 
 GO
@@ -2246,7 +2292,7 @@ INSERT [dbo].[rule] ([rule_id], [max_rental_day], [max_rental_book], [fine], [pe
 GO
 INSERT [dbo].[rule] ([rule_id], [max_rental_day], [max_rental_book], [fine], [penalties_damaged], [date_end], [date_start]) VALUES (12, 10, 15, 3500, 260, NULL, CAST(N'2021-06-20' AS Date))
 GO
-INSERT [dbo].[rule] ([rule_id], [max_rental_day], [max_rental_book], [fine], [penalties_damaged], [date_end], [date_start]) VALUES (13, 10, 15, 3500, 150, NULL, CAST(N'2021-06-21' AS Date))
+INSERT [dbo].[rule] ([rule_id], [max_rental_day], [max_rental_book], [fine], [penalties_damaged], [date_end], [date_start]) VALUES (13, 10, 7, 3500, 150, NULL, CAST(N'2021-06-21' AS Date))
 GO
 SET IDENTITY_INSERT [dbo].[rule] OFF
 GO
@@ -24820,7 +24866,7 @@ INSERT [dbo].[ward] ([ward_id], [ward_name], [ward_prefix], [district_id]) VALUE
 GO
 SET IDENTITY_INSERT [dbo].[ward] OFF
 GO
-/****** Object:  Index [_province_id]    Script Date: 26/11/2021 09:09:25 PM ******/
+/****** Object:  Index [_province_id]    Script Date: 11/27/2021 7:03:48 PM ******/
 CREATE NONCLUSTERED INDEX [_province_id] ON [dbo].[district]
 (
 	[province_id] ASC
@@ -24899,27 +24945,29 @@ REFERENCES [dbo].[account] ([username])
 GO
 ALTER TABLE [dbo].[feedback] CHECK CONSTRAINT [FK_FEEDBACK_USER]
 GO
-ALTER TABLE [dbo].[loan]  WITH CHECK ADD  CONSTRAINT [FK_LOAN_QUYDINH] FOREIGN KEY([rule_id])
-REFERENCES [dbo].[rule] ([rule_id])
-GO
-ALTER TABLE [dbo].[loan] CHECK CONSTRAINT [FK_LOAN_QUYDINH]
-GO
-ALTER TABLE [dbo].[loan]  WITH CHECK ADD  CONSTRAINT [FK_LOAN_USER] FOREIGN KEY([user_id])
+ALTER TABLE [dbo].[loan]  WITH CHECK ADD  CONSTRAINT [FK_borrow_account] FOREIGN KEY([user_id])
 REFERENCES [dbo].[account] ([username])
+ON UPDATE CASCADE
 GO
-ALTER TABLE [dbo].[loan] CHECK CONSTRAINT [FK_LOAN_USER]
+ALTER TABLE [dbo].[loan] CHECK CONSTRAINT [FK_borrow_account]
 GO
-ALTER TABLE [dbo].[loan_detail]  WITH CHECK ADD  CONSTRAINT [FK_loan_detail_book] FOREIGN KEY([book_id])
+ALTER TABLE [dbo].[loan]  WITH CHECK ADD  CONSTRAINT [FK_borrow_rule] FOREIGN KEY([rule_id])
+REFERENCES [dbo].[rule] ([rule_id])
+ON UPDATE CASCADE
+GO
+ALTER TABLE [dbo].[loan] CHECK CONSTRAINT [FK_borrow_rule]
+GO
+ALTER TABLE [dbo].[loan_detail]  WITH CHECK ADD  CONSTRAINT [FK_borrow_detail_book] FOREIGN KEY([book_id])
 REFERENCES [dbo].[book] ([book_id])
 ON UPDATE CASCADE
 GO
-ALTER TABLE [dbo].[loan_detail] CHECK CONSTRAINT [FK_loan_detail_book]
+ALTER TABLE [dbo].[loan_detail] CHECK CONSTRAINT [FK_borrow_detail_book]
 GO
-ALTER TABLE [dbo].[loan_detail]  WITH CHECK ADD  CONSTRAINT [FK_loan_detail_loan] FOREIGN KEY([loan_id])
+ALTER TABLE [dbo].[loan_detail]  WITH CHECK ADD  CONSTRAINT [FK_borrow_detail_borrow] FOREIGN KEY([loan_id])
 REFERENCES [dbo].[loan] ([loan_id])
 ON UPDATE CASCADE
 GO
-ALTER TABLE [dbo].[loan_detail] CHECK CONSTRAINT [FK_loan_detail_loan]
+ALTER TABLE [dbo].[loan_detail] CHECK CONSTRAINT [FK_borrow_detail_borrow]
 GO
 ALTER TABLE [dbo].[ward]  WITH CHECK ADD  CONSTRAINT [FK_ward_district] FOREIGN KEY([district_id])
 REFERENCES [dbo].[district] ([district_id])
@@ -24932,7 +24980,7 @@ ALTER TABLE [dbo].[account]  WITH CHECK ADD  CONSTRAINT [CK_gender] CHECK  (([ge
 GO
 ALTER TABLE [dbo].[account] CHECK CONSTRAINT [CK_gender]
 GO
-/****** Object:  StoredProcedure [dbo].[SP_AddExtension]    Script Date: 26/11/2021 09:09:25 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_AddExtension]    Script Date: 11/27/2021 7:03:48 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -24950,7 +24998,7 @@ as
 					values (@AmountMoney, @StartDate, @UserId, @ExtensionPriceId)
 return 0
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetAmountMoneyByMonth]    Script Date: 26/11/2021 09:09:25 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetAmountMoneyByMonth]    Script Date: 11/27/2021 7:03:48 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -24961,13 +25009,13 @@ AS
 	select @Month * Per_Month from dbo.Get_CurrentExtensionPrice
 RETURN 0  -- THANH CONG
 GO
-/****** Object:  StoredProcedure [dbo].[SP_GetExpirationDate]    Script Date: 26/11/2021 09:09:25 PM ******/
+/****** Object:  StoredProcedure [dbo].[SP_GetExpirationDate]    Script Date: 11/27/2021 7:03:48 PM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROC [dbo].[SP_GetExpirationDate]
-  @USERNAME VARCHAR
+  @USERNAME VARCHAR(50)
 AS
 	declare @FinalStartDate date
 	declare @ExtensionPriceId int
@@ -24994,7 +25042,7 @@ AS
 		end
 	select @MonthAdd = @AmountMoney / (Select EP.Per_Month from Extension_Price EP where EP.Id = @ExtensionPriceId)
 	select @ExpirationDate = DATEADD(MONTH, @MonthAdd, @FinalStartDate)
-	if @ExpirationDate < GETDATE() select GETDATE()
+	if @ExpirationDate < GETDATE() select CAST(GETDATE() AS DATE)
 	else select @ExpirationDate
 RETURN 0  -- THANH CONG
 GO

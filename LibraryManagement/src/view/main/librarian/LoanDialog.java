@@ -5,7 +5,14 @@
  */
 package view.main.librarian;
 
+import control.librarian.BookLoan;
+import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.database.Reader;
 import swing.UIController;
 
 /**
@@ -14,6 +21,10 @@ import swing.UIController;
  */
 public class LoanDialog extends javax.swing.JDialog {
 
+    private BookLoan bookLoan;
+    private Reader reader;
+    private DefaultTableModel modelBookList;
+    private DefaultTableModel modelChosenBook;
     /**
      * Creates new form LoanDialog
      * @param parent
@@ -23,6 +34,12 @@ public class LoanDialog extends javax.swing.JDialog {
     public LoanDialog(java.awt.Frame parent, boolean modal, JPanel parentPanel) {
         super(parent, modal);
         initComponents();
+        bookLoan = new BookLoan();
+        reader = bookLoan.getReaderInformation(ChooseReaderPanel.username);
+        modelBookList = (DefaultTableModel) jTable_BookList.getModel();
+        modelChosenBook = (DefaultTableModel) jTable_ChosenBook.getModel();
+        bookLoan.loadBookList(modelBookList);
+        setReaderInformation();
         setLocationRelativeTo(null);
         setTableView();
     }
@@ -42,11 +59,10 @@ public class LoanDialog extends javax.swing.JDialog {
         jLabel_Name = new javax.swing.JLabel();
         jLabel_Gender = new javax.swing.JLabel();
         jLabel_DateOfBirth = new javax.swing.JLabel();
-        jLabel_Address = new javax.swing.JLabel();
         jLabel_PhoneNumber = new javax.swing.JLabel();
         jLabel_Email = new javax.swing.JLabel();
         jLabel_DayStart = new javax.swing.JLabel();
-        jLabel_DayEnd = new javax.swing.JLabel();
+        jLabel_Address = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTextArea_Detail = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
@@ -76,36 +92,32 @@ public class LoanDialog extends javax.swing.JDialog {
         jPanel1.setLayout(new java.awt.GridLayout(0, 1, 35, 10));
 
         jLabel_Name.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_Name.setText("Name");
+        jLabel_Name.setText("Name: ");
         jPanel1.add(jLabel_Name);
 
         jLabel_Gender.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_Gender.setText("Gender");
+        jLabel_Gender.setText("Gender: ");
         jPanel1.add(jLabel_Gender);
 
         jLabel_DateOfBirth.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_DateOfBirth.setText("Date of birth");
+        jLabel_DateOfBirth.setText("Date of birth: ");
         jPanel1.add(jLabel_DateOfBirth);
 
-        jLabel_Address.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_Address.setText("Address");
-        jPanel1.add(jLabel_Address);
-
         jLabel_PhoneNumber.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_PhoneNumber.setText("Phone number");
+        jLabel_PhoneNumber.setText("Phone number: ");
         jPanel1.add(jLabel_PhoneNumber);
 
         jLabel_Email.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_Email.setText("Email");
+        jLabel_Email.setText("Email: ");
         jPanel1.add(jLabel_Email);
 
         jLabel_DayStart.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_DayStart.setText("Day start");
+        jLabel_DayStart.setText("Registration date: ");
         jPanel1.add(jLabel_DayStart);
 
-        jLabel_DayEnd.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_DayEnd.setText("Day end");
-        jPanel1.add(jLabel_DayEnd);
+        jLabel_Address.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel_Address.setText("Address: ");
+        jPanel1.add(jLabel_Address);
 
         jTextArea_Detail.setEditable(false);
         jTextArea_Detail.setColumns(20);
@@ -140,6 +152,11 @@ public class LoanDialog extends javax.swing.JDialog {
         jLabel10.setText("Book name");
 
         jTextField_SearchBook.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jTextField_SearchBook.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextField_SearchBookCaretUpdate(evt);
+            }
+        });
 
         jButton_ClearSearch.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
         jButton_ClearSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
@@ -198,7 +215,11 @@ public class LoanDialog extends javax.swing.JDialog {
         jButton_Choose.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Choose.setText("Choose");
         jButton_Choose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_Choose.setEnabled(false);
+        jButton_Choose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ChooseActionPerformed(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
         jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -231,12 +252,21 @@ public class LoanDialog extends javax.swing.JDialog {
         jButton_ClearBook.setForeground(new java.awt.Color(51, 51, 51));
         jButton_ClearBook.setText("Clear");
         jButton_ClearBook.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_ClearBook.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ClearBookActionPerformed(evt);
+            }
+        });
 
         jButton_Remove.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Remove.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Remove.setText("Remove");
         jButton_Remove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton_Remove.setEnabled(false);
+        jButton_Remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_RemoveActionPerformed(evt);
+            }
+        });
 
         jButton_Exit.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Exit.setForeground(new java.awt.Color(51, 51, 51));
@@ -252,6 +282,11 @@ public class LoanDialog extends javax.swing.JDialog {
         jButton_Borrow.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Borrow.setText("Borrow");
         jButton_Borrow.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Borrow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_BorrowActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -332,6 +367,16 @@ public class LoanDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setReaderInformation() {
+        jLabel_Name.setText("Name: " + reader.getName());
+        jLabel_Gender.setText("Gender: " + reader.getGender());
+        jLabel_DateOfBirth.setText("Date of birth: " + reader.getDateOfBirth());
+        jLabel_PhoneNumber.setText("Phone: " + reader.getPhone());
+        jLabel_Email.setText("Email: " + reader.getEmail());
+        jLabel_DayStart.setText("Registration date: " + reader.getRegisteredDate());
+        jTextArea_Detail.setText(reader.getAddress());
+    }
+    
     private void setTableView() {
         UIController.setDefaultTableHeader(jTable_BookList);
         UIController.setDefaultTableHeader(jTable_ChosenBook);
@@ -341,6 +386,70 @@ public class LoanDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton_ExitActionPerformed
+
+    private void jTextField_SearchBookCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField_SearchBookCaretUpdate
+        // TODO add your handling code here:
+        String tuKhoa = jTextField_SearchBook.getText();
+        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(modelBookList);
+        jTable_BookList.setRowSorter(trs);
+
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + tuKhoa, 1));
+    }//GEN-LAST:event_jTextField_SearchBookCaretUpdate
+
+    private void jButton_ChooseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ChooseActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable_BookList.convertRowIndexToModel(jTable_BookList.getSelectedRow());
+        if(selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sách muốn mượn!");
+            return;
+        }
+        if(modelChosenBook.getRowCount() == ChooseReaderPanel.remainingBook) {
+            JOptionPane.showMessageDialog(this, "Đã đạt số sách tối đa được mượn!");
+            return;
+        }
+        if(Integer.parseInt(modelBookList.getValueAt(selectedRow, 6).toString()) == 0) {
+            JOptionPane.showMessageDialog(this, "Số lượng sách này đã hết, không thể mượn. Vui lòng chọn sách khác!");
+            return;
+        }
+        
+        if(bookLoan.findChosenBook(modelChosenBook, modelBookList.getValueAt(selectedRow, 0).toString())) {
+            JOptionPane.showMessageDialog(this, "Sách này đã được chọn!");
+            return;
+        }
+        
+        if(bookLoan.findBorrowedBook(ChooseReaderPanel.username, modelBookList.getValueAt(selectedRow, 0).toString())) {
+            JOptionPane.showMessageDialog(this, "Không thể mượn sách mà độc giả đang mượn. Vui lòng chọn sách khác!");
+            return;
+        }
+        
+        Vector vt = new Vector();
+        vt.add(modelBookList.getValueAt(selectedRow, 0));
+        vt.add(modelBookList.getValueAt(selectedRow, 1));
+        vt.add(modelBookList.getValueAt(selectedRow, 3));
+        modelChosenBook.addRow(vt);
+    }//GEN-LAST:event_jButton_ChooseActionPerformed
+
+    private void jButton_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RemoveActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable_ChosenBook.getSelectedRow();
+        if(selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sách muốn xóa!");
+            return;
+        }
+        modelChosenBook.removeRow(selectedRow);
+    }//GEN-LAST:event_jButton_RemoveActionPerformed
+
+    private void jButton_ClearBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearBookActionPerformed
+        // TODO add your handling code here:
+        modelChosenBook.setNumRows(0);
+    }//GEN-LAST:event_jButton_ClearBookActionPerformed
+
+    private void jButton_BorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BorrowActionPerformed
+        // TODO add your handling code here:
+        bookLoan.borrowBook(ChooseReaderPanel.username, modelChosenBook);
+        JOptionPane.showMessageDialog(this, "Mượn sách thành công!");
+        this.dispose();
+    }//GEN-LAST:event_jButton_BorrowActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Borrow;
@@ -354,7 +463,6 @@ public class LoanDialog extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel_Address;
     private javax.swing.JLabel jLabel_DateOfBirth;
-    private javax.swing.JLabel jLabel_DayEnd;
     private javax.swing.JLabel jLabel_DayStart;
     private javax.swing.JLabel jLabel_Email;
     private javax.swing.JLabel jLabel_Gender;
