@@ -5,7 +5,18 @@
  */
 package view.main.reader;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalDate;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.database.Connect;
 import swing.UIController;
+import utilities.JTableFunction;
+import view.login.LoginFrame;
 
 /**
  *
@@ -13,12 +24,27 @@ import swing.UIController;
  */
 public class BookBorrowPanel extends javax.swing.JPanel {
 
+    private JTableFunction function;
+    private DefaultTableModel model;
+    private String queryLoadData = "select b.book_id, b.title, b.publish_date, b.price, a.name, p.name, c.category\n" +
+                                    "from loan l\n" +
+                                    "inner join loan_detail dt on l.loan_id = dt.loan_id\n" +
+                                    "inner join book b on b.book_id = dt.book_id\n" +
+                                    "inner join author a on b.author_id = a.author_id\n" +
+                                    "inner join publisher p on b.publisher_id = p.publisher_id\n" +
+                                    "inner join category c on b.category_id = c.category_id\n" +
+                                    "where l.user_id = '" + LoginFrame.username + "'\n" +
+                                    "and dt.status = 0";
+    
     /**
      * Creates new form BookBorrowPanel
      */
     public BookBorrowPanel() {
         initComponents();
         UIController.setDefaultTableHeader(jTable_Book);
+        function = new JTableFunction();
+        model = (DefaultTableModel) jTable_Book.getModel();
+        function.LoadData(jTable_Book, queryLoadData);
     }
 
     /**
@@ -55,22 +81,20 @@ public class BookBorrowPanel extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel2.setText("Ngày mượn");
+        jLabel2.setText("Ngày mượn:");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel6.setText("Rate");
 
         jLabel_NgayMuon.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_NgayMuon.setText("ngày");
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel8.setText("Hạn trả");
+        jLabel8.setText("Hạn trả:");
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel10.setText("Phạt");
+        jLabel10.setText("Phạt:");
 
         jLabel_HanTra.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel_HanTra.setText("ngày");
 
         jLabel_Phat.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel_Phat.setText("Đã trễ ... phải nộp phạt ...");
@@ -100,6 +124,11 @@ public class BookBorrowPanel extends javax.swing.JPanel {
 
         jButton_Send.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Send.setText("Send");
+        jButton_Send.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_SendActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -119,7 +148,7 @@ public class BookBorrowPanel extends javax.swing.JPanel {
                         .addGap(81, 81, 81)
                         .addComponent(jLabel10)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel_Phat, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE))
+                        .addComponent(jLabel_Phat, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -186,6 +215,11 @@ public class BookBorrowPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        jTable_Book.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_BookMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable_Book);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -210,6 +244,97 @@ public class BookBorrowPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTable_BookMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_BookMouseClicked
+        // TODO add your handling code here:
+        int selectedRow = jTable_Book.getSelectedRow();
+        if(selectedRow == -1)
+            return;
+        
+        String bookID = model.getValueAt(selectedRow, 0).toString();
+        getBorrowInformation(LoginFrame.username, bookID);
+    }//GEN-LAST:event_jTable_BookMouseClicked
+
+    private void jButton_SendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SendActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable_Book.getSelectedRow();
+        if(selectedRow == -1)
+            return;
+        String bookID = model.getValueAt(selectedRow, 0).toString();
+        int rate = jSlider_Rate.getValue();
+        System.out.println(rate);
+        feedback(LoginFrame.username, bookID, rate);
+        JOptionPane.showMessageDialog(this, "Gửi rate thành công!");
+    }//GEN-LAST:event_jButton_SendActionPerformed
+
+    public void feedback(String username, String bookID, int rate) {
+        String query = "declare @user_id nvarchar(50)\n" +
+                        "declare @book_id int\n" +
+                        "declare @rate int\n" +
+                        "\n" +
+                        "select @user_id = '" + username + "'\n" +
+                        "select @book_id = " + bookID + "\n" +
+                        "select @rate = " + rate + "\n" +
+                        "\n" +
+                        "if exists	(select *\n" +
+                        "			from feedback\n" +
+                        "			where user_id = @user_id\n" +
+                        "			and book_id = @book_id)\n" +
+                        "\n" +
+                        "	update feedback set rate = @rate where user_id = @user_id and book_id = @book_id\n" +
+                        "\n" +
+                        "else insert into feedback values (@user_id, @book_id, @rate)";
+        
+        try {
+            Connection con = Connect.GetConnect();
+            PreparedStatement ps = con.prepareStatement(query);
+            ps.executeUpdate();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }              
+    }
+    
+    public void getBorrowInformation(String username, String bookID) {
+        String query = "select loan.date_start, DATEADD(day, r.max_rental_day, loan.date_start), r.fine\n" +
+                        "from loan\n" +
+                        "inner join [rule] r on loan.rule_id = r.rule_id\n" +
+                        "inner join loan_detail dt on loan.loan_id = dt.loan_id\n" +
+                        "where dt.status = 0 and loan.user_id = '" + username + "' and dt.book_id = " + bookID;
+        int overDueFines = 0;
+        String borrowDate = null;
+        String expirationDate = null;
+        int fines = 0;
+        try {
+            Connection con = Connect.GetConnect();
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                borrowDate = rs.getString(1);
+                expirationDate = rs.getString(2);
+                overDueFines = rs.getInt(3);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        // Calculate days between today and hanTra
+        LocalDate today = LocalDate.now();
+        LocalDate hanTra = LocalDate.parse(expirationDate);
+        Duration diff = Duration.between(hanTra.atStartOfDay(), today.atStartOfDay());
+        long diffDays = diff.toDays();
+        System.out.println("Số ngày trễ hạn: " + diffDays);
+        
+        // Check if the book is returned late or not
+        if (diffDays > 0)
+            fines = (int) (overDueFines * diffDays);
+        
+        jLabel_NgayMuon.setText(borrowDate);
+        jLabel_HanTra.setText(expirationDate);
+        jLabel_Phat.setText("Đã trễ " + (diffDays < 0 ? 0 : diffDays) + " ngày phải nộp phạt " + fines + " đồng");        
+    }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Send;

@@ -403,7 +403,7 @@ public class BookLoan {
             return (int) (overDueFines * diffDays);
         }
     }
-    
+       
     public int getBrokenLostFines(String username, String bookID) {
         String query = "select b.price, r.penalties_damaged\n" +
                         "from loan\n" +
