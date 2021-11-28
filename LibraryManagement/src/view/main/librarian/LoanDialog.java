@@ -34,6 +34,7 @@ public class LoanDialog extends javax.swing.JDialog {
     public LoanDialog(java.awt.Frame parent, boolean modal, JPanel parentPanel) {
         super(parent, modal);
         initComponents();
+        jTextArea_Detail.setWrapStyleWord(true);
         bookLoan = new BookLoan();
         reader = bookLoan.getReaderInformation(ChooseReaderPanel.username);
         modelBookList = (DefaultTableModel) jTable_BookList.getModel();
@@ -82,6 +83,7 @@ public class LoanDialog extends javax.swing.JDialog {
         jButton_Borrow = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Borrow Book");
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -122,6 +124,7 @@ public class LoanDialog extends javax.swing.JDialog {
         jTextArea_Detail.setEditable(false);
         jTextArea_Detail.setColumns(20);
         jTextArea_Detail.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jTextArea_Detail.setLineWrap(true);
         jTextArea_Detail.setRows(5);
         jScrollPane4.setViewportView(jTextArea_Detail);
 

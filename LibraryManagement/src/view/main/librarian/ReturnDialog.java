@@ -80,6 +80,7 @@ public class ReturnDialog extends javax.swing.JDialog {
         jButton_Return = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Return Book");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
