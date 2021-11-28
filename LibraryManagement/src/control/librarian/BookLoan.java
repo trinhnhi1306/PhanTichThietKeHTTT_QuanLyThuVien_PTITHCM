@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -213,8 +214,28 @@ public class BookLoan {
             } catch (SQLException ex) {
                 Logger.getLogger(BookLoan.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }  
+        }          
+    }
+    
+    public void updateBookQuantity1(DefaultTableModel modelChosenBook) {
         
+        int size = modelChosenBook.getRowCount();
+        for (int i = 0; i < size; i++) {
+            
+            if(Integer.parseInt(modelChosenBook.getValueAt(i,4).toString()) != 0)
+                continue;
+            
+            try {
+                Connection con = Connect.GetConnect();
+                PreparedStatement rs = con.prepareStatement("UPDATE BOOK SET no_of_copies_current = no_of_copies_current + 1 WHERE book_id = ?");
+                rs.setInt(1, Integer.parseInt(modelChosenBook.getValueAt(i,0).toString()));
+                rs.executeUpdate();
+                rs.close();
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(BookLoan.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }          
     }
     
     public void borrowBook(String username, DefaultTableModel modelChosenBook) {
@@ -237,6 +258,56 @@ public class BookLoan {
             }
         }  
         updateBookQuantity(modelChosenBook);
+    }
+    
+    public void returnBook(String username, DefaultTableModel modelChosenBook) {
+        
+        String query = "update loan_detail\n" +
+                        "set status = ?, date_end = Getdate()\n" +
+                        "where status = 0 and book_id = ?\n" +
+                        "and loan_id = (select dt.loan_id\n" +
+                        "                from loan l\n" +
+                        "                inner join loan_detail dt\n" +
+                        "                on l.loan_id = dt.loan_id\n" +
+                        "                where l.user_id = '" + username + "'\n" +
+                        "                and dt.status = 0\n" +
+                        "                and dt.book_id = ?)";
+        int size = modelChosenBook.getRowCount();
+        int bookID = 0;
+        int overDueFines = 0;
+        int brokenLostFines = 0;
+        for (int i = 0; i < size; i++) {
+            bookID = Integer.parseInt(modelChosenBook.getValueAt(i,0).toString());
+            overDueFines = Integer.parseInt(modelChosenBook.getValueAt(i,3).toString());
+            brokenLostFines = Integer.parseInt(modelChosenBook.getValueAt(i,4).toString());
+            try {
+                Connection con = Connect.GetConnect();
+                PreparedStatement rs = con.prepareStatement(query);
+                /*
+                    Status 0: đang mượn chưa trả
+                    Status 1: đã trả, không trễ, không làm hỏng/mất
+                    Status 2: đã trả, trả trễ, không làm hỏng/mất
+                    Status 3: đã trả, không trễ, làm hỏng/mất
+                    Status 4: đã trả, trả trễ, làm hỏng/mất
+                */
+                if(brokenLostFines != 0 && overDueFines != 0)
+                    rs.setInt(1, 4);
+                else if(brokenLostFines != 0 && overDueFines == 0)
+                    rs.setInt(1, 3);
+                else if(brokenLostFines == 0 && overDueFines != 0)
+                    rs.setInt(1, 2);
+                else
+                    rs.setInt(1, 1);
+                rs.setInt(2, bookID);
+                rs.setInt(3, bookID);
+                rs.executeUpdate();
+                rs.close();
+                con.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(BookLoan.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }  
+        updateBookQuantity1(modelChosenBook);
     }
     
     public boolean expiredUser(String username){
@@ -293,6 +364,72 @@ public class BookLoan {
             System.out.println(ex.getMessage());
         }
         return rule;
+    }
+    
+    public int getOverdueFines(String username, String bookID) {
+        String query = "select DATEADD(day, r.max_rental_day, loan.date_start), r.fine\n" +
+                        "from loan\n" +
+                        "inner join [rule] r on loan.rule_id = r.rule_id\n" +
+                        "inner join loan_detail dt on loan.loan_id = dt.loan_id\n" +
+                        "where dt.status = 0 and loan.user_id = '" + username + "' and dt.book_id = " + bookID;
+        int overDueFines = 0;
+        String date = null;
+        try {
+            Connection con = Connect.GetConnect();
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                date = rs.getString(1);
+                overDueFines = rs.getInt(2);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        // Calculate days between today and hanTra
+        LocalDate today = LocalDate.now();
+        LocalDate hanTra = LocalDate.parse(date);
+        Duration diff = Duration.between(hanTra.atStartOfDay(), today.atStartOfDay());
+        long diffDays = diff.toDays();
+        System.out.println("Số ngày trễ hạn: " + diffDays);
+        
+        // Check if the book is returned late or not
+        if (diffDays <= 0) {
+            return 0;
+        }
+        else {
+            return (int) (overDueFines * diffDays);
+        }
+    }
+    
+    public int getBrokenLostFines(String username, String bookID) {
+        String query = "select b.price, r.penalties_damaged\n" +
+                        "from loan\n" +
+                        "inner join [rule] r on loan.rule_id = r.rule_id\n" +
+                        "inner join loan_detail dt on loan.loan_id = dt.loan_id\n" +
+                        "inner join book b on dt.book_id = b.book_id\n" +
+                        "where dt.status = 0 and loan.user_id = '" + username + "' and dt.book_id = " + bookID;
+        int brokenlost = 0;
+        int price = 0;
+        try {
+            Connection con = Connect.GetConnect();
+            PreparedStatement ps = con.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                price = rs.getInt(1);
+                brokenlost = rs.getInt(2);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        // Calculate fines for loss/broke book
+        int fines = price * brokenlost / 100;
+        return fines;
     }
     
     public boolean expiredBook(String username, int soNgayMuonToiDa) {

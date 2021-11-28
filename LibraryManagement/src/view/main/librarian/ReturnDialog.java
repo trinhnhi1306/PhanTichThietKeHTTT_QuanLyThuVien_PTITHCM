@@ -6,6 +6,9 @@
 package view.main.librarian;
 
 import control.librarian.BookLoan;
+import java.util.Date;
+import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import model.database.Reader;
@@ -162,6 +165,7 @@ public class ReturnDialog extends javax.swing.JDialog {
         jTextArea_Fines.setColumns(20);
         jTextArea_Fines.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jTextArea_Fines.setRows(5);
+        jTextArea_Fines.setText("Total overdue fines:\t0\nTotal broken/lost fines:\t0\nTotal fines:\t\t0");
         jScrollPane3.setViewportView(jTextArea_Fines);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -209,22 +213,42 @@ public class ReturnDialog extends javax.swing.JDialog {
         jButton_BrokenLost.setForeground(new java.awt.Color(51, 51, 51));
         jButton_BrokenLost.setText("Broken / Lost ");
         jButton_BrokenLost.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_BrokenLost.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_BrokenLostActionPerformed(evt);
+            }
+        });
 
         jButton_Choose.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Choose.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Choose.setText("Choose");
         jButton_Choose.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Choose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ChooseActionPerformed(evt);
+            }
+        });
 
         jButton_Remove.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Remove.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Remove.setText("Remove");
         jButton_Remove.setToolTipText("");
         jButton_Remove.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Remove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_RemoveActionPerformed(evt);
+            }
+        });
 
         jButton_Clear.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Clear.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Clear.setText("Clear");
         jButton_Clear.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ClearActionPerformed(evt);
+            }
+        });
 
         jButton_Exit.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Exit.setForeground(new java.awt.Color(51, 51, 51));
@@ -240,6 +264,11 @@ public class ReturnDialog extends javax.swing.JDialog {
         jButton_Return.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Return.setText("Return");
         jButton_Return.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Return.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ReturnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -339,6 +368,102 @@ public class ReturnDialog extends javax.swing.JDialog {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton_ExitActionPerformed
+
+    private void calculateTotalFines() {
+        int totalOverdueFines = 0;
+        int totalBrokenLostFines = 0;
+        int size = modelChosenBook.getRowCount();
+        for (int i = 0; i < size; i++) {
+            totalOverdueFines += Integer.parseInt(modelChosenBook.getValueAt(i,3).toString());
+            totalBrokenLostFines += Integer.parseInt(modelChosenBook.getValueAt(i,4).toString());
+        }
+        String str = "Total overdue fines:\t" + totalOverdueFines + "\n" +
+                     "Total broken/lost fines:\t" + totalBrokenLostFines + "\n" +
+                     "Total fines:\t\t" + (totalOverdueFines + totalBrokenLostFines);
+        jTextArea_Fines.setText(str);
+    }
+    
+    private void jButton_ChooseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ChooseActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable_BooksBorrowed.getSelectedRow();
+        
+        if(selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sách muốn mượn!");
+            return;
+        }
+        
+        if(bookLoan.findChosenBook(modelChosenBook, modelBookBorrowed.getValueAt(selectedRow, 0).toString())) {
+            JOptionPane.showMessageDialog(this, "Sách này đã được chọn!");
+            return;
+        }
+        
+        Vector vt = new Vector();
+        int overDueFines = bookLoan.getOverdueFines(ChooseReaderPanel.username, modelBookBorrowed.getValueAt(selectedRow, 0).toString());
+        System.out.println(overDueFines);
+        vt.add(modelBookBorrowed.getValueAt(selectedRow, 0));
+        vt.add(modelBookBorrowed.getValueAt(selectedRow, 1));
+        vt.add(modelBookBorrowed.getValueAt(selectedRow, 3));
+        vt.add(overDueFines);
+        vt.add(0);
+        modelChosenBook.addRow(vt);
+        calculateTotalFines();
+    }//GEN-LAST:event_jButton_ChooseActionPerformed
+
+    private void jButton_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RemoveActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable_ChosenBook.getSelectedRow();
+        if(selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sách muốn xóa!");
+            return;
+        }
+        modelChosenBook.removeRow(selectedRow);
+        calculateTotalFines();
+    }//GEN-LAST:event_jButton_RemoveActionPerformed
+
+    private void jButton_BrokenLostActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BrokenLostActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = jTable_BooksBorrowed.getSelectedRow();
+        
+        if(selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sách muốn mượn!");
+            return;
+        }
+        
+        if(bookLoan.findChosenBook(modelChosenBook, modelBookBorrowed.getValueAt(selectedRow, 0).toString())) {
+            JOptionPane.showMessageDialog(this, "Sách này đã được chọn!");
+            return;
+        }
+        
+        Vector vt = new Vector();
+        int overDueFines = bookLoan.getOverdueFines(ChooseReaderPanel.username, modelBookBorrowed.getValueAt(selectedRow, 0).toString());
+        int brokenLostFines = bookLoan.getBrokenLostFines(ChooseReaderPanel.username, modelBookBorrowed.getValueAt(selectedRow, 0).toString());
+        System.out.println(overDueFines);
+        vt.add(modelBookBorrowed.getValueAt(selectedRow, 0));
+        vt.add(modelBookBorrowed.getValueAt(selectedRow, 1));
+        vt.add(modelBookBorrowed.getValueAt(selectedRow, 3));
+        vt.add(overDueFines);
+        vt.add(brokenLostFines);
+        modelChosenBook.addRow(vt);
+        calculateTotalFines();
+    }//GEN-LAST:event_jButton_BrokenLostActionPerformed
+
+    private void jButton_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearActionPerformed
+        // TODO add your handling code here:
+        modelChosenBook.setNumRows(0);
+        calculateTotalFines();
+    }//GEN-LAST:event_jButton_ClearActionPerformed
+
+    private void jButton_ReturnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ReturnActionPerformed
+        // TODO add your handling code here:
+        if(modelChosenBook.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "Chưa có sách được chọn!");
+            return;
+        }
+        bookLoan.returnBook(ChooseReaderPanel.username, modelChosenBook);
+        JOptionPane.showMessageDialog(this, "Trả sách thành công!");
+        bookLoan.loadBookBorrowed(modelBookBorrowed, ChooseReaderPanel.username);
+        modelChosenBook.setNumRows(0);
+    }//GEN-LAST:event_jButton_ReturnActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_BrokenLost;
