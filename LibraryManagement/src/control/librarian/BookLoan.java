@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,7 +94,7 @@ public class BookLoan {
         }   
     }    
     
-    public void loadBookBorrowed(DefaultTableModel model, String username){
+    public void loadBookBorrowed(Map<Integer, Vector> mapBookBorrewed, DefaultTableModel model, String username){
         
         model.setNumRows(0);
         Connection ketNoi= Connect.GetConnect();
@@ -120,13 +120,14 @@ public class BookLoan {
                 vt.add(rs.getString(6));
                 vt.add(rs.getString(7));
                 model.addRow(vt);
+                mapBookBorrewed.put(rs.getInt(1), vt);
             }
             ps.close();
             rs.close();
             ketNoi.close();
         } catch (SQLException ex) {
-            System.out.println("Lỗi load reader");
-        }   
+            System.out.println("Lỗi load Book Borrowed");
+        } 
     }    
     
     public boolean findChosenBook(DefaultTableModel model, String id) {
