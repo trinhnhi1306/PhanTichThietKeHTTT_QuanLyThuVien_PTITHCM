@@ -26,7 +26,7 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
     private ReturnDialog returnDialog;
     private BookLoan bookLoan;
     private DefaultTableModel model;
-    private Rule rule;
+    public static Rule rule;
 
     /**
      * Creates new form ChooseReaderPanel

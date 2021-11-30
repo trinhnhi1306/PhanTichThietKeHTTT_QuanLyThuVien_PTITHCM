@@ -31,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
 import model.database.Connect;
 import org.mindrot.bcrypt.BCrypt;
 import swing.UIController;
+import utilities.File;
 
 /**
  *
@@ -109,6 +110,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         jTextField_NameSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_Reader = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -432,6 +434,15 @@ public class ReaderPanel extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(jTable_Reader);
 
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/excel.png"))); // NOI18N
+        jButton1.setText("Export");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -448,6 +459,8 @@ public class ReaderPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addComponent(jButton_Search)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44)
                         .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -456,13 +469,18 @@ public class ReaderPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel14)
-                        .addComponent(jTextField_NameSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton_Search))
-                    .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel14)
+                                .addComponent(jTextField_NameSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton_Search))
+                            .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
                 .addContainerGap())
@@ -791,6 +809,12 @@ public class ReaderPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         layUserBySearch(jTextField_NameSearch.getText());
     }//GEN-LAST:event_jButton_SearchActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        File.xuatFileExcel("DSDOCGIA", (DefaultTableModel) jTable_Reader.getModel(), "DocGia.xlsx");
+        JOptionPane.showMessageDialog(this, "Xuất file excel thành công!");
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     int getIdProvince(String nameProvince){
         int i = 0;
@@ -1260,6 +1284,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupGender;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton_Add;
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Clear;

@@ -6,6 +6,8 @@
 package view.main.librarian;
 
 import control.librarian.BookLoan;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,7 +15,9 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.database.Reader;
+import model.database.Rule;
 import swing.UIController;
+import utilities.File;
 
 /**
  *
@@ -25,6 +29,7 @@ public class LoanDialog extends javax.swing.JDialog {
     private Reader reader;
     private DefaultTableModel modelBookList;
     private DefaultTableModel modelChosenBook;
+    private Rule rule;
     /**
      * Creates new form LoanDialog
      * @param parent
@@ -36,6 +41,7 @@ public class LoanDialog extends javax.swing.JDialog {
         initComponents();
         jTextArea_Detail.setWrapStyleWord(true);
         bookLoan = new BookLoan();
+        rule = ChooseReaderPanel.rule;
         reader = bookLoan.getReaderInformation(ChooseReaderPanel.username);
         modelBookList = (DefaultTableModel) jTable_BookList.getModel();
         modelChosenBook = (DefaultTableModel) jTable_ChosenBook.getModel();
@@ -452,6 +458,22 @@ public class LoanDialog extends javax.swing.JDialog {
         modelChosenBook.setNumRows(0);
     }//GEN-LAST:event_jButton_ClearBookActionPerformed
 
+    private String getReaderInformation() {
+        Calendar c = Calendar.getInstance();
+        Date startDate = new Date();
+        c.setTime(startDate);
+        c.add(Calendar.DATE, rule.getSoNgayMuonToiDa());
+        return jLabel_Name.getText() + "\n" +
+        jLabel_Gender.getText() + "\n" +
+        jLabel_DateOfBirth.getText() + "\n" +
+        jLabel_PhoneNumber.getText() + "\n" +
+        jLabel_Email.getText() + "\n" +
+        jLabel_DayStart.getText() + "\n" +
+        "Address: " + jTextArea_Detail.getText() + "\n" +
+        "Borrow date: " + startDate + "\n" +
+        "Expiration date: " + c.getTime() + "\n";
+    }
+    
     private void jButton_BorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BorrowActionPerformed
         // TODO add your handling code here:
         if(modelChosenBook.getRowCount() == 0) {
@@ -460,6 +482,9 @@ public class LoanDialog extends javax.swing.JDialog {
         }
         bookLoan.borrowBook(ChooseReaderPanel.username, modelChosenBook);
         JOptionPane.showMessageDialog(this, "Mượn sách thành công!");
+        
+        int loanID = bookLoan.getCurrentBorrow();
+        File.xuatFilePDF("PhieuMuon" + loanID, "PHIẾU MƯỢN SÁCH " + loanID, getReaderInformation(), modelChosenBook);
         this.dispose();
     }//GEN-LAST:event_jButton_BorrowActionPerformed
 
