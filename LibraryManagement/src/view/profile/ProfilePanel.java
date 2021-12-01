@@ -439,6 +439,7 @@ public class ProfilePanel extends javax.swing.JPanel {
             }
             updateAccount(Full_Name, gender, date_of_birth, phone_number, email, username);
             updateAddress(address_id, IdWard, address);
+            JOptionPane.showMessageDialog(null, "Cập nhật thành công!");
     }//GEN-LAST:event_jButton_EditProfileActionPerformed
 
 

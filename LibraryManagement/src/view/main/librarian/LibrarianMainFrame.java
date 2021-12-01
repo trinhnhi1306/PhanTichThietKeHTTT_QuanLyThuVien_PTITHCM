@@ -22,6 +22,7 @@ public class LibrarianMainFrame extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         jPanel_Borrow.setBackground(jPanel_Title.getBackground());
+        chooseReaderPanel1.setFlag(1);
     }
 
     /**

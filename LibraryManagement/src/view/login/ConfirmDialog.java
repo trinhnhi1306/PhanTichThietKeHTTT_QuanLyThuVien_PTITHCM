@@ -176,7 +176,8 @@ public class ConfirmDialog extends javax.swing.JDialog {
                   ps.executeUpdate();
               } catch (SQLException ex) {
                   Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
-              }  
+              }
+        JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công!");
         this.dispose();
     }//GEN-LAST:event_jButton_ConfirmActionPerformed
 

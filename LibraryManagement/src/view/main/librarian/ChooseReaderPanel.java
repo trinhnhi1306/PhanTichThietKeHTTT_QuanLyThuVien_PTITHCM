@@ -5,6 +5,12 @@
  */
 package view.main.librarian;
 
+import control.librarian.BookLoan;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.database.Rule;
 import swing.UIController;
 
 /**
@@ -13,9 +19,14 @@ import swing.UIController;
  */
 public class ChooseReaderPanel extends javax.swing.JPanel {
 
+    public static int remainingBook;
+    public static String username;
     private int flag;
-    LoanDialog loanDialog;
-    ReturnDialog returnDialog;
+    private LoanDialog loanDialog;
+    private ReturnDialog returnDialog;
+    private BookLoan bookLoan;
+    private DefaultTableModel model;
+    public static Rule rule;
 
     /**
      * Creates new form ChooseReaderPanel
@@ -23,6 +34,10 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
     public ChooseReaderPanel() {
         initComponents();
         UIController.setDefaultTableHeader(jTable_Reader);
+        bookLoan = new BookLoan();
+        model = (DefaultTableModel) jTable_Reader.getModel();
+        bookLoan.loadReader(model);
+        rule = bookLoan.getCurrentRule();
     }
 
     public void setFlag(int flag) {
@@ -38,6 +53,7 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_Reader = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
@@ -56,11 +72,11 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Name", "Gender", "Date of birth", "Adress", "Phone number", "Email", "Ngày đăng ký", "Ngày hết hạn"
+                "Username", "Name", "Gender", "Date of birth", "Address", "Phone number", "Email", "Ngày đăng ký"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -76,21 +92,33 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
         jLabel21.setText("Search with");
 
         jTextField_Search.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jTextField_Search.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextField_SearchCaretUpdate(evt);
+            }
+        });
 
         jButton_ClearSearch.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_ClearSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
         jButton_ClearSearch.setText("Clear");
+        jButton_ClearSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ClearSearchActionPerformed(evt);
+            }
+        });
 
         jPanel_Card3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel_Card3.setLayout(new java.awt.GridLayout(1, 0, 20, 0));
 
         jRadioButton_Name.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(jRadioButton_Name);
         jRadioButton_Name.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Name.setSelected(true);
         jRadioButton_Name.setText("Name");
         jPanel_Card3.add(jRadioButton_Name);
 
         jRadioButton_Phone.setBackground(new java.awt.Color(255, 255, 255));
+        buttonGroup1.add(jRadioButton_Phone);
         jRadioButton_Phone.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Phone.setText("Phone number");
         jPanel_Card3.add(jRadioButton_Phone);
@@ -165,7 +193,34 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
 
     private void jButton_ChooseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ChooseActionPerformed
         // TODO add your handling code here:
+        int selectedRow = jTable_Reader.convertRowIndexToModel(jTable_Reader.getSelectedRow());
+        if(selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn độc giả!");
+            return;
+        }
+        username = (String) model.getValueAt(selectedRow, 0);
+        System.out.println("Username: " + username);
+        
+            
         if (flag == 1) {
+            // check if reader card has expired
+            if(bookLoan.expiredUser(username)) {
+                JOptionPane.showMessageDialog(this, "Thẻ độc giả đã hết hạn! Vui lòng yêu cầu độc giả gia hạn thẻ để mượn sách");
+                return;
+            }
+            System.out.println("Số sách tối đa được phép mượn: " + rule.getSoSachMuonToiDa());
+            System.out.println("Số sách " + username + " đang mượn: " + bookLoan.numberOfBooksBorrowing(username));
+
+            remainingBook = rule.getSoSachMuonToiDa() - bookLoan.numberOfBooksBorrowing(username);
+            if(remainingBook <= 0) {
+                JOptionPane.showMessageDialog(this, "Độc giả đã mượn số sách tối đa được phép là " + rule.getSoSachMuonToiDa() + ". Không thể mượn thêm!");
+                return;
+            }
+
+            if(bookLoan.expiredBook(username, rule.getSoNgayMuonToiDa())) {
+                JOptionPane.showMessageDialog(this, "Vui lòng trả sách mượn quá hạn trước để có thể mượn sách mới!");
+                return;
+            }
             this.loanDialog = new LoanDialog(null, true, this);
             this.loanDialog.setVisible(true);
         } else if (flag == 2) {
@@ -174,8 +229,28 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton_ChooseActionPerformed
 
+    private void jTextField_SearchCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField_SearchCaretUpdate
+        // TODO add your handling code here:
+        String tuKhoa = jTextField_Search.getText();
+        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+        jTable_Reader.setRowSorter(trs);
+
+        if (jRadioButton_Name.isSelected()) {
+            trs.setRowFilter(RowFilter.regexFilter("(?i)" + tuKhoa, 1));
+        }
+        if (jRadioButton_Phone.isSelected()) {
+            trs.setRowFilter(RowFilter.regexFilter("(?i)" + tuKhoa, 5));
+        }
+    }//GEN-LAST:event_jTextField_SearchCaretUpdate
+
+    private void jButton_ClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearSearchActionPerformed
+        // TODO add your handling code here:
+        jTextField_Search.setText("");
+    }//GEN-LAST:event_jButton_ClearSearchActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton_Choose;
     private javax.swing.JButton jButton_ClearSearch;
     private javax.swing.JLabel jLabel21;
