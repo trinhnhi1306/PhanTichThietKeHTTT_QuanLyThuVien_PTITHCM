@@ -13,14 +13,22 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -63,13 +71,51 @@ public class File {
         }
         
         //Lưu file
-        java.io.File f = new java.io.File(fileName);
+        java.io.File f = new java.io.File(fileName + ".xlsx");
         try {
             FileOutputStream fos = new FileOutputStream(f);
             workbook.write(fos);
             fos.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(File.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(File.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void nhapFileExcel(String filePath, DefaultTableModel model) {
+        
+        int slCot = model.getColumnCount();
+        try {
+            FileInputStream file = new FileInputStream(filePath);
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+            for(Row row : sheet) {
+                for (int i = 0; i < slCot; i++) {
+                    if (!String.valueOf(row.getCell(i + 1)).equals(model.getColumnName(i))) {
+                        JOptionPane.showMessageDialog(null, "Thứ tự cột file excel không đúng!");
+                        return;
+                    }
+                }
+                JOptionPane.showMessageDialog(null, "Nhập file excel thành công!");
+                break;
+            }
+            
+            model.setNumRows(0);
+            Vector vt = null;
+            boolean ignore = true;
+            
+            for(Row row : sheet) {           
+                if (ignore == true) {
+                    ignore = false;
+                    continue;
+                }
+                vt = new Vector();
+                for (int i = 1; i <= slCot; i++){
+                    vt.add(row.getCell(i));
+                }
+                model.addRow(vt);
+            }
         } catch (IOException ex) {
             Logger.getLogger(File.class.getName()).log(Level.SEVERE, null, ex);
         }
