@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/librarian/ReaderPanel.java</file>
-            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/utilities/File.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/RulePanel.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/model/database/Rule.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/StatisticalPanel.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/control/manager/RuleController.java</file>
         </group>
     </open-files>
 </project-private>

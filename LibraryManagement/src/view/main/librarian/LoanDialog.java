@@ -6,6 +6,7 @@
 package view.main.librarian;
 
 import control.librarian.BookLoan;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
@@ -459,10 +460,16 @@ public class LoanDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jButton_ClearBookActionPerformed
 
     private String getReaderInformation() {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+        
         Calendar c = Calendar.getInstance();
         Date startDate = new Date();
         c.setTime(startDate);
         c.add(Calendar.DATE, rule.getSoNgayMuonToiDa());
+        
+        String strStartDate = dateFormatter.format(startDate);
+        String strEndDate = dateFormatter.format(c.getTime());
+        
         return jLabel_Name.getText() + "\n" +
         jLabel_Gender.getText() + "\n" +
         jLabel_DateOfBirth.getText() + "\n" +
@@ -470,8 +477,8 @@ public class LoanDialog extends javax.swing.JDialog {
         jLabel_Email.getText() + "\n" +
         jLabel_DayStart.getText() + "\n" +
         "Address: " + jTextArea_Detail.getText() + "\n" +
-        "Borrow date: " + startDate + "\n" +
-        "Expiration date: " + c.getTime() + "\n";
+        "Borrow date: " + strStartDate + "\n" +
+        "Expiration date: " + strEndDate + "\n";
     }
     
     private void jButton_BorrowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_BorrowActionPerformed
