@@ -40,7 +40,7 @@ public class BookLoan {
                                                                 "left join district\n" +
                                                                 "on ward.district_id = district.district_id\n" +
                                                                 "left join province\n" +
-                                                                "on district.province_id = province.province_id");
+                                                                "on district.province_id = province.province_id where a.role_id = 1 and a.status = 1");
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
                 vt = new Vector();

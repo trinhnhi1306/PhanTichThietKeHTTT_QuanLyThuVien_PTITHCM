@@ -6,6 +6,7 @@
 package view.main.librarian;
 
 import com.toedter.calendar.JTextFieldDateEditor;
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,13 +27,20 @@ import java.util.regex.Pattern;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import model.database.Connect;
 import org.mindrot.bcrypt.BCrypt;
 import swing.UIController;
+import static swing.UIController.setColumnWidth;
+import static swing.UIController.setHorizontalAlignmentForColumn;
 import utilities.File;
 
 /**
@@ -57,7 +65,8 @@ public class ReaderPanel extends javax.swing.JPanel {
         UIController.showCardLayout("cardFirst", jPanel_Card);
         layUser();
         loadAddress();
-        UIController.setDefaultTableHeader(jTable_Reader);
+        setDefaultTableHeader(jTable_Reader);
+        
         setEditableForAll(false);
         jTextField_Username.setEnabled(false);
         JTextFieldDateEditor editor = (JTextFieldDateEditor) jDateChooser_DateOfBirth.getDateEditor();
@@ -252,7 +261,7 @@ public class ReaderPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
                     .addComponent(jTextField_Email))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -394,7 +403,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         jButton_Search.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Search.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
-        jButton_Search.setText("Find");
+        jButton_Search.setText("Clear");
         jButton_Search.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton_Search.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -406,6 +415,11 @@ public class ReaderPanel extends javax.swing.JPanel {
         jLabel14.setText("Name");
 
         jTextField_NameSearch.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jTextField_NameSearch.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextField_NameSearchCaretUpdate(evt);
+            }
+        });
 
         jTable_Reader.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -436,6 +450,12 @@ public class ReaderPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable_Reader);
+        if (jTable_Reader.getColumnModel().getColumnCount() > 0) {
+            jTable_Reader.getColumnModel().getColumn(3).setMinWidth(120);
+            jTable_Reader.getColumnModel().getColumn(3).setMaxWidth(300);
+            jTable_Reader.getColumnModel().getColumn(5).setMinWidth(120);
+            jTable_Reader.getColumnModel().getColumn(5).setMaxWidth(300);
+        }
 
         jButton_ExportExcel.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_ExportExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/excel.png"))); // NOI18N
@@ -470,7 +490,7 @@ public class ReaderPanel extends javax.swing.JPanel {
                         .addComponent(jTextField_NameSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton_Search)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                         .addComponent(jButton_ImportExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(jButton_ExportExcel)
@@ -504,7 +524,19 @@ public class ReaderPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    public static void setDefaultTableHeader(JTable table) {
+        DefaultTableCellRenderer defaultTableCellRenderer;
+        table.setRowHeight(30);
+        defaultTableCellRenderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+        defaultTableCellRenderer.setHorizontalAlignment(0); //Tiêu đề nằm giữa
+        table.getTableHeader().setFont(new Font("Segoe UI", 1, 15));
+        table.setFont(new java.awt.Font("Segoe UI", 0, 15));
+      
+        setHorizontalAlignmentForColumn(table, 0, JLabel.CENTER);
+        setColumnWidth(table, 0, 100);
+        setColumnWidth(table, 2, 80);
+        
+    }
     public void clearAll() {
         jRadioButton_Male.setSelected(true);
         jDateChooser_DateOfBirth.setDate(null);
@@ -561,8 +593,13 @@ public class ReaderPanel extends javax.swing.JPanel {
 
     private void jButton_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RemoveActionPerformed
         // TODO add your handling code here:
+        
         jButton_Modify.setEnabled(false);
         jButton_Remove.setEnabled(false);
+        disbleAccount(jTextField_Username.getText());
+        
+         JOptionPane.showMessageDialog(null, "Xóa thành công!");
+         layUser();
     }//GEN-LAST:event_jButton_RemoveActionPerformed
 
     private void jButton_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_OKActionPerformed
@@ -728,7 +765,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         clearAll();
         setEditableForAll(false);
         jTextField_Username.setEnabled(false);
-        if (jTable_Reader.getSelectedRow() != -1) {
+        if (jTable_Reader.convertRowIndexToModel(jTable_Reader.getSelectedRow()) != -1) {
         } else {
             jButton_Modify.setEnabled(false);
             jButton_Remove.setEnabled(false);
@@ -790,7 +827,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     private void jTable_ReaderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_ReaderMouseClicked
         // TODO add your handling code here:
         DefaultTableModel model= (DefaultTableModel)jTable_Reader.getModel();
-        int selectedRow = jTable_Reader.getSelectedRow();
+        int selectedRow = jTable_Reader.convertRowIndexToModel(jTable_Reader.getSelectedRow());
         
 //        jButtonNVSua.enable(true);
         List<Integer> list = getIdDistrictAndIdProvince(model.getValueAt(selectedRow, 0).toString());
@@ -825,7 +862,7 @@ public class ReaderPanel extends javax.swing.JPanel {
 
     private void jButton_SearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SearchActionPerformed
         // TODO add your handling code here:
-        layUserBySearch(jTextField_NameSearch.getText());
+        jTextField_NameSearch.setText("");
     }//GEN-LAST:event_jButton_SearchActionPerformed
 
     private void jButton_ExportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExportExcelActionPerformed
@@ -849,6 +886,16 @@ public class ReaderPanel extends javax.swing.JPanel {
             return;
         }
     }//GEN-LAST:event_jButton_ImportExcelActionPerformed
+
+    private void jTextField_NameSearchCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField_NameSearchCaretUpdate
+        // TODO add your handling code here:
+        String tuKhoa = jTextField_NameSearch.getText();
+        DefaultTableModel model= (DefaultTableModel)jTable_Reader.getModel();
+        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+        jTable_Reader.setRowSorter(trs);
+
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + tuKhoa, 1));
+    }//GEN-LAST:event_jTextField_NameSearchCaretUpdate
     
     int getIdProvince(String nameProvince){
         int i = 0;
@@ -974,7 +1021,7 @@ public class ReaderPanel extends javax.swing.JPanel {
                                                                 "left join district\n" +
                                                                 "on ward.district_id = district.district_id\n" +
                                                                 "left join province\n" +
-                                                                "on district.province_id = province.province_id");
+                                                                "on district.province_id = province.province_id where status = 1 and role_id = 1");
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
                 vt= new Vector();
@@ -1164,6 +1211,25 @@ public class ReaderPanel extends javax.swing.JPanel {
           ps.setString(4, phone_number);
           ps.setString(5, email);
           ps.setString(6, username);
+          return ps.executeUpdate() > 0;
+      } catch (SQLException ex) {
+          Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+      }  
+        return false;
+
+        
+   }
+   
+   public boolean disbleAccount(String username){
+       Connection ketNoi =Connect.GetConnect();
+        String sql = "UPDATE account\n" +
+                        "SET status= 2\n" +
+                        "WHERE username = ?";
+
+        PreparedStatement ps;
+      try {
+          ps = ketNoi.prepareStatement(sql);
+          ps.setString(1, username);
           return ps.executeUpdate() > 0;
       } catch (SQLException ex) {
           Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
