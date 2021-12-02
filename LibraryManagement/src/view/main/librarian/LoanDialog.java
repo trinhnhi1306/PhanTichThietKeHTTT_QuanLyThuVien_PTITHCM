@@ -128,6 +128,8 @@ public class LoanDialog extends javax.swing.JDialog {
         jLabel_Address.setText("Address: ");
         jPanel1.add(jLabel_Address);
 
+        jScrollPane4.setBorder(null);
+
         jTextArea_Detail.setEditable(false);
         jTextArea_Detail.setColumns(20);
         jTextArea_Detail.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N

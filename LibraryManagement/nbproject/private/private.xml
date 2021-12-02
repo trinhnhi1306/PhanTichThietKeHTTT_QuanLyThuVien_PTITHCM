@@ -3,15 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/Dau%20Truong%20Quan/Downloads/Documents/NetBeansProjects/pttkhtt/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/login/LoginFrame.java</file>
-            <file>file:/C:/Users/Dau%20Truong%20Quan/Downloads/Documents/NetBeansProjects/pttkhtt/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/profile/ProfilePanel.java</file>
-=======
-            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/RulePanel.java</file>
-            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/model/database/Rule.java</file>
-            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/StatisticalPanel.java</file>
-            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/control/manager/RuleController.java</file>
->>>>>>> 1448048d67d544f3a0b36f51949d6898f7f844d1
+            <file>file:/E:/Nam4/PhanTichVaThietKeHeThongThongTin/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/librarian/ReaderPanel.java</file>
+            <file>file:/E:/Nam4/PhanTichVaThietKeHeThongThongTin/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/AdminMainFrame.java</file>
         </group>
     </open-files>
 </project-private>

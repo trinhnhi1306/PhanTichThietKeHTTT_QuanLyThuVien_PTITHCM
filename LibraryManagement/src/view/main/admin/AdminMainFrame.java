@@ -187,18 +187,6 @@ public class AdminMainFrame extends javax.swing.JFrame {
 
         jPanel_CardLayout.setLayout(new java.awt.CardLayout());
         jPanel_CardLayout.add(staffPanel1, "staff");
-
-        javax.swing.GroupLayout statisticalPanel1Layout = new javax.swing.GroupLayout(statisticalPanel1);
-        statisticalPanel1.setLayout(statisticalPanel1Layout);
-        statisticalPanel1Layout.setHorizontalGroup(
-            statisticalPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1320, Short.MAX_VALUE)
-        );
-        statisticalPanel1Layout.setVerticalGroup(
-            statisticalPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 700, Short.MAX_VALUE)
-        );
-
         jPanel_CardLayout.add(statisticalPanel1, "statistical");
         jPanel_CardLayout.add(profilePanel1, "profile");
         jPanel_CardLayout.add(rulePanel1, "rule");
