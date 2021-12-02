@@ -18,13 +18,13 @@ public class StatisticalPanel extends javax.swing.JPanel {
      */
     //To handle JTable
     JTableFunction tbFunction = new JTableFunction();
-    String sqlLoadData = "select * from Extension";
+    String sqlLoadData = "EXEC SP_GetAllRevenueInMonth ";
     
     public StatisticalPanel() {
         initComponents();
         
         //Load data into revenue statistic JTable
-        tbFunction.LoadData(tbRevenueStatistic, sqlLoadData);
+        LoadDataTable();
     }
     
     private void LoadDataTable ()

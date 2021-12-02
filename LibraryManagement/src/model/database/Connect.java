@@ -25,7 +25,7 @@ public class Connect {
         Connection conn = null;
         String url ="jdbc:sqlserver://;databaseName=QLTHUVIEN";
         String user = "sa";
-        String password = "123456";
+        String password = "123";
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             
