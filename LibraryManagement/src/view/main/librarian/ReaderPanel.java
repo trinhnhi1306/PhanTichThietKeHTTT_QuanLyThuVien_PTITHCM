@@ -6,16 +6,15 @@
 package view.main.librarian;
 
 import com.toedter.calendar.JTextFieldDateEditor;
+import control.librarian.BookLoan;
 import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -30,7 +29,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -48,7 +46,7 @@ import utilities.File;
  * @author Admin
  */
 public class ReaderPanel extends javax.swing.JPanel {
-  DefaultTableModel dtm;
+    DefaultTableModel dtm;
     public enum Mode {
         ADD,
         MODIFY,
@@ -56,6 +54,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     }
     ExtendCardDialog extendCardDialog;
     Mode mode;
+    BookLoan bookLoan;
 
     /**
      * Creates new form ReaderPanel
@@ -71,6 +70,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         jTextField_Username.setEnabled(false);
         JTextFieldDateEditor editor = (JTextFieldDateEditor) jDateChooser_DateOfBirth.getDateEditor();
         editor.setEditable(false);
+        bookLoan = new BookLoan();
       
     }
 
@@ -619,6 +619,11 @@ public class ReaderPanel extends javax.swing.JPanel {
 
     private void jButton_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RemoveActionPerformed
         // TODO add your handling code here:
+        String username = jTextField_Username.getText();
+        if(bookLoan.numberOfBooksBorrowing(username) != 0) {
+            JOptionPane.showMessageDialog(this, "Độc giả này đang mượn sách chưa trả! Không thể xóa!");
+            return;
+        }        
         
         jButton_Modify.setEnabled(false);
         jButton_Remove.setEnabled(false);
@@ -627,6 +632,16 @@ public class ReaderPanel extends javax.swing.JPanel {
         
          JOptionPane.showMessageDialog(null, "Xóa thành công!");
          layUser();
+        int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa?", "Xác nhận", 0);
+        if (luaChon == JOptionPane.OK_OPTION) {
+         
+            jButton_Modify.setEnabled(false);
+            jButton_Remove.setEnabled(false);
+            disbleAccount(username);
+
+            JOptionPane.showMessageDialog(null, "Xóa thành công!");
+            layUser();
+        }
     }//GEN-LAST:event_jButton_RemoveActionPerformed
 
     private void jButton_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_OKActionPerformed
