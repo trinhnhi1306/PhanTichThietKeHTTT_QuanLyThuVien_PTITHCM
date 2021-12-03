@@ -13,17 +13,29 @@ import javax.swing.JPanel;
  * @author Admin
  */
 public class ExtendCardDialog extends javax.swing.JDialog {
-
     /**
      * Creates new form ExtendCardDialog
      * @param parent
      * @param modal
      * @param parentPanel
      */
-    public ExtendCardDialog(java.awt.Frame parent, boolean modal, JPanel parentPanel) {
+    public ExtendCardDialog(java.awt.Frame parent, boolean modal, JPanel parentPanel, String username, String name) {
         super(parent, modal);
         initComponents();
+        tfUsername.setText(username);
+        jTextField_Name.setText(name);
         setLocationRelativeTo(null);
+        
+        UpdateCost();
+    }
+    
+    private void UpdateCost()
+    {
+        try {
+            jTextField_Cost.setText(String.valueOf(ExtendCard.Instance.CurrentPrice() * Integer.parseInt(spMonth.getValue().toString())));
+        } catch (Exception e) {
+            System.out.println("cast errors");
+        }
     }
 
     /**
@@ -80,12 +92,18 @@ public class ExtendCardDialog extends javax.swing.JDialog {
 
         tfUsername.setEditable(false);
         tfUsername.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        tfUsername.setToolTipText("");
 
         jTextField_Name.setEditable(false);
         jTextField_Name.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         spMonth.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         spMonth.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+        spMonth.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                spMonthStateChanged(evt);
+            }
+        });
 
         jTextField_Cost.setEditable(false);
         jTextField_Cost.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -216,8 +234,13 @@ public class ExtendCardDialog extends javax.swing.JDialog {
 
     private void jButton_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SaveActionPerformed
         // TODO add your handling code here:
-        ExtendCard.Instance.ExtendByMonth(tfUsername.getText(), (Integer)spMonth.getValue());
+        ExtendCard.Instance.ExtendByMonth(tfUsername.getText(), Integer.parseInt(spMonth.getValue().toString()));
     }//GEN-LAST:event_jButton_SaveActionPerformed
+
+    private void spMonthStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spMonthStateChanged
+        // TODO add your handling code here:
+        UpdateCost();
+    }//GEN-LAST:event_spMonthStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Cancel;

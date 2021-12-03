@@ -944,7 +944,7 @@ public class ReaderPanel extends javax.swing.JPanel {
 
     private void jButton_ExtendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExtendActionPerformed
         // TODO add your handling code here:
-        this.extendCardDialog = new ExtendCardDialog(null, true, this);
+        this.extendCardDialog = new ExtendCardDialog(null, true, this, jTextField_Username.getText(), jTextField_Name.getText());
         this.extendCardDialog.setVisible(true);
     }//GEN-LAST:event_jButton_ExtendActionPerformed
     
