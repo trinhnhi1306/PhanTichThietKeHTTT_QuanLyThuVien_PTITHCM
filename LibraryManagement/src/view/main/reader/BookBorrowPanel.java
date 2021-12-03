@@ -257,8 +257,10 @@ public class BookBorrowPanel extends javax.swing.JPanel {
     private void jButton_SendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SendActionPerformed
         // TODO add your handling code here:
         int selectedRow = jTable_Book.getSelectedRow();
-        if(selectedRow == -1)
+        if(selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sách!");
             return;
+        }
         String bookID = model.getValueAt(selectedRow, 0).toString();
         int rate = jSlider_Rate.getValue();
         System.out.println(rate);

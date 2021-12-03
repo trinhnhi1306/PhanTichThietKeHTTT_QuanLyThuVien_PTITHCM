@@ -6,7 +6,8 @@
 package view.main.librarian;
 
 import control.librarian.BookLoan;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,6 +25,7 @@ public class ReturnDialog extends javax.swing.JDialog {
     private Reader reader;
     private DefaultTableModel modelBookBorrowed;
     private DefaultTableModel modelChosenBook;
+    private Map<Integer, Vector> mapBookBorrewed;
     /**
      * Creates new form ReturnDialog
      * @param parent
@@ -34,10 +36,15 @@ public class ReturnDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         bookLoan = new BookLoan();
+        
         reader = bookLoan.getReaderInformation(ChooseReaderPanel.username);
         modelBookBorrowed = (DefaultTableModel) jTable_BooksBorrowed.getModel();
         modelChosenBook = (DefaultTableModel) jTable_ChosenBook.getModel();
-        bookLoan.loadBookBorrowed(modelBookBorrowed, ChooseReaderPanel.username);
+        
+        mapBookBorrewed = new HashMap<>();
+        
+        bookLoan.loadBookBorrowed(mapBookBorrewed, modelBookBorrowed, ChooseReaderPanel.username);
+        
         setReaderInformation();
         setLocationRelativeTo(null);
         setTableView();
@@ -78,6 +85,7 @@ public class ReturnDialog extends javax.swing.JDialog {
         jButton_Clear = new javax.swing.JButton();
         jButton_Exit = new javax.swing.JButton();
         jButton_Return = new javax.swing.JButton();
+        jButton_ChooseAll = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Return Book");
@@ -271,6 +279,16 @@ public class ReturnDialog extends javax.swing.JDialog {
             }
         });
 
+        jButton_ChooseAll.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_ChooseAll.setForeground(new java.awt.Color(51, 51, 51));
+        jButton_ChooseAll.setText("Choose all");
+        jButton_ChooseAll.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_ChooseAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ChooseAllActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -284,10 +302,13 @@ public class ReturnDialog extends javax.swing.JDialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton_Exit, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(158, 158, 158)
+                        .addGap(107, 107, 107)
                         .addComponent(jButton_Choose, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(75, 75, 75)
-                        .addComponent(jButton_BrokenLost))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton_ChooseAll, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(59, 59, 59)
+                        .addComponent(jButton_BrokenLost)
+                        .addGap(131, 131, 131))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 850, Short.MAX_VALUE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -331,7 +352,8 @@ public class ReturnDialog extends javax.swing.JDialog {
                         .addComponent(jButton_Exit)
                         .addComponent(jButton_Choose)
                         .addComponent(jButton_BrokenLost)
-                        .addComponent(jButton_Return))
+                        .addComponent(jButton_Return)
+                        .addComponent(jButton_ChooseAll))
                     .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -406,8 +428,11 @@ public class ReturnDialog extends javax.swing.JDialog {
         vt.add(modelBookBorrowed.getValueAt(selectedRow, 3));
         vt.add(overDueFines);
         vt.add(0);
+        
         modelChosenBook.addRow(vt);
         calculateTotalFines();
+        
+        modelBookBorrowed.removeRow(selectedRow);
     }//GEN-LAST:event_jButton_ChooseActionPerformed
 
     private void jButton_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RemoveActionPerformed
@@ -416,7 +441,12 @@ public class ReturnDialog extends javax.swing.JDialog {
         if(selectedRow == -1) {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn sách muốn xóa!");
             return;
-        }
+        }       
+        
+        int key = Integer.parseInt(modelChosenBook.getValueAt(selectedRow, 0).toString());
+        
+        modelBookBorrowed.addRow(mapBookBorrewed.get(key));
+        
         modelChosenBook.removeRow(selectedRow);
         calculateTotalFines();
     }//GEN-LAST:event_jButton_RemoveActionPerformed
@@ -444,12 +474,25 @@ public class ReturnDialog extends javax.swing.JDialog {
         vt.add(modelBookBorrowed.getValueAt(selectedRow, 3));
         vt.add(overDueFines);
         vt.add(brokenLostFines);
+        
         modelChosenBook.addRow(vt);
         calculateTotalFines();
+        
+        modelBookBorrowed.removeRow(selectedRow);
     }//GEN-LAST:event_jButton_BrokenLostActionPerformed
 
     private void jButton_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearActionPerformed
         // TODO add your handling code here:
+        if(modelChosenBook.getRowCount() == 0) 
+            return;
+        
+        int size = modelChosenBook.getRowCount();
+        int key = 0;
+        for(int i = 0; i < size; i++) {
+            key = Integer.parseInt(modelChosenBook.getValueAt(i, 0).toString());
+            modelBookBorrowed.addRow(mapBookBorrewed.get(key));
+        }
+        
         modelChosenBook.setNumRows(0);
         calculateTotalFines();
     }//GEN-LAST:event_jButton_ClearActionPerformed
@@ -462,13 +505,37 @@ public class ReturnDialog extends javax.swing.JDialog {
         }
         bookLoan.returnBook(ChooseReaderPanel.username, modelChosenBook);
         JOptionPane.showMessageDialog(this, "Trả sách thành công!");
-        bookLoan.loadBookBorrowed(modelBookBorrowed, ChooseReaderPanel.username);
+        bookLoan.loadBookBorrowed(mapBookBorrewed, modelBookBorrowed, ChooseReaderPanel.username);
         modelChosenBook.setNumRows(0);
+        calculateTotalFines();
     }//GEN-LAST:event_jButton_ReturnActionPerformed
+
+    private void jButton_ChooseAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ChooseAllActionPerformed
+        // TODO add your handling code here:
+        Vector vt;
+        int overDueFines;
+        int size = modelBookBorrowed.getRowCount();
+        for (int i = 0; i < size; i++) {
+            vt = new Vector();
+            overDueFines = bookLoan.getOverdueFines(ChooseReaderPanel.username, modelBookBorrowed.getValueAt(i, 0).toString());
+            System.out.println(overDueFines);
+            vt.add(modelBookBorrowed.getValueAt(i, 0));
+            vt.add(modelBookBorrowed.getValueAt(i, 1));
+            vt.add(modelBookBorrowed.getValueAt(i, 3));
+            vt.add(overDueFines);
+            vt.add(0);
+
+            modelChosenBook.addRow(vt);
+        }
+        
+        calculateTotalFines();
+        modelBookBorrowed.setNumRows(0);
+    }//GEN-LAST:event_jButton_ChooseAllActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_BrokenLost;
     private javax.swing.JButton jButton_Choose;
+    private javax.swing.JButton jButton_ChooseAll;
     private javax.swing.JButton jButton_Clear;
     private javax.swing.JButton jButton_Exit;
     private javax.swing.JButton jButton_Remove;

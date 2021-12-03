@@ -6,15 +6,15 @@
 package view.main.librarian;
 
 import com.toedter.calendar.JTextFieldDateEditor;
+import control.librarian.BookLoan;
+import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
@@ -25,19 +25,28 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
+import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import model.database.Connect;
 import org.mindrot.bcrypt.BCrypt;
 import swing.UIController;
+import static swing.UIController.setColumnWidth;
+import static swing.UIController.setHorizontalAlignmentForColumn;
+import utilities.File;
 
 /**
  *
  * @author Admin
  */
 public class ReaderPanel extends javax.swing.JPanel {
-  DefaultTableModel dtm;
+    DefaultTableModel dtm;
     public enum Mode {
         ADD,
         MODIFY,
@@ -45,6 +54,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     }
     ExtendCardDialog extendCardDialog;
     Mode mode;
+    BookLoan bookLoan;
 
     /**
      * Creates new form ReaderPanel
@@ -54,11 +64,13 @@ public class ReaderPanel extends javax.swing.JPanel {
         UIController.showCardLayout("cardFirst", jPanel_Card);
         layUser();
         loadAddress();
-        UIController.setDefaultTableHeader(jTable_Reader);
+        setDefaultTableHeader(jTable_Reader);
+        
         setEditableForAll(false);
         jTextField_Username.setEnabled(false);
         JTextFieldDateEditor editor = (JTextFieldDateEditor) jDateChooser_DateOfBirth.getDateEditor();
         editor.setEditable(false);
+        bookLoan = new BookLoan();
       
     }
 
@@ -95,6 +107,9 @@ public class ReaderPanel extends javax.swing.JPanel {
         jTextField_Address = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jTextField_Username = new javax.swing.JTextField();
+        jDateChooser_DayEnd = new com.toedter.calendar.JDateChooser();
+        jLabel6 = new javax.swing.JLabel();
+        jButton_Extend = new javax.swing.JButton();
         jPanel_Card = new javax.swing.JPanel();
         jPanel_Card2 = new javax.swing.JPanel();
         jButton_OK = new javax.swing.JButton();
@@ -109,6 +124,8 @@ public class ReaderPanel extends javax.swing.JPanel {
         jTextField_NameSearch = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable_Reader = new javax.swing.JTable();
+        jButton_ExportExcel = new javax.swing.JButton();
+        jButton_ImportExcel = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -191,6 +208,24 @@ public class ReaderPanel extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 15)); // NOI18N
         jLabel1.setText("Username");
 
+        jDateChooser_DayEnd.setEnabled(false);
+        jDateChooser_DayEnd.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel6.setText("Expiration date");
+
+        jButton_Extend.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_Extend.setForeground(new java.awt.Color(51, 51, 51));
+        jButton_Extend.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icon-clock.png"))); // NOI18N
+        jButton_Extend.setText("Extend");
+        jButton_Extend.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_Extend.setEnabled(false);
+        jButton_Extend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ExtendActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -237,38 +272,51 @@ public class ReaderPanel extends javax.swing.JPanel {
                             .addComponent(jLabel13)
                             .addGap(18, 18, 18)
                             .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(98, 98, 98)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGap(57, 57, 57)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
                     .addComponent(jLabel8)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7)))
-                .addGap(35, 35, 35)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 238, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton_Extend))
+                    .addComponent(jTextField_PhoneNumber)
                     .addComponent(jTextField_Email))
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel3)
                             .addComponent(jRadioButton_Male)
                             .addComponent(jRadioButton_Female)
                             .addComponent(jRadioButton_Other))
-                        .addGap(22, 22, 22))
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(jComboBox_Province, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(jTextField_Address, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jTextField_Email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(21, 21, 21)
+                                .addGap(48, 48, 48)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel7)
                                     .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -277,26 +325,24 @@ public class ReaderPanel extends javax.swing.JPanel {
                                     .addComponent(jLabel1)
                                     .addComponent(jTextField_Username, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTextField_Name, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2))
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jTextField_Email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jDateChooser_DateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(1, 1, 1)))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel11)
-                    .addComponent(jComboBox_Province, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox_District, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel13)
-                    .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jTextField_Address, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                                .addGap(62, 62, 62))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton_Extend)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
 
         jPanel_Card.setBackground(new java.awt.Color(255, 255, 255));
@@ -389,7 +435,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         jButton_Search.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_Search.setForeground(new java.awt.Color(51, 51, 51));
         jButton_Search.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
-        jButton_Search.setText("Find");
+        jButton_Search.setText("Clear");
         jButton_Search.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton_Search.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -401,6 +447,11 @@ public class ReaderPanel extends javax.swing.JPanel {
         jLabel14.setText("Name");
 
         jTextField_NameSearch.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jTextField_NameSearch.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextField_NameSearchCaretUpdate(evt);
+            }
+        });
 
         jTable_Reader.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -431,6 +482,30 @@ public class ReaderPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable_Reader);
+        if (jTable_Reader.getColumnModel().getColumnCount() > 0) {
+            jTable_Reader.getColumnModel().getColumn(3).setMinWidth(120);
+            jTable_Reader.getColumnModel().getColumn(3).setMaxWidth(300);
+            jTable_Reader.getColumnModel().getColumn(5).setMinWidth(120);
+            jTable_Reader.getColumnModel().getColumn(5).setMaxWidth(300);
+        }
+
+        jButton_ExportExcel.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_ExportExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/excel.png"))); // NOI18N
+        jButton_ExportExcel.setText("Export");
+        jButton_ExportExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ExportExcelActionPerformed(evt);
+            }
+        });
+
+        jButton_ImportExcel.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_ImportExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/excel.png"))); // NOI18N
+        jButton_ImportExcel.setText("Import");
+        jButton_ImportExcel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ImportExcelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -439,16 +514,20 @@ public class ReaderPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField_NameSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField_NameSearch)
                         .addGap(18, 18, 18)
                         .addComponent(jButton_Search)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(59, 59, 59)
+                        .addComponent(jButton_ImportExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton_ExportExcel)
+                        .addGap(59, 59, 59)
+                        .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -456,19 +535,34 @@ public class ReaderPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
+                .addGap(8, 8, 8)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel14)
-                        .addComponent(jTextField_NameSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton_Search))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jButton_ImportExcel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel14)
+                            .addComponent(jTextField_NameSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton_Search)
+                            .addComponent(jButton_ExportExcel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+                .addGap(7, 7, 7)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
-
+    public static void setDefaultTableHeader(JTable table) {
+        DefaultTableCellRenderer defaultTableCellRenderer;
+        table.setRowHeight(30);
+        defaultTableCellRenderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+        defaultTableCellRenderer.setHorizontalAlignment(0); //Tiêu đề nằm giữa
+        table.getTableHeader().setFont(new Font("Segoe UI", 1, 15));
+        table.setFont(new java.awt.Font("Segoe UI", 0, 15));
+      
+        setHorizontalAlignmentForColumn(table, 0, JLabel.CENTER);
+        setColumnWidth(table, 0, 100);
+        setColumnWidth(table, 2, 80);
+        
+    }
     public void clearAll() {
         jRadioButton_Male.setSelected(true);
         jDateChooser_DateOfBirth.setDate(null);
@@ -525,8 +619,29 @@ public class ReaderPanel extends javax.swing.JPanel {
 
     private void jButton_RemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_RemoveActionPerformed
         // TODO add your handling code here:
+        String username = jTextField_Username.getText();
+        if(bookLoan.numberOfBooksBorrowing(username) != 0) {
+            JOptionPane.showMessageDialog(this, "Độc giả này đang mượn sách chưa trả! Không thể xóa!");
+            return;
+        }        
+        
         jButton_Modify.setEnabled(false);
         jButton_Remove.setEnabled(false);
+        jButton_Extend.setEnabled(false);
+        disbleAccount(jTextField_Username.getText());
+        
+         JOptionPane.showMessageDialog(null, "Xóa thành công!");
+         layUser();
+        int luaChon = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa?", "Xác nhận", 0);
+        if (luaChon == JOptionPane.OK_OPTION) {
+         
+            jButton_Modify.setEnabled(false);
+            jButton_Remove.setEnabled(false);
+            disbleAccount(username);
+
+            JOptionPane.showMessageDialog(null, "Xóa thành công!");
+            layUser();
+        }
     }//GEN-LAST:event_jButton_RemoveActionPerformed
 
     private void jButton_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_OKActionPerformed
@@ -682,6 +797,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         setEditableForAll(false);
         jTextField_Username.setEnabled(false);
         jButton_Modify.setEnabled(true);
+        jButton_Extend.setEnabled(true);
         UIController.showCardLayout("cardFirst", jPanel_Card);
         layUser();
     }//GEN-LAST:event_jButton_OKActionPerformed
@@ -692,9 +808,10 @@ public class ReaderPanel extends javax.swing.JPanel {
         clearAll();
         setEditableForAll(false);
         jTextField_Username.setEnabled(false);
-        if (jTable_Reader.getSelectedRow() != -1) {
+        if (jTable_Reader.convertRowIndexToModel(jTable_Reader.getSelectedRow()) != -1) {
         } else {
             jButton_Modify.setEnabled(false);
+            jButton_Extend.setEnabled(false);
             jButton_Remove.setEnabled(false);
         }
         UIController.showCardLayout("cardFirst", jPanel_Card);
@@ -754,7 +871,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     private void jTable_ReaderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_ReaderMouseClicked
         // TODO add your handling code here:
         DefaultTableModel model= (DefaultTableModel)jTable_Reader.getModel();
-        int selectedRow = jTable_Reader.getSelectedRow();
+        int selectedRow = jTable_Reader.convertRowIndexToModel(jTable_Reader.getSelectedRow());
         
 //        jButtonNVSua.enable(true);
         List<Integer> list = getIdDistrictAndIdProvince(model.getValueAt(selectedRow, 0).toString());
@@ -783,14 +900,53 @@ public class ReaderPanel extends javax.swing.JPanel {
             System.out.println("loi lay ngay tu bang nhan vien"+ex.getMessage());
         }
         jButton_Modify.setEnabled(true);
+        jButton_Extend.setEnabled(true);
         jButton_Remove.setEnabled(true);
         
     }//GEN-LAST:event_jTable_ReaderMouseClicked
 
     private void jButton_SearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SearchActionPerformed
         // TODO add your handling code here:
-        layUserBySearch(jTextField_NameSearch.getText());
+        jTextField_NameSearch.setText("");
     }//GEN-LAST:event_jButton_SearchActionPerformed
+
+    private void jButton_ExportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExportExcelActionPerformed
+        // TODO add your handling code here:
+        File.xuatFileExcel("DSDOCGIA", (DefaultTableModel) jTable_Reader.getModel(), "DocGia");
+        JOptionPane.showMessageDialog(this, "Xuất file excel thành công!");
+    }//GEN-LAST:event_jButton_ExportExcelActionPerformed
+
+    private void jButton_ImportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ImportExcelActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter excelFilter = new FileNameExtensionFilter("excel", "xls", "xlsx", "xlsm");
+        fileChooser.setFileFilter(excelFilter);
+        fileChooser.setMultiSelectionEnabled(false);
+        int x = fileChooser.showDialog(this, "Chọn file");
+        if (x == JFileChooser.APPROVE_OPTION) {
+            java.io.File file = fileChooser.getSelectedFile();
+            File.nhapFileExcel(file.getAbsolutePath(), (DefaultTableModel) jTable_Reader.getModel());
+        }
+        else {
+            return;
+        }
+    }//GEN-LAST:event_jButton_ImportExcelActionPerformed
+
+    private void jTextField_NameSearchCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField_NameSearchCaretUpdate
+        // TODO add your handling code here:
+        String tuKhoa = jTextField_NameSearch.getText();
+        DefaultTableModel model= (DefaultTableModel)jTable_Reader.getModel();
+        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+        jTable_Reader.setRowSorter(trs);
+
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + tuKhoa, 1));
+    }//GEN-LAST:event_jTextField_NameSearchCaretUpdate
+
+    private void jButton_ExtendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExtendActionPerformed
+        // TODO add your handling code here:
+        this.extendCardDialog = new ExtendCardDialog(null, true, this);
+        this.extendCardDialog.setVisible(true);
+    }//GEN-LAST:event_jButton_ExtendActionPerformed
     
     int getIdProvince(String nameProvince){
         int i = 0;
@@ -916,7 +1072,7 @@ public class ReaderPanel extends javax.swing.JPanel {
                                                                 "left join district\n" +
                                                                 "on ward.district_id = district.district_id\n" +
                                                                 "left join province\n" +
-                                                                "on district.province_id = province.province_id");
+                                                                "on district.province_id = province.province_id where status = 1 and role_id = 1");
             ResultSet rs=ps.executeQuery();
             while(rs.next()){
                 vt= new Vector();
@@ -1115,6 +1271,25 @@ public class ReaderPanel extends javax.swing.JPanel {
         
    }
    
+   public boolean disbleAccount(String username){
+       Connection ketNoi =Connect.GetConnect();
+        String sql = "UPDATE account\n" +
+                        "SET status= 2\n" +
+                        "WHERE username = ?";
+
+        PreparedStatement ps;
+      try {
+          ps = ketNoi.prepareStatement(sql);
+          ps.setString(1, username);
+          return ps.executeUpdate() > 0;
+      } catch (SQLException ex) {
+          Logger.getLogger(ReaderPanel.class.getName()).log(Level.SEVERE, null, ex);
+      }  
+        return false;
+
+        
+   }
+   
    void insertAddress(int ward_id,String specific_address){
        Connection ketNoi =Connect.GetConnect();
         String sql = "INSERT INTO address(ward_id,specific_address)\n" +
@@ -1263,6 +1438,9 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton_Add;
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Clear;
+    private javax.swing.JButton jButton_ExportExcel;
+    private javax.swing.JButton jButton_Extend;
+    private javax.swing.JButton jButton_ImportExcel;
     private javax.swing.JButton jButton_Modify;
     private javax.swing.JButton jButton_OK;
     private javax.swing.JButton jButton_Remove;
@@ -1271,6 +1449,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jComboBox_District;
     private javax.swing.JComboBox<String> jComboBox_Province;
     private com.toedter.calendar.JDateChooser jDateChooser_DateOfBirth;
+    private com.toedter.calendar.JDateChooser jDateChooser_DayEnd;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1280,6 +1459,7 @@ public class ReaderPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;

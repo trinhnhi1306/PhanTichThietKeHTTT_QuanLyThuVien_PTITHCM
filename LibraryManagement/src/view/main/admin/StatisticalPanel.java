@@ -5,6 +5,9 @@
  */
 package view.main.admin;
 
+import java.awt.Font;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import utilities.JTableFunction;
 
 /**
@@ -18,20 +21,20 @@ public class StatisticalPanel extends javax.swing.JPanel {
      */
     //To handle JTable
     JTableFunction tbFunction = new JTableFunction();
-    String sqlLoadData = "select * from Extension";
+    String sqlLoadData = "EXEC SP_GetAllRevenueInMonth ";
     
     public StatisticalPanel() {
         initComponents();
-        
+        setDefaultTableHeader(tbRevenueStatistic);
         //Load data into revenue statistic JTable
-        tbFunction.LoadData(tbRevenueStatistic, sqlLoadData);
+//        LoadDataTable();
     }
     
-    private void LoadDataTable ()
-    {
-        tbFunction.LoadData(tbRevenueStatistic, sqlLoadData + (jMonthChooer.getMonth() + 1) + ", " + jYearChooser.getYear());
-        lbTotalRevenue.setText(String.valueOf(tbFunction.SumColumn(tbRevenueStatistic, 4)));
-    }
+//    private void LoadDataTable ()
+//    {
+//        tbFunction.LoadData(tbRevenueStatistic, sqlLoadData + (jMonthChooer.getMonth() + 1) + ", " + jYearChooser.getYear());
+//        lbTotalRevenue.setText(String.valueOf(tbFunction.SumColumn(tbRevenueStatistic, 4)));
+//    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,17 +45,48 @@ public class StatisticalPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel_StatisitcTable = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tbRevenueStatistic = new javax.swing.JTable();
-        lbTotalRevenue = new javax.swing.JLabel();
-        lbTextTotalRevenue = new javax.swing.JLabel();
-        lbSearchText = new javax.swing.JLabel();
-        tfSearch = new javax.swing.JTextField();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel1 = new javax.swing.JPanel();
         jMonthChooer = new com.toedter.calendar.JMonthChooser();
         jYearChooser = new com.toedter.calendar.JYearChooser();
+        tfSearch = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbRevenueStatistic = new javax.swing.JTable();
+        lbSearchText = new javax.swing.JLabel();
+        lbTextTotalRevenue = new javax.swing.JLabel();
+        lbTotalRevenue = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 255));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jMonthChooer.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jMonthChooer.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jMonthChooerPropertyChange(evt);
+            }
+        });
+        jMonthChooer.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jMonthChooerKeyReleased(evt);
+            }
+        });
+
+        jYearChooser.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jYearChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jYearChooserPropertyChange(evt);
+            }
+        });
+
+        tfSearch.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        tfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tfSearchKeyReleased(evt);
+            }
+        });
 
         tbRevenueStatistic.setAutoCreateRowSorter(true);
         tbRevenueStatistic.setModel(new javax.swing.table.DefaultTableModel(
@@ -67,7 +101,7 @@ public class StatisticalPanel extends javax.swing.JPanel {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -79,119 +113,122 @@ public class StatisticalPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tbRevenueStatistic);
-        if (tbRevenueStatistic.getColumnModel().getColumnCount() > 0) {
-            tbRevenueStatistic.getColumnModel().getColumn(0).setResizable(false);
-            tbRevenueStatistic.getColumnModel().getColumn(1).setResizable(false);
-            tbRevenueStatistic.getColumnModel().getColumn(2).setResizable(false);
-            tbRevenueStatistic.getColumnModel().getColumn(3).setResizable(false);
-            tbRevenueStatistic.getColumnModel().getColumn(4).setResizable(false);
-        }
 
-        lbTotalRevenue.setText("TotalMoney");
-
-        lbTextTotalRevenue.setText("Total:");
-
+        lbSearchText.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         lbSearchText.setText("Search:");
 
-        tfSearch.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tfSearchKeyReleased(evt);
-            }
-        });
+        lbTextTotalRevenue.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        lbTextTotalRevenue.setText("Total:");
 
-        jMonthChooer.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jMonthChooerPropertyChange(evt);
-            }
-        });
-        jMonthChooer.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jMonthChooerKeyReleased(evt);
-            }
-        });
+        lbTotalRevenue.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        lbTotalRevenue.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lbTotalRevenue.setText("TotalMoney");
 
-        jYearChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jYearChooserPropertyChange(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel_StatisitcTableLayout = new javax.swing.GroupLayout(jPanel_StatisitcTable);
-        jPanel_StatisitcTable.setLayout(jPanel_StatisitcTableLayout);
-        jPanel_StatisitcTableLayout.setHorizontalGroup(
-            jPanel_StatisitcTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel_StatisitcTableLayout.createSequentialGroup()
-                .addGroup(jPanel_StatisitcTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_StatisitcTableLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lbTextTotalRevenue, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lbTotalRevenue, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel_StatisitcTableLayout.createSequentialGroup()
-                        .addGap(100, 100, 100)
-                        .addComponent(lbSearchText)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel_StatisitcTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel_StatisitcTableLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(579, 579, 579)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jMonthChooer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jYearChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel_StatisitcTableLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 486, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(38, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jYearChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(lbSearchText)
+                                .addGap(18, 18, 18)
+                                .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 499, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(lbTextTotalRevenue)
+                                .addGap(18, 18, 18)
+                                .addComponent(lbTotalRevenue, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
-        jPanel_StatisitcTableLayout.setVerticalGroup(
-            jPanel_StatisitcTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel_StatisitcTableLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel_StatisitcTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jYearChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jMonthChooer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_StatisitcTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lbSearchText, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel_StatisitcTableLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jYearChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jMonthChooer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbSearchText, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbTotalRevenue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbTextTotalRevenue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54))
+                .addContainerGap())
         );
+
+        jTabbedPane1.addTab("Thống kê 1", jPanel1);
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1315, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 672, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Thống kê 2", jPanel2);
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1315, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 672, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Thống kê 3", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel_StatisitcTable, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(179, 179, 179))
+            .addComponent(jTabbedPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel_StatisitcTable, javax.swing.GroupLayout.PREFERRED_SIZE, 424, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(91, 91, 91))
+            .addComponent(jTabbedPane1)
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
-        if(!tfSearch.getText().isEmpty()){
-            tbFunction.Search(tbRevenueStatistic,tfSearch.getText(),-1);
-        }
-        else tbFunction.Search(tbRevenueStatistic,"",-1);
-    }//GEN-LAST:event_tfSearchKeyReleased
-
+    public static void setDefaultTableHeader(JTable table) {
+        DefaultTableCellRenderer defaultTableCellRenderer;
+        table.setRowHeight(30);
+        defaultTableCellRenderer = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+        defaultTableCellRenderer.setHorizontalAlignment(0); //Tiêu đề nằm giữa
+        table.getTableHeader().setFont(new Font("Segoe UI", 1, 15));
+        table.setFont(new java.awt.Font("Segoe UI", 0, 15));
+    }
+    
     private void jMonthChooerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jMonthChooerPropertyChange
         // TODO add your handling code here:
-        LoadDataTable();
+//        LoadDataTable();
     }//GEN-LAST:event_jMonthChooerPropertyChange
 
     private void jMonthChooerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jMonthChooerKeyReleased
@@ -200,14 +237,24 @@ public class StatisticalPanel extends javax.swing.JPanel {
 
     private void jYearChooserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jYearChooserPropertyChange
         // TODO add your handling code here:
-        LoadDataTable();
+//        LoadDataTable();
     }//GEN-LAST:event_jYearChooserPropertyChange
+
+    private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
+        if(!tfSearch.getText().isEmpty()){
+            tbFunction.Search(tbRevenueStatistic,tfSearch.getText(),-1);
+        }
+        else tbFunction.Search(tbRevenueStatistic,"",-1);
+    }//GEN-LAST:event_tfSearchKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JMonthChooser jMonthChooer;
-    private javax.swing.JPanel jPanel_StatisitcTable;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private com.toedter.calendar.JYearChooser jYearChooser;
     private javax.swing.JLabel lbSearchText;
     private javax.swing.JLabel lbTextTotalRevenue;
