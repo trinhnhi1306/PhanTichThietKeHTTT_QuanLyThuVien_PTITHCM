@@ -5,6 +5,25 @@
  */
 package view.main.archivist;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+import model.database.Author;
+import model.database.Category;
+import model.database.Connect;
+import model.database.Location;
+import model.database.Publisher;
 import swing.UIController;
 
 /**
@@ -13,6 +32,8 @@ import swing.UIController;
  */
 public class BookPanel extends javax.swing.JPanel {
 
+    private DefaultTableModel model;
+    
     public enum Mode {
         ADD,
         MODIFY,
@@ -31,6 +52,12 @@ public class BookPanel extends javax.swing.JPanel {
         initComponents();
         UIController.setDefaultTableHeader(jTable_Book);
         setEditableForAll(false);
+        model = (DefaultTableModel) jTable_Book.getModel();
+        getAuthor();
+        getPublisher();
+        getCategory();
+        getLocations();
+        loadBook(model);
     }
 
     /**
@@ -42,6 +69,7 @@ public class BookPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog_Book = new javax.swing.JDialog();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -56,7 +84,6 @@ public class BookPanel extends javax.swing.JPanel {
         jComboBox_Publisher = new javax.swing.JComboBox<>();
         jTextField_ID = new javax.swing.JTextField();
         jTextField_Title = new javax.swing.JTextField();
-        jTextField_Price = new javax.swing.JTextField();
         jDateChooser_PublishDate = new com.toedter.calendar.JDateChooser();
         jLabel3 = new javax.swing.JLabel();
         jComboBox_Category = new javax.swing.JComboBox<>();
@@ -66,6 +93,7 @@ public class BookPanel extends javax.swing.JPanel {
         jButton_Category = new javax.swing.JButton();
         jButton_Location = new javax.swing.JButton();
         jButton_Author = new javax.swing.JButton();
+        jSpinner_Price = new javax.swing.JSpinner();
         jPanel_Card = new javax.swing.JPanel();
         jPanel_Card1 = new javax.swing.JPanel();
         jButton_Add = new javax.swing.JButton();
@@ -80,6 +108,17 @@ public class BookPanel extends javax.swing.JPanel {
         jLabel14 = new javax.swing.JLabel();
         jTextField_TitleSearch = new javax.swing.JTextField();
         jButton_ClearSearch = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jDialog_BookLayout = new javax.swing.GroupLayout(jDialog_Book.getContentPane());
+        jDialog_Book.getContentPane().setLayout(jDialog_BookLayout);
+        jDialog_BookLayout.setHorizontalGroup(
+            jDialog_BookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog_BookLayout.setVerticalGroup(
+            jDialog_BookLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -111,20 +150,30 @@ public class BookPanel extends javax.swing.JPanel {
         jLabel12.setText("Author");
 
         jComboBox_Location.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jComboBox_Location.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_Location.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_LocationActionPerformed(evt);
+            }
+        });
 
         jComboBox_Author.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jComboBox_Author.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox_Author.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox_AuthorActionPerformed(evt);
+            }
+        });
 
         jComboBox_Publisher.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jComboBox_Publisher.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jTextField_ID.setEditable(false);
         jTextField_ID.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jTextField_ID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField_IDActionPerformed(evt);
+            }
+        });
 
         jTextField_Title.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-
-        jTextField_Price.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
         jDateChooser_PublishDate.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
 
@@ -133,7 +182,6 @@ public class BookPanel extends javax.swing.JPanel {
         jLabel3.setText("đ");
 
         jComboBox_Category.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jComboBox_Category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Add");
@@ -212,8 +260,8 @@ public class BookPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jComboBox_Location, 0, 200, Short.MAX_VALUE)
-                    .addComponent(jTextField_Price)
-                    .addComponent(jComboBox_Author, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jComboBox_Author, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSpinner_Price))
                 .addGap(8, 8, 8)
                 .addComponent(jLabel3)
                 .addGap(1, 1, 1)
@@ -222,7 +270,7 @@ public class BookPanel extends javax.swing.JPanel {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton_Location, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton_Author, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)))
@@ -245,16 +293,18 @@ public class BookPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextField_ID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel8)
-                    .addComponent(jTextField_Price, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jComboBox_Publisher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton_Publisher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jTextField_ID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel10)
+                        .addComponent(jLabel8)
+                        .addComponent(jLabel3)
+                        .addComponent(jComboBox_Publisher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_Publisher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jSpinner_Price)
+                        .addGap(2, 2, 2)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton_Location, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -381,16 +431,31 @@ public class BookPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
+        jTable_Book.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable_BookMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable_Book);
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel14.setText("Title");
 
         jTextField_TitleSearch.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jTextField_TitleSearch.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextField_TitleSearchCaretUpdate(evt);
+            }
+        });
 
         jButton_ClearSearch.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jButton_ClearSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
         jButton_ClearSearch.setText("Clear");
+        jButton_ClearSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ClearSearchActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -424,15 +489,250 @@ public class BookPanel extends javax.swing.JPanel {
                         .addComponent(jLabel14))
                     .addComponent(jPanel_Card, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 432, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    public void loadBook(DefaultTableModel model) {
+        model.setNumRows(0);
+        Connection ketNoi= Connect.GetConnect();
+        Vector vt;
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement("select b.book_id, b.title, b.publish_date, b.price, l.location, a.name, p.name, c.category, b.no_of_copies_current\n" +
+                                                            "from book b\n" +
+                                                            "inner join location l on b.location_id = l.location_id\n" +
+                                                            "inner join author a on b.author_id = a.author_id\n" +
+                                                            "inner join publisher p on b.publisher_id = p.publisher_id\n" +
+                                                            "inner join category c on b.category_id = c.category_id\n  where b.status=1");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                vt = new Vector();
+                vt.add(rs.getString(1));
+                vt.add(rs.getString(2));
+                vt.add(rs.getString(3));
+                vt.add(rs.getString(4));
+                vt.add(rs.getString(5));
+                vt.add(rs.getString(6));
+                vt.add(rs.getString(7));
+                vt.add(rs.getString(8));
+                vt.add(rs.getString(9));
+                model.addRow(vt);
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi load book\n" + ex.getMessage());
+        }   
+    }
+    
+    private void getAuthor() {
+        jComboBox_Author.removeAllItems();
+//        jComboBox_Author.removeAllItems();
+        Connection con = Connect.GetConnect();
+        Author author = null;
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM author");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                author = new Author(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(3));
+                jComboBox_Author.addItem(author);
+//                jComboBox_Author.addItem(author);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi load dữ liệu");
+        }
+    }
+
+    private void getPublisher() {
+        jComboBox_Publisher.removeAllItems();
+//        jComboBox_NXB1.removeAllItems();
+        Connection con = Connect.GetConnect();
+        Publisher publisher = null;
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM publisher");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                publisher = new Publisher(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(3));
+                jComboBox_Publisher.addItem(publisher);
+//                jComboBox_NXB1.addItem(nxb);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi lấy dữ liệu");
+        }
+    }
+
+    private void getLocations() {
+        jComboBox_Location.removeAllItems();
+        Connection con = Connect.GetConnect();
+        Location location = null;
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM location");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                location = new Location(Integer.parseInt(rs.getString(1)), rs.getString(2));
+                jComboBox_Location.addItem(location);
+ //               jComboBox_TheLoai1.addItem(category);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi lấy dữ liệu");
+        }
+    }
+    
+    private void getCategory() {
+        jComboBox_Category.removeAllItems();
+ //       jComboBox_TheLoai1.removeAllItems();
+        Connection con = Connect.GetConnect();
+        Category category = null;
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM category");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                category = new Category(Integer.parseInt(rs.getString(1)), rs.getString(2), rs.getString(3));
+                jComboBox_Category.addItem(category);
+ //               jComboBox_TheLoai1.addItem(category);
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi lấy dữ liệu");
+        }
+    }
+    
+    private int getId(){
+        Connection con = Connect.GetConnect();
+        int id=0;
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT count(b.book_id) FROM book b");
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                id = Integer.parseInt(rs.getString(1)) + 1;
+            }
+            
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi lấy dữ liệu");
+        }
+        return id;
+    }
+    
+    private int newBook(String name, String authorId, String publisherId, String catId, String price, String publishDate, String locationId, String quantity) {
+        String sql = "INSERT INTO book(title, publish_date, price, location_id, author_id, publisher_id, category_id, no_of_copies_actual, no_of_copies_current) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        Connection con = Connect.GetConnect();
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, publishDate);
+            ps.setString(3, price);
+            ps.setString(4, locationId);
+            ps.setString(5, authorId);
+            ps.setString(6, publisherId);
+            ps.setString(7, catId);
+            ps.setString(8, quantity);
+            ps.setString(9, quantity);
+            ps.executeUpdate();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi thêm mới sách!");
+            return 0;
+        }
+        return 1;
+    }
+    
+    private int updateBook(String id, String name, String authorId, String publisherId, String catId, String price, String publishDate, String locationId, String quantity){
+        String sql = "UPDATE book SET title = ?, publish_date = ?, price = ?, location_id = ?, author_id = ?, publisher_id = ?, category_id = ?, no_of_copies_actual = no_of_copies_actual + ?, no_of_copies_current = no_of_copies_current + ? WHERE book_id = ?";
+        Connection con = Connect.GetConnect();
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, publishDate);
+            ps.setString(3, price);
+            ps.setString(4, locationId);
+            ps.setString(5, authorId);
+            ps.setString(6, publisherId);
+            ps.setString(7, catId);
+            ps.setInt(8, Integer.parseInt(quantity));
+            ps.setInt(9, Integer.parseInt(quantity));
+            ps.setString(10, id);
+            ps.executeUpdate();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi sửa thông tin sách!\n" + ex.getMessage());
+            return 0;
+        }
+        return 1;
+    }
+    
+    private int checkBookIfBorrow(String id) {
+        Connection con = Connect.GetConnect();
+        int tonTai = 0;
+        String sql = "SELECT * FROM loan_detail WHERE book_id = '" + id + "'";
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                tonTai = 1;
+            }
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi tìm sách!");
+        }
+        return tonTai;
+    }
+    
+    private int deleteBook(String id) {
+//        String sql = "DELETE FROM book WHERE book_id = ?";
+        String sql = "UPDATE book SET status = 0 WHERE book_id = ?";
+        Connection con = Connect.GetConnect();
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, id);
+            ps.executeUpdate();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi sửa thông tin sách!");
+            return 0;
+        }
+        return 1;
+    }
+
+    private String xoaKhoangTrangThua(String str) {
+        str = str.trim();
+        String temp[] = str.split("\\s+");
+        str = "";
+        for (int i = 0; i < temp.length; i++) {
+            str += temp[i];
+            if (i < temp.length - 1) {
+                str += " ";
+            }
+        }
+        return str;
+    }
+    
     public void clearAll() {
-        jDateChooser_PublishDate.setDate(null);
+        jTextField_ID.setText("");
+       jDateChooser_PublishDate.setDate(null);
         jTextField_Title.setText("");
-        jTextField_Price.setText("");
+        jSpinner_Price.setValue(0);
         jComboBox_Location.setSelectedIndex(0);
         jComboBox_Author.setSelectedIndex(0);
         jComboBox_Publisher.setSelectedIndex(0);
@@ -443,7 +743,7 @@ public class BookPanel extends javax.swing.JPanel {
     public void setEditableForAll(boolean editable) {
         jDateChooser_PublishDate.setEnabled(editable);
         jTextField_Title.setEditable(editable);
-        jTextField_Price.setEditable(editable);
+        jSpinner_Price.setEnabled(editable);
         jComboBox_Location.setEnabled(editable);
         jComboBox_Author.setEnabled(editable);
         jComboBox_Publisher.setEnabled(editable);
@@ -454,10 +754,10 @@ public class BookPanel extends javax.swing.JPanel {
     private void jButton_AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AddActionPerformed
         // TODO add your handling code here:
         clearAll();
-        jTextField_ID.setText("...");
+        jTextField_ID.setText(String.valueOf(getId()));
         mode = Mode.ADD;
         UIController.showCardLayout("cardSecond", jPanel_Card);
-        setEditableForAll(true);
+        setEditableForAll(true);    
     }//GEN-LAST:event_jButton_AddActionPerformed
 
     private void jButton_ModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ModifyActionPerformed
@@ -471,14 +771,118 @@ public class BookPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         jButton_Modify.setEnabled(false);
         jButton_Remove.setEnabled(false);
+        
+        String id = jTextField_ID.getText();
+        if (id.equals("")) {
+            JOptionPane.showMessageDialog(this, "Vui lòng chọn sách bạn muốn xóa!");
+        } else {
+            if (checkBookIfBorrow(id) == 1) {
+                JOptionPane.showMessageDialog(this, "Sách này đang được mượn!");
+            } else {
+                int opt = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn xóa?", "Xác nhận", 0);
+                if (opt == JOptionPane.OK_OPTION) {
+                    int result = deleteBook(id);
+                    if(result==0){
+                        JOptionPane.showMessageDialog(jDialog_Book, "Xóa sách thất bại!");
+                    }else{
+                        JOptionPane.showMessageDialog(jDialog_Book, "Xóa sách thành công!");
+                    }
+                    clearAll();
+                    loadBook(model);
+                } else {
+                    return;
+                }
+            }
+        }
     }//GEN-LAST:event_jButton_RemoveActionPerformed
 
     private void jButton_OKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_OKActionPerformed
         // TODO add your handling code here:
         if (mode == Mode.ADD) {
-
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String name = jTextField_Title.getText();
+            String authorId = String.valueOf(((Author) jComboBox_Author.getSelectedItem()).getId());
+            String publisherId = String.valueOf(((Publisher) jComboBox_Publisher.getSelectedItem()).getId());
+            String locationId = String.valueOf(((Location) jComboBox_Location.getSelectedItem()).getId());
+            String catId = String.valueOf(((Category) jComboBox_Category.getSelectedItem()).getId());
+            String price = String.valueOf(jSpinner_Price.getValue());
+            String publishDate = null;
+            Date date = jDateChooser_PublishDate.getDate();
+            if (date != null) {
+                publishDate = sdf.format(date);
+            }
+            String quantity = String.valueOf(jSpinner_Add.getValue());
+            if (name.equals("")) {
+                JOptionPane.showMessageDialog(jDialog_Book, "Tên sách không được để trống!");
+            } else if (publishDate == null) {
+                JOptionPane.showMessageDialog(jDialog_Book, "Ngày nhập không được để trống!");
+            } else if (price.equals("")) {
+                JOptionPane.showMessageDialog(jDialog_Book, "Giá không được để trống!");
+            } else if (!price.matches("[0-9]+")) {
+                JOptionPane.showMessageDialog(jDialog_Book, "Giá không hợp lệ!");
+            } else if (quantity.equals("")) {
+                JOptionPane.showMessageDialog(jDialog_Book, "Số lượng không được để trống!");
+            } else if (!quantity.matches("[0-9]+")) {
+                JOptionPane.showMessageDialog(jDialog_Book, "Số lượng không hợp lệ!");
+            } else {
+                int result = newBook(xoaKhoangTrangThua(name), authorId, publisherId, catId, price, publishDate, locationId, quantity);
+                if(result==0){
+                    JOptionPane.showMessageDialog(jDialog_Book, "Thêm sách thất bại!");
+                }else{
+                    JOptionPane.showMessageDialog(jDialog_Book, "Thêm sách thành công!");
+                }
+                jDialog_Book.dispose();
+                clearAll();
+                loadBook(model);
+            }
         } else if (mode == Mode.MODIFY) {
-
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String id = jTextField_ID.getText();
+            if (id.equals("")) {
+                JOptionPane.showMessageDialog(this, "Vui lòng chọn sách bạn muốn chỉnh sửa!");
+            } else {
+                String name = jTextField_Title.getText();
+                String authorId = String.valueOf(((Author) jComboBox_Author.getSelectedItem()).getId());
+                String publisherId = String.valueOf(((Publisher) jComboBox_Publisher.getSelectedItem()).getId());
+                String locationId = String.valueOf(((Location) jComboBox_Location.getSelectedItem()).getId());
+                String catId = String.valueOf(((Category) jComboBox_Category.getSelectedItem()).getId());
+                String price = String.valueOf(jSpinner_Price.getValue());
+                String publishDate = null;
+                Date date = jDateChooser_PublishDate.getDate();
+                if (date != null) {
+                    publishDate = sdf.format(date);
+                }
+                String quantity = String.valueOf(jSpinner_Add.getValue());
+                if (quantity.equals("")) {
+                    quantity = "0";
+                }
+                if (name.equals("")) {
+                    JOptionPane.showMessageDialog(jDialog_Book, "Tên sách không được để trống!");
+                } else if (publishDate == null) {
+                    JOptionPane.showMessageDialog(jDialog_Book, "Ngày nhập không được để trống!");
+                } else if (price.equals("")) {
+                    JOptionPane.showMessageDialog(jDialog_Book, "Giá không được để trống!");
+                } else if (!price.matches("[0-9]+")) {
+                    JOptionPane.showMessageDialog(jDialog_Book, "Giá không hợp lệ!");
+                } else if (quantity.equals("")) {
+                    JOptionPane.showMessageDialog(jDialog_Book, "Số lượng không được để trống!");
+                } else if (!quantity.matches("[0-9]+")) {
+                    JOptionPane.showMessageDialog(jDialog_Book, "Số lượng không hợp lệ!");
+                } else {
+                    int opt = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn muốn chỉnh sửa?", "Xác nhận", 0);
+                    if (opt == JOptionPane.OK_OPTION) {
+                        int result = updateBook(id, name, authorId, publisherId, catId, price, publishDate, locationId, quantity);
+                        if(result==0){
+                            JOptionPane.showMessageDialog(jDialog_Book, "Chỉnh sửa sách thất bại!");
+                        }else{
+                            JOptionPane.showMessageDialog(jDialog_Book, "Chỉnh sửa sách thành công!");
+                        }
+                        loadBook(model);
+                    } else {
+                        return;
+                    }
+                }
+            }
         }
         UIController.showCardLayout("cardFirst", jPanel_Card);
     }//GEN-LAST:event_jButton_OKActionPerformed
@@ -505,25 +909,113 @@ public class BookPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
         this.newLocationDialog = new NewLocationDialog(null, true, this);
         this.newLocationDialog.setVisible(true);
+        
+        getLocations();
     }//GEN-LAST:event_jButton_LocationActionPerformed
 
     private void jButton_AuthorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_AuthorActionPerformed
         // TODO add your handling code here:
         this.newAuthorDialog = new NewAuthorDialog(null, true, this);
         this.newAuthorDialog.setVisible(true);
+        
+        getAuthor();
     }//GEN-LAST:event_jButton_AuthorActionPerformed
 
     private void jButton_PublisherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_PublisherActionPerformed
         // TODO add your handling code here:
         this.newPublisherDialog = new NewPublisherDialog(null, true, this);
         this.newPublisherDialog.setVisible(true);
+        
+        getPublisher();
     }//GEN-LAST:event_jButton_PublisherActionPerformed
 
     private void jButton_CategoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CategoryActionPerformed
         // TODO add your handling code here:
         this.newCategoryDialog = new NewCategoryDialog(null, true, this);
         this.newCategoryDialog.setVisible(true);
+        
+        getCategory();
     }//GEN-LAST:event_jButton_CategoryActionPerformed
+
+    private void jComboBox_AuthorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_AuthorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox_AuthorActionPerformed
+
+    private void jTable_BookMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable_BookMouseClicked
+        // TODO add your handling code here:
+        int selectedRow = jTable_Book.convertRowIndexToModel(jTable_Book.getSelectedRow());
+        if(selectedRow == -1) 
+            return;
+        
+        jTextField_ID.setText(model.getValueAt(selectedRow, 0).toString());
+        jTextField_Title.setText(model.getValueAt(selectedRow, 1).toString());
+        jSpinner_Price.setValue(Integer.parseInt(model.getValueAt(selectedRow, 3).toString()));
+        
+        String publishDate = model.getValueAt(selectedRow, 2).toString();
+        if (publishDate == null) {
+            jDateChooser_PublishDate.setDate(null);
+        } else {
+            try {
+                Date date = new SimpleDateFormat("yyyy-MM-dd").parse(publishDate);
+                jDateChooser_PublishDate.setDate(date);
+            } catch (ParseException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        
+        String location = model.getValueAt(selectedRow, 4).toString();
+        for (int i = 0; i < jComboBox_Location.getItemCount(); i++) {
+            if (jComboBox_Location.getItemAt(i).getLocation().equals(location)) {
+                jComboBox_Location.setSelectedIndex(i);
+            }
+        }
+        
+        String author = model.getValueAt(selectedRow, 5).toString();
+        for (int i = 0; i < jComboBox_Author.getItemCount(); i++) {
+            if (jComboBox_Author.getItemAt(i).getName().equals(author)) {
+                jComboBox_Author.setSelectedIndex(i);
+            }
+        }
+        
+        String publisher = model.getValueAt(selectedRow, 6).toString();
+        for (int i = 0; i < jComboBox_Publisher.getItemCount(); i++) {
+            if (jComboBox_Publisher.getItemAt(i).getName().equals(publisher)) {
+                jComboBox_Publisher.setSelectedIndex(i);
+            }
+        }
+        
+        String category = model.getValueAt(selectedRow, 7).toString();
+        for (int i = 0; i < jComboBox_Category.getItemCount(); i++) {
+            if (jComboBox_Category.getItemAt(i).getName().equals(category)) {
+                jComboBox_Category.setSelectedIndex(i);
+            }
+        }
+        
+        jButton_Modify.setEnabled(true);
+        jButton_Remove.setEnabled(true);
+    }//GEN-LAST:event_jTable_BookMouseClicked
+
+    private void jTextField_TitleSearchCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField_TitleSearchCaretUpdate
+        // TODO add your handling code here:
+        String tuKhoa = jTextField_TitleSearch.getText();
+        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
+        jTable_Book.setRowSorter(trs);
+
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + tuKhoa, 1));
+    }//GEN-LAST:event_jTextField_TitleSearchCaretUpdate
+
+    private void jButton_ClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearSearchActionPerformed
+        // TODO add your handling code here:
+        jTextField_TitleSearch.setText("");
+    }//GEN-LAST:event_jButton_ClearSearchActionPerformed
+
+    private void jComboBox_LocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_LocationActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox_LocationActionPerformed
+
+    private void jTextField_IDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField_IDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField_IDActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Add;
@@ -537,11 +1029,12 @@ public class BookPanel extends javax.swing.JPanel {
     private javax.swing.JButton jButton_OK;
     private javax.swing.JButton jButton_Publisher;
     private javax.swing.JButton jButton_Remove;
-    private javax.swing.JComboBox<String> jComboBox_Author;
-    private javax.swing.JComboBox<String> jComboBox_Category;
-    private javax.swing.JComboBox<String> jComboBox_Location;
-    private javax.swing.JComboBox<String> jComboBox_Publisher;
+    private javax.swing.JComboBox<Author> jComboBox_Author;
+    private javax.swing.JComboBox<Category> jComboBox_Category;
+    private javax.swing.JComboBox<Location> jComboBox_Location;
+    private javax.swing.JComboBox<Publisher> jComboBox_Publisher;
     private com.toedter.calendar.JDateChooser jDateChooser_PublishDate;
+    private javax.swing.JDialog jDialog_Book;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -559,9 +1052,9 @@ public class BookPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel_Card2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jSpinner_Add;
+    private javax.swing.JSpinner jSpinner_Price;
     private javax.swing.JTable jTable_Book;
     private javax.swing.JTextField jTextField_ID;
-    private javax.swing.JTextField jTextField_Price;
     private javax.swing.JTextField jTextField_Title;
     private javax.swing.JTextField jTextField_TitleSearch;
     // End of variables declaration//GEN-END:variables

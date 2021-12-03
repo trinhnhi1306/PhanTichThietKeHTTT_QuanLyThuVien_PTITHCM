@@ -5,7 +5,13 @@
  */
 package view.main.archivist;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.database.Connect;
 
 /**
  *
@@ -23,6 +29,7 @@ public class NewCategoryDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        getId();
     }
 
     /**
@@ -34,6 +41,7 @@ public class NewCategoryDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog_NewCat = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -47,6 +55,17 @@ public class NewCategoryDialog extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jButton_Save = new javax.swing.JButton();
         jButton_Cancel = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jDialog_NewCatLayout = new javax.swing.GroupLayout(jDialog_NewCat.getContentPane());
+        jDialog_NewCat.getContentPane().setLayout(jDialog_NewCatLayout);
+        jDialog_NewCatLayout.setHorizontalGroup(
+            jDialog_NewCatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog_NewCatLayout.setVerticalGroup(
+            jDialog_NewCatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -179,9 +198,73 @@ public class NewCategoryDialog extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private String xoaKhoangTrangThua(String str) {
+        str = str.trim();
+        String temp[] = str.split("\\s+");
+        str = "";
+        for (int i = 0; i < temp.length; i++) {
+            str += temp[i];
+            if (i < temp.length - 1) {
+                str += " ";
+            }
+        }
+        return str;
+    }
+    
+    private void getId(){
+        Connection con = Connect.GetConnect();
+
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT count(c.category_id) FROM category c");
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                String id = rs.getString(1);
+                id = String.valueOf(Integer.parseInt(id) + 1);
+                jTextField_ID.setText(id);
+            }
+            
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi lấy dữ liệu");
+        }
+    }
+    
+    private int newCategory(String name, String note){
+        String sql = "INSERT INTO category(category, note) VALUES (?, ?)";
+        Connection con = Connect.GetConnect();
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, note);
+            ps.executeUpdate();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi thêm mới thể loại!");
+            return 0;
+        }
+        return 1;
+    }
+    
     private void jButton_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SaveActionPerformed
         // TODO add your handling code here:
-        this.dispose();
+        String name = jTextField_Name.getText();
+        String note = jTextArea_Note.getText();
+        if (name.equals("")) {
+            JOptionPane.showMessageDialog(jDialog_NewCat, "Tên thể loại không được để trống!");
+        } else {
+            int result = newCategory(xoaKhoangTrangThua(name), xoaKhoangTrangThua(note));
+            if(result==0){
+                JOptionPane.showMessageDialog(jDialog_NewCat, "Thêm thể loại thất bại!");
+            }else{
+                JOptionPane.showMessageDialog(jDialog_NewCat, "Thêm thể loại thành công!");
+            }
+            jDialog_NewCat.dispose();
+            this.dispose();    
+        }    
     }//GEN-LAST:event_jButton_SaveActionPerformed
 
     private void jButton_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelActionPerformed
@@ -192,6 +275,7 @@ public class NewCategoryDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Save;
+    private javax.swing.JDialog jDialog_NewCat;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

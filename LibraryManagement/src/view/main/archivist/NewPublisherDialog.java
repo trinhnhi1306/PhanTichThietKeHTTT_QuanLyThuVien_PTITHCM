@@ -5,7 +5,13 @@
  */
 package view.main.archivist;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import model.database.Connect;
 
 /**
  *
@@ -23,6 +29,7 @@ public class NewPublisherDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(null);
+        getId();
     }
 
     /**
@@ -34,6 +41,7 @@ public class NewPublisherDialog extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDialog_NewPublisher = new javax.swing.JDialog();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -46,6 +54,17 @@ public class NewPublisherDialog extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jButton_Save = new javax.swing.JButton();
         jButton_Cancel = new javax.swing.JButton();
+
+        javax.swing.GroupLayout jDialog_NewPublisherLayout = new javax.swing.GroupLayout(jDialog_NewPublisher.getContentPane());
+        jDialog_NewPublisher.getContentPane().setLayout(jDialog_NewPublisherLayout);
+        jDialog_NewPublisherLayout.setHorizontalGroup(
+            jDialog_NewPublisherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        jDialog_NewPublisherLayout.setVerticalGroup(
+            jDialog_NewPublisherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -167,15 +186,93 @@ public class NewPublisherDialog extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private String chuanHoaDanhTuRieng(String str) {
+        str = str.trim();
+        String temp[] = str.split("\\s+");
+        str = ""; // ? ^-^
+        for (int i = 0; i < temp.length; i++) {
+            str += String.valueOf(temp[i].charAt(0)).toUpperCase() + temp[i].substring(1).toLowerCase();
+            if (i < temp.length - 1) // ? ^-^
+            {
+                str += " ";
+            }
+        }
+        return str;
+    }
+
+    private String xoaKhoangTrangThua(String str) {
+        str = str.trim();
+        String temp[] = str.split("\\s+");
+        str = "";
+        for (int i = 0; i < temp.length; i++) {
+            str += temp[i];
+            if (i < temp.length - 1) {
+                str += " ";
+            }
+        }
+        return str;
+    }
+    
+    private void getId(){
+        Connection con = Connect.GetConnect();
+
+        try {
+            PreparedStatement ps = con.prepareStatement("SELECT count(p.publisher_id) FROM publisher p");
+            ResultSet rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                String id = rs.getString(1);
+                id = String.valueOf(Integer.parseInt(id) + 1);
+                jTextField_ID.setText(id);
+            }
+            
+            rs.close();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi lấy dữ liệu");
+        }
+    }
+    
+    private int newPublisher(String name, String add){
+        String sql = "INSERT INTO publisher(name, address) VALUES (?, ?)";
+        Connection con = Connect.GetConnect();
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, name);
+            ps.setString(2, add);
+            ps.executeUpdate();
+            ps.close();
+            con.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi thêm mới nhà xuất bản!");
+            return 0;
+        }
+        return 1;
+    }
+    
     private void jButton_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SaveActionPerformed
         // TODO add your handling code here:
-        this.dispose();
+        String name = jTextField_Name.getText();
+        String add = jTextField_Address.getText();
+        if (name.equals("")) {
+            JOptionPane.showMessageDialog(jDialog_NewPublisher, "Tên nhà xuất bản không được để trống!");
+        } else {
+            int result = newPublisher(chuanHoaDanhTuRieng(name), xoaKhoangTrangThua(add));
+            if(result==0){
+                JOptionPane.showMessageDialog(jDialog_NewPublisher, "Thêm nhà xuất bản thất bại!");
+            }else{
+                JOptionPane.showMessageDialog(jDialog_NewPublisher, "Thêm nhà xuất bản thành công!");
+            }    
+            jDialog_NewPublisher.dispose();
+            this.dispose();
+        }
     }//GEN-LAST:event_jButton_SaveActionPerformed
 
     private void jButton_CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CancelActionPerformed
@@ -186,6 +283,7 @@ public class NewPublisherDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton_Cancel;
     private javax.swing.JButton jButton_Save;
+    private javax.swing.JDialog jDialog_NewPublisher;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
