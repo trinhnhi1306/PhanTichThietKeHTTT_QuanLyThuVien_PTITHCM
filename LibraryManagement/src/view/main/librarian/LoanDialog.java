@@ -226,6 +226,7 @@ public class LoanDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable_BookList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTable_BookList);
 
         jButton_Choose.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
@@ -263,6 +264,7 @@ public class LoanDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable_ChosenBook.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jTable_ChosenBook);
 
         jButton_ClearBook.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N

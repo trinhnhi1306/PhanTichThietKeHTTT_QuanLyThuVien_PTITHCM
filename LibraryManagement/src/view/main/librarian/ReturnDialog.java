@@ -165,6 +165,7 @@ public class ReturnDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable_BooksBorrowed.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTable_BooksBorrowed);
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -213,6 +214,7 @@ public class ReturnDialog extends javax.swing.JDialog {
                 return canEdit [columnIndex];
             }
         });
+        jTable_ChosenBook.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(jTable_ChosenBook);
 
         jPanel5.setBackground(new java.awt.Color(255, 255, 255));
@@ -415,10 +417,10 @@ public class ReturnDialog extends javax.swing.JDialog {
             return;
         }
         
-        if(bookLoan.findChosenBook(modelChosenBook, modelBookBorrowed.getValueAt(selectedRow, 0).toString())) {
-            JOptionPane.showMessageDialog(this, "Sách này đã được chọn!");
-            return;
-        }
+//        if(bookLoan.findChosenBook(modelChosenBook, modelBookBorrowed.getValueAt(selectedRow, 0).toString())) {
+//            JOptionPane.showMessageDialog(this, "Sách này đã được chọn!");
+//            return;
+//        }
         
         Vector vt = new Vector();
         int overDueFines = bookLoan.getOverdueFines(ChooseReaderPanel.username, modelBookBorrowed.getValueAt(selectedRow, 0).toString());

@@ -912,8 +912,19 @@ public class ReaderPanel extends javax.swing.JPanel {
 
     private void jButton_ExportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExportExcelActionPerformed
         // TODO add your handling code here:
-        File.xuatFileExcel("DSDOCGIA", (DefaultTableModel) jTable_Reader.getModel(), "DocGia");
-        JOptionPane.showMessageDialog(this, "Xuất file excel thành công!");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int x = fileChooser.showDialog(this, "Choose folder");
+        if (x == JFileChooser.APPROVE_OPTION) {
+            java.io.File file = fileChooser.getSelectedFile();
+            File.xuatFileExcel("DSDOCGIA", (DefaultTableModel) jTable_Reader.getModel(), file.getAbsolutePath() + "/DocGia");
+            JOptionPane.showMessageDialog(this, "Xuất file excel thành công!");
+        }
+        else {
+            return;
+        }
+        
     }//GEN-LAST:event_jButton_ExportExcelActionPerformed
 
     private void jButton_ImportExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ImportExcelActionPerformed
