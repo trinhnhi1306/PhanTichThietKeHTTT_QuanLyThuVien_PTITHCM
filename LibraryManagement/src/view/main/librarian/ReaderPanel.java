@@ -952,7 +952,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(model);
         jTable_Reader.setRowSorter(trs);
 
-        trs.setRowFilter(RowFilter.regexFilter("(?i)" + tuKhoa, 1));
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + tuKhoa));
     }//GEN-LAST:event_jTextField_NameSearchCaretUpdate
 
     private void jButton_ExtendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExtendActionPerformed

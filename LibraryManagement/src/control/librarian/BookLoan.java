@@ -130,6 +130,87 @@ public class BookLoan {
         } 
     }    
     
+    public void loadLoanList(DefaultTableModel model){
+        
+        model.setNumRows(0);
+        Connection ketNoi= Connect.GetConnect();
+        Vector vt;
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement("select l.loan_id, a.Full_Name, a.phone_number, l.date_start, DATEADD(day, r.max_rental_day, l.date_start), l.rule_id\n" +
+                                                            "from loan l\n" +
+                                                            "inner join account a\n" +
+                                                            "on l.user_id = a.username\n" +
+                                                            "inner join [rule] r\n" +
+                                                            "on l.rule_id = r.rule_id\n" +
+                                                            "order by l.loan_id desc");
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                vt = new Vector();
+                vt.add(rs.getString(1));
+                vt.add(rs.getString(2));
+                vt.add(rs.getString(3));
+                vt.add(rs.getString(4));
+                vt.add(rs.getString(5));
+                vt.add(rs.getString(6));
+                model.addRow(vt);
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi load Loan List");
+        } 
+    }    
+    
+    public void loadLoanDetail(DefaultTableModel model, String loanID){
+        
+        model.setNumRows(0);
+        Connection ketNoi= Connect.GetConnect();
+        Vector vt;
+        int status = 0;
+        try {
+            PreparedStatement ps = ketNoi.prepareStatement("select dt.loan_id, b.title, a.name, dt.date_end, dt.status\n" +
+                                                            "from loan_detail dt\n" +
+                                                            "inner join book b\n" +
+                                                            "on dt.book_id = b.book_id\n" +
+                                                            "inner join author a\n" +
+                                                            "on b.author_id = a.author_id\n" +
+                                                            "where dt.loan_id = " + loanID);
+            ResultSet rs=ps.executeQuery();
+            while(rs.next()){
+                vt = new Vector();
+                vt.add(rs.getString(1));
+                vt.add(rs.getString(2));
+                vt.add(rs.getString(3));
+                vt.add(rs.getString(4));
+                status = rs.getInt(5);
+                /*
+                    Status 0: đang mượn chưa trả
+                    Status 1: đã trả, không trễ, không làm hỏng/mất
+                    Status 2: đã trả, trả trễ, không làm hỏng/mất
+                    Status 3: đã trả, không trễ, làm hỏng/mất
+                    Status 4: đã trả, trả trễ, làm hỏng/mất
+                */
+                if(status == 0)
+                    vt.add("Đang mượn");
+                else if(status == 1)
+                    vt.add("Đã trả");
+                else if(status == 2)
+                    vt.add("Trễ hạn");
+                else if(status == 3)
+                    vt.add("Hỏng/mất");
+                else
+                    vt.add("Trễ hạn, hỏng/mất");
+                model.addRow(vt);
+            }
+            ps.close();
+            rs.close();
+            ketNoi.close();
+        } catch (SQLException ex) {
+            System.out.println("Lỗi load Loan List");
+        } 
+    }    
+    
     public boolean findChosenBook(DefaultTableModel model, String id) {
         int size = model.getRowCount();
         for(int i = 0; i < size; i++) {

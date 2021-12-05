@@ -24,6 +24,7 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
     private int flag;
     private LoanDialog loanDialog;
     private ReturnDialog returnDialog;
+    private LoanListDialog loanListDialog;
     private BookLoan bookLoan;
     private DefaultTableModel model;
     public static Rule rule;
@@ -64,6 +65,7 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
         jRadioButton_Name = new javax.swing.JRadioButton();
         jRadioButton_Phone = new javax.swing.JRadioButton();
         jButton_Choose = new javax.swing.JButton();
+        jButton_LoanList = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -72,7 +74,7 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Username", "Name", "Gender", "Date of birth", "Address", "Phone number", "Email", "Ngày đăng ký"
+                "Username", "Name", "Gender", "Date of birth", "Address", "Phone number", "Email", "Registration date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -84,6 +86,13 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(jTable_Reader);
+        if (jTable_Reader.getColumnModel().getColumnCount() > 0) {
+            jTable_Reader.getColumnModel().getColumn(0).setMinWidth(50);
+            jTable_Reader.getColumnModel().getColumn(1).setMinWidth(200);
+            jTable_Reader.getColumnModel().getColumn(2).setMinWidth(80);
+            jTable_Reader.getColumnModel().getColumn(2).setMaxWidth(80);
+            jTable_Reader.getColumnModel().getColumn(3).setMinWidth(50);
+        }
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Search", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 2, 14), new java.awt.Color(153, 153, 153))); // NOI18N
@@ -161,6 +170,17 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
             }
         });
 
+        jButton_LoanList.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_LoanList.setForeground(new java.awt.Color(51, 51, 51));
+        jButton_LoanList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/list.png"))); // NOI18N
+        jButton_LoanList.setText("Loan list");
+        jButton_LoanList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_LoanList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_LoanListActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -172,6 +192,8 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton_LoanList)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton_Choose)))
                 .addContainerGap())
         );
@@ -184,7 +206,9 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(27, 27, 27)
-                        .addComponent(jButton_Choose)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton_Choose)
+                            .addComponent(jButton_LoanList, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 590, Short.MAX_VALUE)
                 .addContainerGap())
@@ -248,11 +272,18 @@ public class ChooseReaderPanel extends javax.swing.JPanel {
         jTextField_Search.setText("");
     }//GEN-LAST:event_jButton_ClearSearchActionPerformed
 
+    private void jButton_LoanListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_LoanListActionPerformed
+        // TODO add your handling code here:
+        this.loanListDialog = new LoanListDialog(null, true, this);
+        this.loanListDialog.setVisible(true);
+    }//GEN-LAST:event_jButton_LoanListActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JButton jButton_Choose;
     private javax.swing.JButton jButton_ClearSearch;
+    private javax.swing.JButton jButton_LoanList;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel_Card3;
