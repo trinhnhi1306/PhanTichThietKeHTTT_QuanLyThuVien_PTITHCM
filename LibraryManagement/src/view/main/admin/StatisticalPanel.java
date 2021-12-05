@@ -5,6 +5,7 @@
  */
 package view.main.admin;
 
+import control.admin.ChartController;
 import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -27,14 +28,14 @@ public class StatisticalPanel extends javax.swing.JPanel {
         initComponents();
         setDefaultTableHeader(tbRevenueStatistic);
         //Load data into revenue statistic JTable
-//        LoadDataTable();
+        LoadDataTable();
     }
     
-//    private void LoadDataTable ()
-//    {
-//        tbFunction.LoadData(tbRevenueStatistic, sqlLoadData + (jMonthChooer.getMonth() + 1) + ", " + jYearChooser.getYear());
-//        lbTotalRevenue.setText(String.valueOf(tbFunction.SumColumn(tbRevenueStatistic, 4)));
-//    }
+    private void LoadDataTable ()
+    {
+        tbFunction.LoadData(tbRevenueStatistic, sqlLoadData + (jMonthChooer.getMonth() + 1) + ", " + jYearChooser.getYear());
+        lbTotalRevenue.setText(String.valueOf(tbFunction.SumColumn(tbRevenueStatistic, 4)));
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,7 +57,8 @@ public class StatisticalPanel extends javax.swing.JPanel {
         lbTextTotalRevenue = new javax.swing.JLabel();
         lbTotalRevenue = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
+        jYearChooser1 = new com.toedter.calendar.JYearChooser();
+        pnChart = new javax.swing.JPanel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -74,7 +76,6 @@ public class StatisticalPanel extends javax.swing.JPanel {
             }
         });
 
-        jYearChooser.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jYearChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 jYearChooserPropertyChange(evt);
@@ -173,37 +174,46 @@ public class StatisticalPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Thống kê 1", jPanel1);
+        jTabbedPane1.addTab("By month", jPanel1);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        jYearChooser1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jYearChooser1PropertyChange(evt);
+            }
+        });
+
+        javax.swing.GroupLayout pnChartLayout = new javax.swing.GroupLayout(pnChart);
+        pnChart.setLayout(pnChartLayout);
+        pnChartLayout.setHorizontalGroup(
+            pnChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnChartLayout.setVerticalGroup(
+            pnChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 609, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1315, Short.MAX_VALUE)
+            .addComponent(pnChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(537, 537, 537)
+                .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(672, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 672, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jYearChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                .addGap(27, 27, 27)
+                .addComponent(pnChart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTabbedPane1.addTab("Thống kê 2", jPanel2);
-
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1315, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 672, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Thống kê 3", jPanel3);
+        jTabbedPane1.addTab("By year", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -228,7 +238,7 @@ public class StatisticalPanel extends javax.swing.JPanel {
     
     private void jMonthChooerPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jMonthChooerPropertyChange
         // TODO add your handling code here:
-//        LoadDataTable();
+        LoadDataTable();
     }//GEN-LAST:event_jMonthChooerPropertyChange
 
     private void jMonthChooerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jMonthChooerKeyReleased
@@ -237,7 +247,7 @@ public class StatisticalPanel extends javax.swing.JPanel {
 
     private void jYearChooserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jYearChooserPropertyChange
         // TODO add your handling code here:
-//        LoadDataTable();
+        LoadDataTable();
     }//GEN-LAST:event_jYearChooserPropertyChange
 
     private void tfSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSearchKeyReleased
@@ -247,18 +257,24 @@ public class StatisticalPanel extends javax.swing.JPanel {
         else tbFunction.Search(tbRevenueStatistic,"",-1);
     }//GEN-LAST:event_tfSearchKeyReleased
 
+    private void jYearChooser1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jYearChooser1PropertyChange
+        // TODO add your handling code here:
+        ChartController.Instance.SetDataToRevanueChart(pnChart, jYearChooser1.getYear());
+    }//GEN-LAST:event_jYearChooser1PropertyChange
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.toedter.calendar.JMonthChooser jMonthChooer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private com.toedter.calendar.JYearChooser jYearChooser;
+    private com.toedter.calendar.JYearChooser jYearChooser1;
     private javax.swing.JLabel lbSearchText;
     private javax.swing.JLabel lbTextTotalRevenue;
     private javax.swing.JLabel lbTotalRevenue;
+    private javax.swing.JPanel pnChart;
     private javax.swing.JTable tbRevenueStatistic;
     private javax.swing.JTextField tfSearch;
     // End of variables declaration//GEN-END:variables

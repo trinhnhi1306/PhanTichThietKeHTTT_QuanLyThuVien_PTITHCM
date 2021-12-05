@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 public class Revenue {
     public static Revenue Instance = new Revenue();
     
-    public static long CalculateTotalRevenue ()
+    public long CalculateTotalRevenue ()
     {
         String query = "select * from Get_TotalRevenueFromExtend";
         long result;
@@ -38,7 +38,30 @@ public class Revenue {
             System.out.println("something wrong in view Get_TotalRevenueFromExtend" + e.getMessage());
             return -1;
         }
-        System.out.println(result);
+        
+        return result;
+    }
+    
+    public long CalculateTotalRevenue (int month, int year)
+    {
+        String query = "EXEC SP_GetAllRevenueInMonth " + month + ", " + year;
+        long result = 0;
+        
+        Connection conn = Connect.GetConnect();
+        PreparedStatement ps;
+        ResultSet rs;
+        
+        try {
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while(rs.next())
+                result += rs.getLong(5);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Lấy doanh thu thất bại, hãy thử lại sau", "Lỗi truy vấn", JOptionPane.WARNING_MESSAGE);
+            System.out.println("something wrong in view Get_TotalRevenueFromExtend" + e.getMessage());
+            return -1;
+        }
+        
         return result;
     }
 }

@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.CallableStatement;
 import javax.swing.JOptionPane;
 import java.lang.String;
+import java.util.Date;
 
 /**
  *
@@ -115,5 +116,28 @@ public class ExtendCard {
         }
         
         return price;
+    }
+    
+    public Date GetExpirationDate (String username)
+    {
+        Date expirationDate;
+        String query = "EXEC SP_GetExpirationDate " + username;
+        
+        Connection conn = Connect.GetConnect();
+        PreparedStatement ps;
+        ResultSet rs;
+        
+        try {
+            ps = conn.prepareStatement(query);
+            rs =ps.executeQuery();
+            rs.next();
+            expirationDate = rs.getDate(1);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Hãy kiểm tra lại tài khoản", "Lỗi username", JOptionPane.WARNING_MESSAGE);
+            System.out.println("Username not correct" + e.getMessage());
+            return null;
+        }
+        
+        return expirationDate;
     }
 }

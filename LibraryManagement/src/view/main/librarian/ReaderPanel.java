@@ -7,6 +7,7 @@ package view.main.librarian;
 
 import com.toedter.calendar.JTextFieldDateEditor;
 import control.librarian.BookLoan;
+import control.librarian.ExtendCard;
 import java.awt.Font;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -71,7 +72,7 @@ public class ReaderPanel extends javax.swing.JPanel {
         JTextFieldDateEditor editor = (JTextFieldDateEditor) jDateChooser_DateOfBirth.getDateEditor();
         editor.setEditable(false);
         bookLoan = new BookLoan();
-      
+               
     }
 
     /**
@@ -272,19 +273,22 @@ public class ReaderPanel extends javax.swing.JPanel {
                             .addComponent(jLabel13)
                             .addGap(18, 18, 18)
                             .addComponent(jComboBox_Commune, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(57, 57, 57)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel6))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jTextField_PhoneNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                                .addComponent(jTextField_Email))
+                            .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton_Extend))
-                    .addComponent(jTextField_PhoneNumber)
-                    .addComponent(jTextField_Email))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton_Extend)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -311,7 +315,8 @@ public class ReaderPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
-                            .addComponent(jTextField_Address, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTextField_Address, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton_Extend))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,15 +339,9 @@ public class ReaderPanel extends javax.swing.JPanel {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jDateChooser_DateOfBirth, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(1, 1, 1)))))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                                .addGap(62, 62, 62))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton_Extend)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                        .addGap(26, 26, 26)
+                        .addComponent(jDateChooser_DayEnd, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                        .addGap(62, 62, 62))))
         );
 
         jPanel_Card.setBackground(new java.awt.Color(255, 255, 255));
@@ -902,6 +901,9 @@ public class ReaderPanel extends javax.swing.JPanel {
         jButton_Modify.setEnabled(true);
         jButton_Extend.setEnabled(true);
         jButton_Remove.setEnabled(true);
+        
+        //update expiration date
+        jDateChooser_DayEnd.setDate(ExtendCard.Instance.GetExpirationDate(jTextField_Username.getText()));
         
     }//GEN-LAST:event_jTable_ReaderMouseClicked
 
