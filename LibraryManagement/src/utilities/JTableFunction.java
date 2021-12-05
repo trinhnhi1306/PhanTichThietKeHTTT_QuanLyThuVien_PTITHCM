@@ -143,10 +143,10 @@ public class JTableFunction {
         TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(((DefaultTableModel) tb.getModel())); 
         tb.setRowSorter(sorter);
         try {
-            if(cotLoc>-1){//nếu cột lọc -1 thì lọc tất cả các cột xem cột nào = str
-                sorter.setRowFilter(RowFilter.regexFilter(str,cotLoc));
+            if(cotLoc > -1){//nếu cột lọc -1 thì lọc tất cả các cột xem cột nào = str
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + str, cotLoc));
             }else {
-                sorter.setRowFilter(RowFilter.regexFilter(str));
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + str));
             }
         } 
         catch(PatternSyntaxException pse) {

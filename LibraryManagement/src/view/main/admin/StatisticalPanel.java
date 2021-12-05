@@ -7,8 +7,12 @@ package view.main.admin;
 
 import control.admin.ChartController;
 import java.awt.Font;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import utilities.File;
 import utilities.JTableFunction;
 
 /**
@@ -27,8 +31,10 @@ public class StatisticalPanel extends javax.swing.JPanel {
     public StatisticalPanel() {
         initComponents();
         setDefaultTableHeader(tbRevenueStatistic);
+        setDefaultTableHeader(JTable_OverdueList);
         //Load data into revenue statistic JTable
         LoadDataTable();
+        getOverdueList();
     }
     
     private void LoadDataTable ()
@@ -57,6 +63,7 @@ public class StatisticalPanel extends javax.swing.JPanel {
         lbSearchText = new javax.swing.JLabel();
         lbTextTotalRevenue = new javax.swing.JLabel();
         lbTotalRevenue = new javax.swing.JLabel();
+        jButton_ExportExcelRevenueStatistic = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jYearChooser1 = new com.toedter.calendar.JYearChooser();
         pnChart = new javax.swing.JPanel();
@@ -66,6 +73,13 @@ public class StatisticalPanel extends javax.swing.JPanel {
         jRadioButton_Category = new javax.swing.JRadioButton();
         jRadioButton_Author = new javax.swing.JRadioButton();
         jRadioButton_Publisher = new javax.swing.JRadioButton();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        JTable_OverdueList = new javax.swing.JTable();
+        lbSearchText1 = new javax.swing.JLabel();
+        JTextField_SearchOverdue = new javax.swing.JTextField();
+        jButton_ClearSearch = new javax.swing.JButton();
+        jButton_ExportExcelOverdue = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -132,6 +146,15 @@ public class StatisticalPanel extends javax.swing.JPanel {
         lbTotalRevenue.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lbTotalRevenue.setText("TotalMoney");
 
+        jButton_ExportExcelRevenueStatistic.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_ExportExcelRevenueStatistic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/excel.png"))); // NOI18N
+        jButton_ExportExcelRevenueStatistic.setText("Export");
+        jButton_ExportExcelRevenueStatistic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ExportExcelRevenueStatisticActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -149,7 +172,9 @@ public class StatisticalPanel extends javax.swing.JPanel {
                                 .addComponent(lbSearchText)
                                 .addGap(18, 18, 18)
                                 .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 499, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 269, Short.MAX_VALUE)
+                        .addComponent(jButton_ExportExcelRevenueStatistic, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(111, 111, 111))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,16 +189,21 @@ public class StatisticalPanel extends javax.swing.JPanel {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jYearChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jMonthChooer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jYearChooser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jMonthChooer, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lbSearchText, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jButton_ExportExcelRevenueStatistic, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tfSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbSearchText, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 517, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 527, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbTotalRevenue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -195,11 +225,11 @@ public class StatisticalPanel extends javax.swing.JPanel {
         pnChart.setLayout(pnChartLayout);
         pnChartLayout.setHorizontalGroup(
             pnChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1317, Short.MAX_VALUE)
         );
         pnChartLayout.setVerticalGroup(
             pnChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 609, Short.MAX_VALUE)
+            .addGap(0, 618, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -208,16 +238,17 @@ public class StatisticalPanel extends javax.swing.JPanel {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(537, 537, 537)
+                .addGap(536, 536, 536)
                 .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(672, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jYearChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                .addGap(27, 27, 27)
-                .addComponent(pnChart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addComponent(jYearChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(pnChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("By year", jPanel2);
@@ -242,6 +273,7 @@ public class StatisticalPanel extends javax.swing.JPanel {
         });
 
         buttonGroup1.add(jRadioButton_Category);
+        jRadioButton_Category.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Category.setSelected(true);
         jRadioButton_Category.setText("Category");
         jRadioButton_Category.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -251,6 +283,7 @@ public class StatisticalPanel extends javax.swing.JPanel {
         });
 
         buttonGroup1.add(jRadioButton_Author);
+        jRadioButton_Author.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Author.setText("Author");
         jRadioButton_Author.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -259,6 +292,7 @@ public class StatisticalPanel extends javax.swing.JPanel {
         });
 
         buttonGroup1.add(jRadioButton_Publisher);
+        jRadioButton_Publisher.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jRadioButton_Publisher.setText("Publisher");
         jRadioButton_Publisher.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -281,7 +315,7 @@ public class StatisticalPanel extends javax.swing.JPanel {
                 .addComponent(jRadioButton_Author)
                 .addGap(65, 65, 65)
                 .addComponent(jRadioButton_Publisher)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 346, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 308, Short.MAX_VALUE)
                 .addComponent(jYearChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(445, 445, 445))
         );
@@ -299,7 +333,92 @@ public class StatisticalPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Genres", jPanel3);
+        jTabbedPane1.addTab("Top 10", jPanel3);
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        JTable_OverdueList.setAutoCreateRowSorter(true);
+        JTable_OverdueList.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Reader name", "Phone", "Book ID", "Book title", "Publish date", "Start date", "Expiration date"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(JTable_OverdueList);
+
+        lbSearchText1.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        lbSearchText1.setText("Search:");
+
+        JTextField_SearchOverdue.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        JTextField_SearchOverdue.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                JTextField_SearchOverdueCaretUpdate(evt);
+            }
+        });
+
+        jButton_ClearSearch.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        jButton_ClearSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/clear.png"))); // NOI18N
+        jButton_ClearSearch.setText("Clear");
+        jButton_ClearSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton_ClearSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ClearSearchActionPerformed(evt);
+            }
+        });
+
+        jButton_ExportExcelOverdue.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jButton_ExportExcelOverdue.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/excel.png"))); // NOI18N
+        jButton_ExportExcelOverdue.setText("Export");
+        jButton_ExportExcelOverdue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ExportExcelOverdueActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(241, 241, 241)
+                .addComponent(lbSearchText1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
+                .addComponent(JTextField_SearchOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
+                .addComponent(jButton_ClearSearch)
+                .addGap(167, 167, 167)
+                .addComponent(jButton_ExportExcelOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(245, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(JTextField_SearchOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lbSearchText1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_ClearSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_ExportExcelOverdue, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(45, 45, 45)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
+                .addGap(17, 17, 17))
+        );
+
+        jTabbedPane1.addTab("Overdue", jPanel4);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -313,6 +432,22 @@ public class StatisticalPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void getOverdueList() {
+        String query = "select a.Full_Name, a.phone_number, dt.book_id, b.title, b.publish_date, l.date_start, expiration_date = DATEADD(day, r.max_rental_day, l.date_start)\n" +
+                        "from loan l\n" +
+                        "inner join account a\n" +
+                        "on l.user_id = a.username\n" +
+                        "inner join loan_detail dt\n" +
+                        "on l.loan_id = dt.loan_id\n" +
+                        "inner join [rule] r\n" +
+                        "on l.rule_id = r.rule_id\n" +
+                        "inner join book b\n" +
+                        "on dt.book_id = b.book_id\n" +
+                        "where dt.status = 0\n" +
+                        "and DATEADD(day, r.max_rental_day, l.date_start) < GETDATE()";
+        tbFunction.LoadData(JTable_OverdueList, query);
+    }
+    
     public static void setDefaultTableHeader(JTable table) {
         DefaultTableCellRenderer defaultTableCellRenderer;
         table.setRowHeight(30);
@@ -376,23 +511,74 @@ public class StatisticalPanel extends javax.swing.JPanel {
             ChartController.Instance.SetDataToPublisherChart(jPanel_CategoryChart, jYearChooser2.getYear());
     }//GEN-LAST:event_jRadioButton_PublisherStateChanged
 
+    private void jButton_ClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ClearSearchActionPerformed
+        // TODO add your handling code here:
+        JTextField_SearchOverdue.setText("");
+    }//GEN-LAST:event_jButton_ClearSearchActionPerformed
+
+    private void JTextField_SearchOverdueCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_JTextField_SearchOverdueCaretUpdate
+        // TODO add your handling code here:
+        tbFunction.Search(JTable_OverdueList, JTextField_SearchOverdue.getText(), -1);
+    }//GEN-LAST:event_JTextField_SearchOverdueCaretUpdate
+
+    private void jButton_ExportExcelRevenueStatisticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExportExcelRevenueStatisticActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int x = fileChooser.showDialog(this, "Choose folder");
+        if (x == JFileChooser.APPROVE_OPTION) {
+            java.io.File file = fileChooser.getSelectedFile();
+            File.xuatFileExcel("RevenueStatistic", (DefaultTableModel) tbRevenueStatistic.getModel(), file.getAbsolutePath() + "/RevenueStatistic");
+            JOptionPane.showMessageDialog(this, "Xuất file excel thành công!");
+        }
+        else {
+            return;
+        }
+
+    }//GEN-LAST:event_jButton_ExportExcelRevenueStatisticActionPerformed
+
+    private void jButton_ExportExcelOverdueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ExportExcelOverdueActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(false);
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int x = fileChooser.showDialog(this, "Choose folder");
+        if (x == JFileChooser.APPROVE_OPTION) {
+            java.io.File file = fileChooser.getSelectedFile();
+            File.xuatFileExcel("Overdue", (DefaultTableModel) JTable_OverdueList.getModel(), file.getAbsolutePath() + "/OverdueList");
+            JOptionPane.showMessageDialog(this, "Xuất file excel thành công!");
+        }
+        else {
+            return;
+        }
+    }//GEN-LAST:event_jButton_ExportExcelOverdueActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable JTable_OverdueList;
+    private javax.swing.JTextField JTextField_SearchOverdue;
     private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JButton jButton_ClearSearch;
+    private javax.swing.JButton jButton_ExportExcelOverdue;
+    private javax.swing.JButton jButton_ExportExcelRevenueStatistic;
     private com.toedter.calendar.JMonthChooser jMonthChooer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel_CategoryChart;
     private javax.swing.JRadioButton jRadioButton_Author;
     private javax.swing.JRadioButton jRadioButton_Category;
     private javax.swing.JRadioButton jRadioButton_Publisher;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private com.toedter.calendar.JYearChooser jYearChooser;
     private com.toedter.calendar.JYearChooser jYearChooser1;
     private com.toedter.calendar.JYearChooser jYearChooser2;
     private javax.swing.JLabel lbSearchText;
+    private javax.swing.JLabel lbSearchText1;
     private javax.swing.JLabel lbTextTotalRevenue;
     private javax.swing.JLabel lbTotalRevenue;
     private javax.swing.JPanel pnChart;
