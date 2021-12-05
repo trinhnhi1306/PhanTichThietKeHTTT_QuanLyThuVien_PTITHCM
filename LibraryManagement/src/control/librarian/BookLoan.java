@@ -405,7 +405,7 @@ public class BookLoan {
                 Duration diff = Duration.between(ngayHetHan.atStartOfDay(), today.atStartOfDay());
                 long diffDays = diff.toDays();
 
-                if (diffDays >= 0) {
+                if (diffDays > 0) {
                     return true;
                 }
             }

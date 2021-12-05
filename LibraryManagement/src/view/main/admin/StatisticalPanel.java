@@ -46,6 +46,7 @@ public class StatisticalPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jMonthChooer = new com.toedter.calendar.JMonthChooser();
@@ -59,6 +60,12 @@ public class StatisticalPanel extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
         jYearChooser1 = new com.toedter.calendar.JYearChooser();
         pnChart = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel_CategoryChart = new javax.swing.JPanel();
+        jYearChooser2 = new com.toedter.calendar.JYearChooser();
+        jRadioButton_Category = new javax.swing.JRadioButton();
+        jRadioButton_Author = new javax.swing.JRadioButton();
+        jRadioButton_Publisher = new javax.swing.JRadioButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -215,6 +222,85 @@ public class StatisticalPanel extends javax.swing.JPanel {
 
         jTabbedPane1.addTab("By year", jPanel2);
 
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel_CategoryChartLayout = new javax.swing.GroupLayout(jPanel_CategoryChart);
+        jPanel_CategoryChart.setLayout(jPanel_CategoryChartLayout);
+        jPanel_CategoryChartLayout.setHorizontalGroup(
+            jPanel_CategoryChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel_CategoryChartLayout.setVerticalGroup(
+            jPanel_CategoryChartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 615, Short.MAX_VALUE)
+        );
+
+        jYearChooser2.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jYearChooser2PropertyChange(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton_Category);
+        jRadioButton_Category.setSelected(true);
+        jRadioButton_Category.setText("Category");
+        jRadioButton_Category.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButton_CategoryStateChanged(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton_Author);
+        jRadioButton_Author.setText("Author");
+        jRadioButton_Author.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButton_AuthorStateChanged(evt);
+            }
+        });
+
+        buttonGroup1.add(jRadioButton_Publisher);
+        jRadioButton_Publisher.setText("Publisher");
+        jRadioButton_Publisher.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRadioButton_PublisherStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel_CategoryChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGap(95, 95, 95)
+                .addComponent(jRadioButton_Category)
+                .addGap(76, 76, 76)
+                .addComponent(jRadioButton_Author)
+                .addGap(65, 65, 65)
+                .addComponent(jRadioButton_Publisher)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 346, Short.MAX_VALUE)
+                .addComponent(jYearChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(445, 445, 445))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jYearChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jRadioButton_Category)
+                        .addComponent(jRadioButton_Author)
+                        .addComponent(jRadioButton_Publisher)))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel_CategoryChart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Genres", jPanel3);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -262,15 +348,50 @@ public class StatisticalPanel extends javax.swing.JPanel {
         ChartController.Instance.SetDataToRevanueChart(pnChart, jYearChooser1.getYear());
     }//GEN-LAST:event_jYearChooser1PropertyChange
 
+    private void jYearChooser2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jYearChooser2PropertyChange
+        // TODO add your handling code here:
+        if(jRadioButton_Category.isSelected())
+            ChartController.Instance.SetDataToCategoryChart(jPanel_CategoryChart, jYearChooser2.getYear());
+        if(jRadioButton_Author.isSelected())
+            ChartController.Instance.SetDataToAuthorChart(jPanel_CategoryChart, jYearChooser2.getYear());
+        if(jRadioButton_Publisher.isSelected())
+            ChartController.Instance.SetDataToPublisherChart(jPanel_CategoryChart, jYearChooser2.getYear());
+    }//GEN-LAST:event_jYearChooser2PropertyChange
+
+    private void jRadioButton_CategoryStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton_CategoryStateChanged
+        // TODO add your handling code here:
+        if(jRadioButton_Category.isSelected())
+            ChartController.Instance.SetDataToCategoryChart(jPanel_CategoryChart, jYearChooser2.getYear());
+    }//GEN-LAST:event_jRadioButton_CategoryStateChanged
+
+    private void jRadioButton_AuthorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton_AuthorStateChanged
+        // TODO add your handling code here:
+        if(jRadioButton_Author.isSelected())
+            ChartController.Instance.SetDataToAuthorChart(jPanel_CategoryChart, jYearChooser2.getYear());
+    }//GEN-LAST:event_jRadioButton_AuthorStateChanged
+
+    private void jRadioButton_PublisherStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRadioButton_PublisherStateChanged
+        // TODO add your handling code here:
+        if(jRadioButton_Publisher.isSelected())
+            ChartController.Instance.SetDataToPublisherChart(jPanel_CategoryChart, jYearChooser2.getYear());
+    }//GEN-LAST:event_jRadioButton_PublisherStateChanged
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
     private com.toedter.calendar.JMonthChooser jMonthChooer;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel_CategoryChart;
+    private javax.swing.JRadioButton jRadioButton_Author;
+    private javax.swing.JRadioButton jRadioButton_Category;
+    private javax.swing.JRadioButton jRadioButton_Publisher;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
     private com.toedter.calendar.JYearChooser jYearChooser;
     private com.toedter.calendar.JYearChooser jYearChooser1;
+    private com.toedter.calendar.JYearChooser jYearChooser2;
     private javax.swing.JLabel lbSearchText;
     private javax.swing.JLabel lbTextTotalRevenue;
     private javax.swing.JLabel lbTotalRevenue;
