@@ -161,7 +161,7 @@ public class JTableFunction {
         try {
             for (int row = 0; row < tb.getRowCount(); row ++) 
             {
-                if (tb.getValueAt(row, column).toString().isBlank()) return 0;
+                if (tb.getValueAt(row, column).toString().isEmpty()) return 0;
                 sum += Integer.parseInt(tb.getValueAt(row, column).toString());
             }
         } catch (Exception e) {
