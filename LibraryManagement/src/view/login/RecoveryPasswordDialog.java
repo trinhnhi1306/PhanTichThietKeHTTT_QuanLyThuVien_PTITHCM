@@ -158,12 +158,13 @@ public class RecoveryPasswordDialog extends javax.swing.JDialog {
       
         Connection ketNoi= Connect.GetConnect();
         try {
-            PreparedStatement ps=ketNoi.prepareStatement("select phone_number,email from account where username = ?");
+            PreparedStatement ps=ketNoi.prepareStatement("select phone_number,email,Full_Name from account where username = ?");
             ps.setString(1, username);
             ResultSet rs=ps.executeQuery();
             while(rs.next()){  
                 LoginFrame.PhoneNumber = rs.getString(1);
                 LoginFrame.Email = rs.getString(2);
+                LoginFrame.name = rs.getString(3);
                 return true;
             }
             ps.close();

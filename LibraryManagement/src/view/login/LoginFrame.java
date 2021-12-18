@@ -38,6 +38,7 @@ public class LoginFrame extends javax.swing.JFrame {
     public static String PhoneNumber;
     public static String Email;
     public static String username;
+    public static String name;
     private String password;
     private int Idrole; 
     /**

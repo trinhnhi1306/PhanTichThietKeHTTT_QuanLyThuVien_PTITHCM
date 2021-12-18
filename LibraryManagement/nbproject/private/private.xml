@@ -2,6 +2,23 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/login/ConfirmDialog.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/model/database/Connect.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/librarian/ReaderPanel.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/AdminMainFrame.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/librarian/ExtendCardDialog.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/login/ChonDialog.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/login/LoginFrame.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/archivist/BookPanel.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/login/MaDialog.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/reader/ReaderMainFrame.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/login/RecoveryPasswordDialog.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/archivist/NewAuthorDialog.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/RulePanel.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/profile/ProfilePanel.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/StaffPanel.java</file>
+            <file>file:/C:/Users/TRINH/Documents/Nam4/Phan%20tich%20va%20thiet%20ke%20HTTT/PhanTichThietKeHTTT_QuanLyThuVien_PTITHCM/LibraryManagement/src/view/main/admin/StatisticalPanel.java</file>
+        </group>
     </open-files>
 </project-private>

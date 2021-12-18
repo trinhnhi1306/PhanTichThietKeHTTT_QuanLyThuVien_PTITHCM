@@ -698,7 +698,7 @@ public class ReaderPanel extends javax.swing.JPanel {
                     return;
             }
             if(!validatePhone(phone_number)){
-                JOptionPane.showMessageDialog(null, "Không được để trống\n Chỉ nhận kí tự số", "Vui lòng nhập số điện thoại đúng định dạng", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Không được để trống\n Chỉ nhận kí tự số \nYêu cầu đủ 10 chữ số", "Vui lòng nhập số điện thoại đúng định dạng", JOptionPane.ERROR_MESSAGE);
                     return;
             }         
 //            if(!verifyUsername(useName)){    

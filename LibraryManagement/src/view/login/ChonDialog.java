@@ -46,6 +46,7 @@ public class ChonDialog extends javax.swing.JDialog {
         
     }
     void getPhoneAndEmail(){
+        jLabel_Ten.setText(LoginFrame.name);
         String dauSao = "";
         for(int i =0; i < (LoginFrame.PhoneNumber.length()-4) ; i++)
         {
@@ -165,7 +166,9 @@ public class ChonDialog extends javax.swing.JDialog {
                                         .addGap(18, 18, 18)
                                         .addComponent(jButton_Continue))
                                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel_Ten, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel_Ten, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(56, 56, 56)))))
                         .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(

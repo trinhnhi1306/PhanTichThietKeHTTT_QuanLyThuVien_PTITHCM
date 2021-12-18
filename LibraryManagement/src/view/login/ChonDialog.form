@@ -81,7 +81,10 @@
                                           <Component id="jButton_Continue" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Component id="jLabel2" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel_Ten" alignment="1" min="-2" pref="183" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="jLabel_Ten" min="-2" pref="183" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="56" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
                               </Group>
                           </Group>

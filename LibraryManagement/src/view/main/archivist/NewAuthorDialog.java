@@ -274,9 +274,9 @@ public class NewAuthorDialog extends javax.swing.JDialog {
         } else {
             int result = newAuthor(chuanHoaDanhTuRieng(name), xoaKhoangTrangThua(ghiChu));
             if(result==0){
-                JOptionPane.showMessageDialog(jDialog_NewAuthor, "Thêm thể loại thất bại!");
+                JOptionPane.showMessageDialog(jDialog_NewAuthor, "Thêm tác giả thất bại!");
             }else{
-                JOptionPane.showMessageDialog(jDialog_NewAuthor, "Thêm thể loại thành công!");
+                JOptionPane.showMessageDialog(jDialog_NewAuthor, "Thêm tác giả thành công!");
             }
             jDialog_NewAuthor.dispose();
             this.dispose();
